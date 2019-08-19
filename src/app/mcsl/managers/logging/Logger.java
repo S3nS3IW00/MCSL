@@ -2,6 +2,7 @@ package app.mcsl.managers.logging;
 
 import app.mcsl.events.LogEvent;
 import app.mcsl.managers.mainside.OSManager;
+import app.mcsl.windows.elements.dialog.customdialogs.ExceptionDialog;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -71,6 +72,7 @@ public class Logger {
         }
 
         LogEvent.log(logLevel, text);
+        if(logLevel == LogLevel.EXCEPTION) new ExceptionDialog(line).show();
     }
 
     public static void debug(String text) {
