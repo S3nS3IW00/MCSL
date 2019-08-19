@@ -525,7 +525,7 @@ public class Template extends Stage {
         }
     }
 
-    public void openWeb(String link) {
+    /*public void openWeb(String link) {
         if (canOpenWeb) {
             canOpenWeb = false;
             webAnimartion.getKeyFrames().clear();
@@ -552,7 +552,7 @@ public class Template extends Stage {
             }
             webAnimartion.play();
         }
-    }
+    }*/
 
     public void showNotification(String text, LabelColor color) {
         if (!isShowingNotification) {
