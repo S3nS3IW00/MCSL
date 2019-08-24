@@ -59,7 +59,7 @@ public class ServerStage extends Stage {
 
         body = new VBox(header, serverContent.getContent());
 
-        Scene scene = new Scene(body, 900, 600);
+        Scene scene = new Scene(body, 1000, 700);
         scene.getStylesheets().add(getClass().getResource("/app/mcsl/windows/styles/style.css").toExternalForm());
 
         serverContent.getContent().prefHeightProperty().bind(scene.heightProperty());

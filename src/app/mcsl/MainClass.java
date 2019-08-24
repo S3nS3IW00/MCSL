@@ -36,6 +36,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author S3nS3IW00
+ * @version 2.0
+ */
 public class MainClass extends Application {
 
     public static final String VERSION = "2.0";

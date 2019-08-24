@@ -390,7 +390,7 @@ public class Template extends Stage {
                 + "-fx-border-style: dashed;");
         dropPane.setVisible(false);
 
-        Scene scene = new Scene(new StackPane(dialogStack, dropPane), 900, 600);
+        Scene scene = new Scene(new StackPane(dialogStack, dropPane), 1000, 700);
         scene.getStylesheets().add(getClass().getResource("/app/mcsl/windows/styles/style.css").toExternalForm());
 
         setScene(scene);

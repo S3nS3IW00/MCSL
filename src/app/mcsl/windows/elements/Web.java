@@ -1,12 +1,10 @@
 package app.mcsl.windows.elements;
 
-import app.mcsl.MainClass;
 import app.mcsl.managers.Language;
 import app.mcsl.managers.mainside.OSManager;
 import app.mcsl.windows.elements.button.Button;
 import app.mcsl.windows.elements.button.ButtonType;
 import app.mcsl.windows.elements.label.Label;
-import app.mcsl.windows.elements.label.LabelColor;
 import app.mcsl.windows.elements.label.LabelType;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -37,7 +35,7 @@ public class Web extends VBox {
 
         closeButton = new Button("X", ButtonType.ERROR_ACTION_BUTTON, 13);
         closeButton.setOnAction(e -> {
-            MainClass.getTemplate().closeWeb();
+            //MainClass.getTemplate().closeWeb();
             webEngine.loadContent("");
         });
 
