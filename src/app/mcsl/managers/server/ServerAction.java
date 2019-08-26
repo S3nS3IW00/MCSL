@@ -21,7 +21,7 @@ public class ServerAction {
         if (!MainClass.getTabManager().isTabByTypeExists(MainClass.getTabManager().getTabClassByServer(server), TabType.SERVER)) {
             TabAction.add(ServersManager.getServerContent(ServersManager.getServerByName(server.getName())), new ImageView(server.getType() == ServerType.LOCAL ? FileManager.SERVER_ICON : FileManager.EXTERNAL_SERVER_ICON), true);
         } else {
-            if(MainClass.getTabManager().isDetached(MainClass.getTabManager().getTabByServer(server))){
+            if (MainClass.getTabManager().isDetached(MainClass.getTabManager().getTabByServer(server))) {
                 MainClass.getTabManager().getServerStageFromTab(MainClass.getTabManager().getTabByServer(server)).setIconified(false);
                 MainClass.getTabManager().getServerStageFromTab(MainClass.getTabManager().getTabByServer(server)).toFront();
             } else {
@@ -44,7 +44,7 @@ public class ServerAction {
         new ConfirmationDialog(200, 400, Language.getText("deleteserver"), Language.getText("suredeleteserver", server.getName())) {
             @Override
             public void yesAction() {
-                if(!MainClass.getFileManager().isExternalServerRoot(server)) close();
+                if (!MainClass.getFileManager().isExternalServerRoot(server)) close();
                 ServersManager.removeServer(server);
                 MainClass.getFileManager().deleteServer(server.getName(), MainClass.getFileManager().getServerFolder(server.getName()));
                 MainClass.getTemplate().getServersContent().removeServer(server);

@@ -31,7 +31,7 @@ class Dialogs {
         return dialogList.size() == 0;
     }
 
-    static Dialog next(){
+    static Dialog next() {
         return dialogList.get(0);
     }
 

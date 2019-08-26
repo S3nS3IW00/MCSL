@@ -3,8 +3,8 @@ package app.mcsl.windows.elements.dialog.customdialogs;
 import app.mcsl.MainClass;
 import app.mcsl.events.ServerStatusChangeEvent;
 import app.mcsl.managers.Language;
-import app.mcsl.managers.server.ServersManager;
 import app.mcsl.managers.logging.Logger;
+import app.mcsl.managers.server.ServersManager;
 import app.mcsl.windows.contents.server.Server;
 import app.mcsl.windows.contents.server.StatusType;
 import app.mcsl.windows.elements.button.Button;
@@ -38,10 +38,10 @@ public class QuitDialog extends Dialog {
     private ObservableList<Server> onlineServers;
     private int onlineServerCount;
 
-    public QuitDialog(){
+    public QuitDialog() {
         super(200, 450, Language.getText("quit"), DialogType.CUSTOM, new VBox());
 
-        textLabel = new Label(Language.getText("surewantquit")+(onlineServerCount > 0 ? "\n"+Language.getText("serverswillstop") : ""));
+        textLabel = new Label(Language.getText("surewantquit") + (onlineServerCount > 0 ? "\n" + Language.getText("serverswillstop") : ""));
 
         onlineServers = FXCollections.observableList(ServersManager.getOnlineServers());
         onlineServerCount = onlineServers.size();
@@ -100,22 +100,22 @@ public class QuitDialog extends Dialog {
         build();
     }
 
-    private void quit(boolean restart){
+    private void quit(boolean restart) {
         Logger.info("Saving server settings...");
-        for(Server server : ServersManager.getServers()){
+        for (Server server : ServersManager.getServers()) {
             server.saveSettings();
         }
 
-        if(onlineServerCount > 0) {
+        if (onlineServerCount > 0) {
             Logger.info("Stopping servers...");
             CompletableFuture.runAsync(() -> Platform.runLater(() -> {
                 content.getChildren().add(serversStopProgressBar);
 
                 onlineServers.addListener((ListChangeListener<Server>) c -> {
-                    if(c.next()){
-                        serversStopProgressBar.setProgress((onlineServerCount-c.getList().size())/onlineServerCount);
-                        if(c.getList().size() == 0){
-                            if(restart){
+                    if (c.next()) {
+                        serversStopProgressBar.setProgress((onlineServerCount - c.getList().size()) / onlineServerCount);
+                        if (c.getList().size() == 0) {
+                            if (restart) {
                                 restartApplication();
                             } else {
                                 System.exit(0);
@@ -126,7 +126,7 @@ public class QuitDialog extends Dialog {
 
                 for (Server s : onlineServers) {
                     ServerStatusChangeEvent.addListener((server, newType) -> {
-                        if(server == s && newType == StatusType.STOPPED){
+                        if (server == s && newType == StatusType.STOPPED) {
                             onlineServers.remove(s);
                         }
                     });
@@ -134,7 +134,7 @@ public class QuitDialog extends Dialog {
                 }
             }));
         } else {
-            if(restart){
+            if (restart) {
                 restartApplication();
             } else {
                 System.exit(0);
@@ -143,24 +143,24 @@ public class QuitDialog extends Dialog {
     }
 
     @Override
-    public void show(){
+    public void show() {
         onlineServers = FXCollections.observableList(ServersManager.getOnlineServers());
         onlineServerCount = onlineServers.size();
-        textLabel.setText(Language.getText("surewantquit")+(onlineServerCount > 0 ? "\n"+Language.getText("serverswillstop") : ""));
+        textLabel.setText(Language.getText("surewantquit") + (onlineServerCount > 0 ? "\n" + Language.getText("serverswillstop") : ""));
         super.show();
     }
 
-    public void hide(){
+    public void hide() {
         show();
         hideButton.fire();
     }
 
-    public void restart(){
+    public void restart() {
         show();
         restartButton.fire();
     }
 
-    public void quit(){
+    public void quit() {
         show();
         yesButton.fire();
     }

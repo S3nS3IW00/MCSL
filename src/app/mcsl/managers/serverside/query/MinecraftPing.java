@@ -138,7 +138,7 @@ public class MinecraftPing {
         try {
             JSONObject pingObject = (JSONObject) new JSONParser().parse(json);
 
-            if(pingObject.get("description") instanceof String){
+            if (pingObject.get("description") instanceof String) {
                 String description = pingObject.get("description").toString();
                 pingObject.remove("description");
 

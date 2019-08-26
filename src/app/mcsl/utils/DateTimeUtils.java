@@ -76,22 +76,22 @@ public class DateTimeUtils {
         return time;
     }
 
-    public static boolean isEquals(Date date){
+    public static boolean isEquals(Date date) {
         return date.getTime() - new Date().getTime() <= 1000 && date.getTime() - new Date().getTime() >= 0;
     }
 
-    public static boolean isEqualsTime(String time){
+    public static boolean isEqualsTime(String time) {
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         return sdf.format(cal.getTime()).equalsIgnoreCase(time);
     }
 
-    public static boolean validDate(String date, boolean daily){
+    public static boolean validDate(String date, boolean daily) {
         Pattern p = Pattern.compile((daily ? "\\d\\d:\\d\\d:\\d\\d|\\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d" : "\\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d"));
         return p.matcher(date).matches();
     }
 
-    private static Integer mathDatePoint(String date){
+    private static Integer mathDatePoint(String date) {
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date now = new Date();
         Date stringdate = null;
@@ -100,10 +100,10 @@ public class DateTimeUtils {
         } catch (ParseException e) {
             Logger.exception(e);
         }
-        return Integer.parseInt(format.format(now).replace("-", ""))-Integer.parseInt(format.format(stringdate).replace("-", ""));
+        return Integer.parseInt(format.format(now).replace("-", "")) - Integer.parseInt(format.format(stringdate).replace("-", ""));
     }
 
-    private static Integer mathTimePoint(String time){
+    private static Integer mathTimePoint(String time) {
         DateFormat format = new SimpleDateFormat("HH:mm:ss");
         Date now = new Date();
         Date stringdate = null;
@@ -112,15 +112,15 @@ public class DateTimeUtils {
         } catch (ParseException e) {
             Logger.exception(e);
         }
-        return Integer.parseInt(format.format(now).replace(":", ""))-Integer.parseInt(format.format(stringdate).replace(":", ""));
+        return Integer.parseInt(format.format(now).replace(":", "")) - Integer.parseInt(format.format(stringdate).replace(":", ""));
     }
 
-    public static boolean lateDate(String date){
+    public static boolean lateDate(String date) {
         return mathDatePoint(date) > 0;
     }
 
-    public static boolean lateTime(String date){
-        if(mathDatePoint(date) == 0){
+    public static boolean lateTime(String date) {
+        if (mathDatePoint(date) == 0) {
             return mathTimePoint(date) > 0;
         }
         return false;

@@ -19,7 +19,7 @@ public class TrayManager {
 
         TrayIcon trayIcon = new TrayIcon(SwingFXUtils.fromFXImage(MainClass.getTemplate().getIcons().get(0), null), "");
         trayIcon.setImageAutoSize(true);
-        trayIcon.setToolTip("Minecraft Server Launcher v"+MainClass.VERSION);
+        trayIcon.setToolTip("Minecraft Server Launcher v" + MainClass.VERSION);
         this.trayIcon = trayIcon;
     }
 

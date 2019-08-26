@@ -40,7 +40,7 @@ public abstract class HamburgerMenuIcon extends VBox {
     };
 
 
-    public HamburgerMenuIcon(int width, int lineStroke){
+    public HamburgerMenuIcon(int width, int lineStroke) {
         this.width = width;
         this.lineStroke = lineStroke;
 
@@ -73,15 +73,15 @@ public abstract class HamburgerMenuIcon extends VBox {
         setId("hamburger-icon");
 
         line1.setStartX(getLayoutX());
-        line1.setEndX(getLayoutX()+width);
+        line1.setEndX(getLayoutX() + width);
         line2.setStartX(getLayoutX());
-        line2.setEndX(getLayoutX()+width);
+        line2.setEndX(getLayoutX() + width);
         line3.setStartX(getLayoutX());
-        line3.setEndX(getLayoutX()+width);
+        line3.setEndX(getLayoutX() + width);
     }
 
-    public void toggle(){
-        if(isRotated){
+    public void toggle() {
+        if (isRotated) {
             rotateOut.play();
             isRotated = false;
         } else {

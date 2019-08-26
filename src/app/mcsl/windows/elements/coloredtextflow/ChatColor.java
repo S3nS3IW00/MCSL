@@ -11,7 +11,8 @@ public enum ChatColor {
 
     String styleCode;
     Color color;
-    ChatColor(String styleCode, Color color){
+
+    ChatColor(String styleCode, Color color) {
         this.styleCode = styleCode;
         this.color = color;
     }

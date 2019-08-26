@@ -6,7 +6,8 @@ public enum ThemeType {
     DARK("#222f3e", "rgba(34,47,62, 0.8)", "#ecf0f1", "dark");
 
     String type, opacityType, textType, displayName;
-    ThemeType(String type, String opacityType, String textType, String displayName){
+
+    ThemeType(String type, String opacityType, String textType, String displayName) {
         this.displayName = displayName;
         this.opacityType = opacityType;
         this.textType = textType;

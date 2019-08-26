@@ -145,7 +145,7 @@ public class Dialog extends VBox {
     }
 
     public void show() {
-        if(MainClass.getTemplate().getDialogStack().getChildren().size() == 1 || MainClass.getTemplate().getDialogStack().getChildren().get(1) != this) {
+        if (MainClass.getTemplate().getDialogStack().getChildren().size() == 1 || MainClass.getTemplate().getDialogStack().getChildren().get(1) != this) {
             if (Dialogs.canShow() || Dialogs.next() == this) {
                 isShowing = true;
                 MainClass.getTemplate().getWebviewStack().setMouseTransparent(true);

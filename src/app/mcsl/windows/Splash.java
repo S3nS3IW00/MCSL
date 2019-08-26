@@ -38,7 +38,7 @@ public class Splash extends Stage {
         line2.setEndX(280);
         line2.setStrokeWidth(3);
 
-        Label versionLabel = new Label("MCSL v"+MainClass.VERSION);
+        Label versionLabel = new Label("MCSL v" + MainClass.VERSION);
         versionLabel.setStyle("-fx-font-size: 20px");
 
         VBox mcslBox = new VBox(new ImageView(mcslLogo), versionLabel);
@@ -50,7 +50,7 @@ public class Splash extends Stage {
         Region region2 = new Region();
         VBox.setVgrow(region2, Priority.ALWAYS);
 
-        VBox body = new VBox(5, title, line, region1, mcslBox, region2, new Label("Copyright \u00A9 "+new SimpleDateFormat("YYYY").format(new Date())), line2);
+        VBox body = new VBox(5, title, line, region1, mcslBox, region2, new Label("Copyright \u00A9 " + new SimpleDateFormat("YYYY").format(new Date())), line2);
         body.setAlignment(Pos.TOP_CENTER);
         body.setPadding(new Insets(5, 0, 20, 0));
         body.setMaxHeight(Double.MAX_VALUE);

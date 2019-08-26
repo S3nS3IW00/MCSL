@@ -13,7 +13,7 @@ public class IconCard extends HBox {
 
     private int width, height;
 
-    public IconCard(ImageView icon, Node content, int width, int height){
+    public IconCard(ImageView icon, Node content, int width, int height) {
         this.icon = icon;
         this.content = content;
         this.width = width;

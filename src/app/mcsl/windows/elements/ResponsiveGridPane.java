@@ -38,7 +38,7 @@ public class ResponsiveGridPane extends GridPane {
         int columnCount = (int) (width - (lastColumnCount * 40)) / gridSize;
         lastWidth = width;
 
-        if(columnCount != 0) {
+        if (columnCount != 0) {
             lastColumnCount = columnCount;
             getChildren().clear();
 

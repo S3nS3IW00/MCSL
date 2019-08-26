@@ -29,6 +29,7 @@ public class SlideMenu extends VBox {
         public Double getValue() {
             return getMaxWidth();
         }
+
         @Override
         public void setValue(Double value) {
             setMaxWidth(value);
@@ -38,7 +39,7 @@ public class SlideMenu extends VBox {
     private List<SlideItem> items = new ArrayList<>();
     private SlideItem selectedItem;
 
-    public SlideMenu(Pane parent, String title, double width){
+    public SlideMenu(Pane parent, String title, double width) {
         this.parent = parent;
         this.title = title;
         this.width = width;
@@ -67,28 +68,28 @@ public class SlideMenu extends VBox {
         Region rightRegion = new Region();
         HBox.setHgrow(rightRegion, Priority.ALWAYS);
 
-        HBox downBox = new HBox(new Label("MCSL \u00A9 "+new SimpleDateFormat("YYYY").format(new Date())), rightRegion, new Label("v"+MainClass.VERSION));
+        HBox downBox = new HBox(new Label("MCSL \u00A9 " + new SimpleDateFormat("YYYY").format(new Date())), rightRegion, new Label("v" + MainClass.VERSION));
         downBox.setStyle("-fx-text-fill: black;");
 
         this.getChildren().addAll(titleLabel, topItemBox, bottomItemBox, downRegion, downBox);
     }
 
-    public void toggle(){
+    public void toggle() {
         animation.getKeyFrames().clear();
-        if(canToggle) {
+        if (canToggle) {
             canToggle = false;
             if (isOpened) {
                 animation.getKeyFrames().add(new KeyFrame(Duration.millis(200), new KeyValue(writableWidth, 0.0)));
                 isOpened = false;
             } else {
                 setMaxWidth(0);
-                if(!parent.getChildren().contains(this)) parent.getChildren().add(this);
+                if (!parent.getChildren().contains(this)) parent.getChildren().add(this);
                 animation.getKeyFrames().add(new KeyFrame(Duration.millis(200), new KeyValue(writableWidth, width)));
                 isOpened = true;
             }
             animation.play();
             animation.setOnFinished(e -> {
-                if(!isOpened){
+                if (!isOpened) {
                     parent.getChildren().remove(this);
                 }
                 canToggle = true;
@@ -96,9 +97,9 @@ public class SlideMenu extends VBox {
         }
     }
 
-    public void selectItem(SlideItem slideItem){
-        if(selectedItem != null) selectedItem.getTitleBox().setId("slide-item-box");
-        if(slideItem == null){
+    public void selectItem(SlideItem slideItem) {
+        if (selectedItem != null) selectedItem.getTitleBox().setId("slide-item-box");
+        if (slideItem == null) {
             selectedItem.getTitleBox().setId("slide-item-box");
             selectedItem = null;
             return;
@@ -115,14 +116,14 @@ public class SlideMenu extends VBox {
         return isOpened;
     }
 
-    public void add(SlideItem slideItem){
+    public void add(SlideItem slideItem) {
         topItemBox.getChildren().add(slideItem);
 
         items.add(slideItem);
     }
 
-    public void add(SlideItem slideItem, SlideAlignment alignment){
-        switch (alignment){
+    public void add(SlideItem slideItem, SlideAlignment alignment) {
+        switch (alignment) {
             case TOP:
                 topItemBox.getChildren().add(slideItem);
                 break;

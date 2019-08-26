@@ -7,7 +7,8 @@ public enum ButtonType {
     ACTION_BUTTON("action-button"), APPLY_ACTION_BUTTON("apply-action-button"), WARNING_ACTION_BUTTON("warning-action-button"), ERROR_ACTION_BUTTON("error-action-button");
 
     String id;
-    ButtonType(String id){
+
+    ButtonType(String id) {
         this.id = id;
     }
 

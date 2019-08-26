@@ -15,7 +15,7 @@ public abstract class TabMenu extends HBox {
     private Label selectedItem;
     private StringProperty selectedPageName = new SimpleStringProperty();
 
-    public TabMenu(int spacing){
+    public TabMenu(int spacing) {
         setId("tabmenu");
         setSpacing(spacing);
 
@@ -24,21 +24,22 @@ public abstract class TabMenu extends HBox {
         });
     }
 
-    public void addIem(String title, Node content){
+    public void addIem(String title, Node content) {
         Label itemLabel = new Label(title);
         itemLabel.setOnMouseClicked(e -> selectTab(itemLabel));
-        if(content == null) itemLabel.setDisable(true);
+        if (content == null) itemLabel.setDisable(true);
 
         contents.put(itemLabel, content);
         getChildren().add(itemLabel);
     }
 
     public abstract void setContent(Node content);
+
     public abstract void onPageChange(String from, String to);
 
-    private void selectTab(Label itemLabel){
-        if(selectedItem != null && selectedItem == itemLabel) return;
-        if(selectedItem != null) selectedItem.setStyle(null);
+    private void selectTab(Label itemLabel) {
+        if (selectedItem != null && selectedItem == itemLabel) return;
+        if (selectedItem != null) selectedItem.setStyle(null);
         selectedItem = itemLabel;
         selectedItem.setStyle("-fx-border-width: 0px 0px 4px 0px;");
 
@@ -46,11 +47,11 @@ public abstract class TabMenu extends HBox {
         selectedPageName.set(selectedItem.getText());
     }
 
-    public void selectTab(String title){
+    public void selectTab(String title) {
         Label itemLabel;
-        if((itemLabel = getItemLabelByText(title)) == null) return;
-        if(selectedItem != null && selectedItem == itemLabel) return;
-        if(selectedItem != null) selectedItem.setStyle(null);
+        if ((itemLabel = getItemLabelByText(title)) == null) return;
+        if (selectedItem != null && selectedItem == itemLabel) return;
+        if (selectedItem != null) selectedItem.setStyle(null);
         selectedItem = itemLabel;
         selectedItem.setStyle("-fx-border-width: 0px 0px 4px 0px;");
 
@@ -58,11 +59,11 @@ public abstract class TabMenu extends HBox {
         selectedPageName.set(selectedItem.getText());
     }
 
-    public void selectTab(int index){
-        if(index > contents.size()-1) return;
+    public void selectTab(int index) {
+        if (index > contents.size() - 1) return;
         Label itemLabel = (Label) contents.keySet().toArray()[index];
-        if(selectedItem != null && selectedItem == itemLabel) return;
-        if(selectedItem != null) selectedItem.setStyle(null);
+        if (selectedItem != null && selectedItem == itemLabel) return;
+        if (selectedItem != null) selectedItem.setStyle(null);
         selectedItem = itemLabel;
         selectedItem.setStyle("-fx-border-width: 0px 0px 4px 0px;");
 
@@ -70,9 +71,9 @@ public abstract class TabMenu extends HBox {
         selectedPageName.set(selectedItem.getText());
     }
 
-    private Label getItemLabelByText(String text){
-        for(Label label : contents.keySet()){
-            if(label.getText().equalsIgnoreCase(text)) return label;
+    private Label getItemLabelByText(String text) {
+        for (Label label : contents.keySet()) {
+            if (label.getText().equalsIgnoreCase(text)) return label;
         }
         return null;
     }

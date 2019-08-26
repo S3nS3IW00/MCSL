@@ -13,7 +13,7 @@ public class ColoredTextFlow extends TextFlow {
         this.fontSize = fontSize;
     }
 
-    public void appendLineSeparator(){
+    public void appendLineSeparator() {
         append(System.lineSeparator());
     }
 
@@ -27,24 +27,24 @@ public class ColoredTextFlow extends TextFlow {
 
     public void append(String sText) {
         try {
-            for(Text text : new JsonParser(sText).parse()){
-                if(text != null) getChildren().add(text);
+            for (Text text : new JsonParser(sText).parse()) {
+                if (text != null) getChildren().add(text);
             }
-        } catch (ParseException e){
-            for(Text text : new ColorParser(sText, fontSize).parse()){
-                if(text != null) getChildren().add(text);
+        } catch (ParseException e) {
+            for (Text text : new ColorParser(sText, fontSize).parse()) {
+                if (text != null) getChildren().add(text);
             }
         }
     }
 
     public void appendLine(String sText) {
         try {
-            for(Text text : new JsonParser(sText).parse()){
-                if(text != null) getChildren().add(text);
+            for (Text text : new JsonParser(sText).parse()) {
+                if (text != null) getChildren().add(text);
             }
-        } catch (ParseException e){
-            for(Text text : new ColorParser(sText, fontSize).parse()){
-                if(text != null) getChildren().add(text);
+        } catch (ParseException e) {
+            for (Text text : new ColorParser(sText, fontSize).parse()) {
+                if (text != null) getChildren().add(text);
             }
         }
         getChildren().add(new Text(System.lineSeparator()));

@@ -40,7 +40,7 @@ public class JsonManager {
             }
             json = (JSONObject) parser.parse(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
 
-            for(Object key : json.keySet()){
+            for (Object key : json.keySet()) {
                 defaults.put(key.toString(), json.get(key));
             }
         } catch (Exception ex) {
@@ -86,7 +86,7 @@ public class JsonManager {
         }
     }
 
-    public void addRawData(String key, Object o){
+    public void addRawData(String key, Object o) {
         defaults.put(key, o);
     }
 
@@ -106,14 +106,16 @@ public class JsonManager {
     public double getDouble(String key) {
         try {
             return Double.parseDouble(getRawData(key));
-        } catch (Exception ex) { }
+        } catch (Exception ex) {
+        }
         return -1;
     }
 
     public double getInteger(String key) {
         try {
             return Integer.parseInt(getRawData(key));
-        } catch (Exception ex) { }
+        } catch (Exception ex) {
+        }
         return -1;
     }
 

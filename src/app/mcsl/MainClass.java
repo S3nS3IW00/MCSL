@@ -73,7 +73,7 @@ public class MainClass extends Application {
         Splash splash = new Splash();
         splash.show();
 
-        if(OSManager.getOs() == OSManager.OS.WINDOWS || OSManager.getOs() == OSManager.OS.UNIX) testedOpSys = true;
+        if (OSManager.getOs() == OSManager.OS.WINDOWS || OSManager.getOs() == OSManager.OS.UNIX) testedOpSys = true;
 
         FileUpdater fileUpdater = new FileUpdater();
         try {
@@ -96,7 +96,7 @@ public class MainClass extends Application {
             Logger.debug("Java home: " + System.getProperty("java.home"));
             Logger.emptyLine();
 
-            if(!testedOpSys) Logger.warn("Operation system not supported!");
+            if (!testedOpSys) Logger.warn("Operation system not supported!");
 
             Logger.info("Verifying session...");
             sessionFile = new File(OSManager.getRoot() + File.separator + "session");
@@ -163,14 +163,15 @@ public class MainClass extends Application {
                 splash.close();
 
                 if (SHOW_WELCOME) new WelcomeDialog().show();
-                if(!testedOpSys) new AlertDialog(300, 400, Language.getText("warning"), Language.getText("nottestedopsys"), AlertType.WARNING).show();
+                if (!testedOpSys)
+                    new AlertDialog(300, 400, Language.getText("warning"), Language.getText("nottestedopsys"), AlertType.WARNING).show();
                 if (SHOW_UPDATED) new ChangelogDialog().show();
                 if (SHOW_FILE_UPDATE)
                     new AlertDialog(250, 400, Language.getText("fileupdate"), Language.getText(fileUpdateStatusType.getLangCode()), fileUpdateStatusType.getAlertType()).show();
                 if (fileUpdateStatusType == FileUpdateStatusType.RECREATED_WITH_COPY)
                     getFileManager().deleteFile(new File(getFileManager().getRoot() + "_old"));
 
-                Logger.info("Startup done!");
+                Logger.info("Startup done! (" + Logger.getWarnCount() + " warning, " + Logger.getErrorCount() + " error, " + Logger.getExceptionCount() + " exception)");
             }));
         }
     }

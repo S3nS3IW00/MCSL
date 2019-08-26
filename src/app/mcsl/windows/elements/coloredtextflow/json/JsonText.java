@@ -6,12 +6,12 @@ import org.json.simple.JSONObject;
 
 public class JsonText extends JSONObject {
 
-    public JsonText(String text){
+    public JsonText(String text) {
         put("text", text);
     }
 
-    public JsonText color(ChatColor color){
-        if(containsKey("color")){
+    public JsonText color(ChatColor color) {
+        if (containsKey("color")) {
             replace("color", color.name().toLowerCase());
         } else {
             put("color", color.name().toLowerCase());
@@ -20,8 +20,8 @@ public class JsonText extends JSONObject {
         return this;
     }
 
-    public JsonText bold(){
-        if(containsKey("bold")){
+    public JsonText bold() {
+        if (containsKey("bold")) {
             replace("bold", true);
         } else {
             put("bold", true);
@@ -30,8 +30,8 @@ public class JsonText extends JSONObject {
         return this;
     }
 
-    public JsonText italic(){
-        if(containsKey("italic")){
+    public JsonText italic() {
+        if (containsKey("italic")) {
             replace("italic", true);
         } else {
             put("italic", true);
@@ -40,8 +40,8 @@ public class JsonText extends JSONObject {
         return this;
     }
 
-    public JsonText underlined(){
-        if(containsKey("underlined")){
+    public JsonText underlined() {
+        if (containsKey("underlined")) {
             replace("underlined", true);
         } else {
             put("underlined", true);
@@ -50,8 +50,8 @@ public class JsonText extends JSONObject {
         return this;
     }
 
-    public JsonText strikethrough(){
-        if(containsKey("strikethrough")){
+    public JsonText strikethrough() {
+        if (containsKey("strikethrough")) {
             replace("strikethrough", true);
         } else {
             put("strikethrough", true);
@@ -60,12 +60,12 @@ public class JsonText extends JSONObject {
         return this;
     }
 
-    public JsonText clickEvent(ClickEvent eventType, String value){
+    public JsonText clickEvent(ClickEvent eventType, String value) {
         JSONObject clickObject = new JSONObject();
         clickObject.put("action", eventType.name().toLowerCase());
         clickObject.put("value", value);
 
-        if(containsKey("clickEvent")){
+        if (containsKey("clickEvent")) {
             replace("clickEvent", clickObject);
         } else {
             put("clickEvent", clickObject);
@@ -74,7 +74,7 @@ public class JsonText extends JSONObject {
         return this;
     }
 
-    public JsonText hoverEvent(HoverEvent eventType, String value){
+    public JsonText hoverEvent(HoverEvent eventType, String value) {
         JSONObject hoverObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
         JSONObject textObject = new JSONObject();
@@ -90,7 +90,7 @@ public class JsonText extends JSONObject {
 
         jsonArray.add(extraObject);
 
-        if(containsKey("hoverEvent")){
+        if (containsKey("hoverEvent")) {
             replace("hoverEvent", hoverObject);
         } else {
             put("hoverEvent", hoverObject);

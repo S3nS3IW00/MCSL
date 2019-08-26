@@ -13,7 +13,7 @@ public class GroupBox extends VBox {
     private Label titleLabel;
     private VBox vBox;
 
-    public GroupBox(String title){
+    public GroupBox(String title) {
         this.title = title;
 
         titleLabel = new Label(title);
@@ -27,15 +27,15 @@ public class GroupBox extends VBox {
         getChildren().addAll(titleLabel, vBox);
     }
 
-    public void add(Node node){
+    public void add(Node node) {
         vBox.getChildren().add(node);
     }
 
-    public void addAll(Node... nodes){
+    public void addAll(Node... nodes) {
         vBox.getChildren().addAll(nodes);
     }
 
-    public VBox getBody(){
+    public VBox getBody() {
         return vBox;
     }
 }

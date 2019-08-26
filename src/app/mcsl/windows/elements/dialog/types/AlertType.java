@@ -7,7 +7,8 @@ public enum AlertType {
     DEFAULT(LabelColor.DEFAULT), SUCCESS(LabelColor.SUCCESS), WARNING(LabelColor.WARNING), ERROR(LabelColor.ERROR);
 
     LabelColor color;
-    AlertType(LabelColor color){
+
+    AlertType(LabelColor color) {
         this.color = color;
     }
 

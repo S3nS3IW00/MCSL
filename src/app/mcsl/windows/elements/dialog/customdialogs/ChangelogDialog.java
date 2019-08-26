@@ -27,13 +27,13 @@ public class ChangelogDialog extends Dialog {
 
         ColoredTextFlow changeLogFlow = new ColoredTextFlow(13);
 
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(MainClass.class.getResourceAsStream("/app/mcsl/resources/changelog_"+Language.LANGUAGE+".txt"), StandardCharsets.UTF_8));
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(MainClass.class.getResourceAsStream("/app/mcsl/resources/changelog_" + Language.LANGUAGE + ".txt"), StandardCharsets.UTF_8));
         try {
             String line;
-            while((line = bufferedReader.readLine()) != null){
+            while ((line = bufferedReader.readLine()) != null) {
                 changeLogFlow.appendLine(line.replace("\u00A7", "§"));
             }
-        } catch (IOException e){
+        } catch (IOException e) {
             //empty catch block
         }
 

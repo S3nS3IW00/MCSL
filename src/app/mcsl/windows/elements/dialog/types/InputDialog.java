@@ -26,8 +26,8 @@ public abstract class InputDialog extends Dialog {
         inputField = new TextField();
         inputField.setPrefWidth(400);
         inputField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(!inputCanBeNull){
-                if(newValue.length() > 0){
+            if (!inputCanBeNull) {
+                if (newValue.length() > 0) {
                     doneButton.setDisable(false);
                 } else {
                     doneButton.setDisable(true);
@@ -41,7 +41,7 @@ public abstract class InputDialog extends Dialog {
         cancelButton.setOnAction(e -> onCancel());
 
         doneButton = new Button(Language.getText("done"), ButtonType.APPLY);
-        if(!inputCanBeNull) doneButton.setDisable(true);
+        if (!inputCanBeNull) doneButton.setDisable(true);
         doneButton.setOnAction(e -> onDone(inputField.getText().length() == 0 ? null : inputField.getText()));
 
         addButton(doneButton, cancelButton);
@@ -52,6 +52,7 @@ public abstract class InputDialog extends Dialog {
     }
 
     public abstract void onDone(String input);
+
     public abstract void onCancel();
 
 }

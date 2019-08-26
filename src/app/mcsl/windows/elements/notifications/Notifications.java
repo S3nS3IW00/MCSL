@@ -15,9 +15,9 @@ public class Notifications {
         }
         if (from == null || from.getContent() != MainClass.getTemplate().getTabPane().getSelectionModel().getSelectedItem().getContent()) {
             MainClass.getTemplate().showNotification(Language.getText("newnotification"), LabelColor.ERROR);
+            MainClass.getFileManager().addNotification(notification);
+            MainClass.getTemplate().addNotification(notification, true);
         }
-        MainClass.getFileManager().addNotification(notification);
-        MainClass.getTemplate().addNotification(notification, true);
     }
 
 }

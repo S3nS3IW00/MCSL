@@ -31,9 +31,9 @@ public class JsonParser {
         JSONArray textArray = (JSONArray) jsonParser.parse(json);
         Text[] texts = new Text[textArray.size()];
 
-        for(int i = 0; i < textArray.size(); i++){
+        for (int i = 0; i < textArray.size(); i++) {
             Object o = textArray.get(i);
-            if(o instanceof JSONObject) {
+            if (o instanceof JSONObject) {
                 JSONObject textObject = (JSONObject) o;
                 texts[i] = getStyledText(textObject);
             }
@@ -46,30 +46,30 @@ public class JsonParser {
 
         FontWeight fontWeight = FontWeight.NORMAL;
         FontPosture fontPosture = FontPosture.REGULAR;
-        for(Object o : textObject.keySet()){
+        for (Object o : textObject.keySet()) {
             String key = o.toString();
-            switch (key){
+            switch (key) {
                 case "color":
                     text.setFill(ChatColor.valueOf(textObject.get("color").toString().toUpperCase()).getColor());
                     break;
                 case "italic":
-                    if((boolean)textObject.get("italic")) fontPosture = FontPosture.ITALIC;
+                    if ((boolean) textObject.get("italic")) fontPosture = FontPosture.ITALIC;
                     break;
                 case "bold":
-                    if((boolean)textObject.get("bold")) fontWeight = FontWeight.BOLD;
+                    if ((boolean) textObject.get("bold")) fontWeight = FontWeight.BOLD;
                     break;
                 case "underlined":
-                    if((boolean)textObject.get("underlined")) text.setUnderline(true);
+                    if ((boolean) textObject.get("underlined")) text.setUnderline(true);
                     break;
                 case "strikethrough":
-                    if((boolean)textObject.get("strikethrough")) text.setStrikethrough(true);
+                    if ((boolean) textObject.get("strikethrough")) text.setStrikethrough(true);
                     break;
                 case "clickEvent":
                     JSONObject clickObject = (JSONObject) textObject.get("clickEvent");
                     String clickAction = clickObject.get("action").toString();
                     String clickValue = clickObject.get("value").toString();
                     text.setOnMouseClicked(e -> {
-                        switch (clickAction){
+                        switch (clickAction) {
                             case "run_command":
                                 //run command in console
                                 break;
@@ -97,7 +97,7 @@ public class JsonParser {
                         JSONObject hoverValueObject = (JSONObject) hoverObject.get("value");
                         JSONArray hoverExtraArray = (JSONArray) hoverValueObject.get("extra");
                         StringBuilder hoverTextBuilder = new StringBuilder();
-                        for(Object ho : hoverExtraArray){
+                        for (Object ho : hoverExtraArray) {
                             JSONObject hoText = (JSONObject) ho;
                             hoverTextBuilder.append(hoText.get("text").toString());
                         }

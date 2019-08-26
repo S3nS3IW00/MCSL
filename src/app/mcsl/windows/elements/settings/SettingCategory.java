@@ -21,7 +21,7 @@ public class SettingCategory extends VBox {
 
     private List<Setting> settings = new ArrayList<>();
 
-    public SettingCategory(String title){
+    public SettingCategory(String title) {
         this.title = title;
 
         titleLabel = new Label(title);
@@ -39,13 +39,13 @@ public class SettingCategory extends VBox {
         getChildren().addAll(titleLabel, pane);
     }
 
-    public void addSetting(Setting setting){
+    public void addSetting(Setting setting) {
         int rowIndex = getRowCount(settingBox);
         settingBox.add(setting.getTitle(), 0, rowIndex);
 
         HBox componentBox = new HBox(setting.getComponent());
         componentBox.setAlignment(Pos.CENTER_LEFT);
-        if(setting.getDesctiption() != null) componentBox.getChildren().add(setting.getDesctiption());
+        if (setting.getDesctiption() != null) componentBox.getChildren().add(setting.getDesctiption());
 
         settingBox.add(componentBox, 1, rowIndex);
         this.settings.add(setting);
@@ -53,21 +53,21 @@ public class SettingCategory extends VBox {
         settings.add(setting);
     }
 
-    public void addSetting(Setting... settings){
-        for(Setting setting : settings){
+    public void addSetting(Setting... settings) {
+        for (Setting setting : settings) {
             int rowIndex = getRowCount(settingBox);
             settingBox.add(setting.getTitle(), 0, rowIndex);
 
             HBox componentBox = new HBox(setting.getComponent());
             componentBox.setAlignment(Pos.CENTER_LEFT);
-            if(setting.getDesctiption() != null) componentBox.getChildren().add(setting.getDesctiption());
+            if (setting.getDesctiption() != null) componentBox.getChildren().add(setting.getDesctiption());
 
             settingBox.add(componentBox, 1, rowIndex);
             this.settings.add(setting);
         }
     }
 
-    public void removeSetting(Setting setting){
+    public void removeSetting(Setting setting) {
         settingBox.getChildren().remove(setting);
     }
 
@@ -81,8 +81,8 @@ public class SettingCategory extends VBox {
             Node child = pane.getChildren().get(i);
             if (child.isManaged()) {
                 Integer rowIndex = GridPane.getRowIndex(child);
-                if(rowIndex != null){
-                    numRows = Math.max(numRows,rowIndex+1);
+                if (rowIndex != null) {
+                    numRows = Math.max(numRows, rowIndex + 1);
                 }
             }
         }

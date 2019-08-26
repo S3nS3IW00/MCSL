@@ -168,7 +168,7 @@ public class Template extends Stage {
 
         slideMenu = new SlideMenu(tabSlide, Language.getText("menu"), 250);
 
-        SlideItem serversItem = new SlideItem(slideMenu, Language.getText("servers"), new ImageView(FileManager.SERVER_ICON)) {
+        SlideItem serversItem = new SlideItem(Language.getText("servers"), FileManager.SERVER_ICON) {
             @Override
             public void onClick() {
                 if (slideMenu.getSelectedItem() != null && slideMenu.getSelectedItem() != this)
@@ -178,7 +178,7 @@ public class Template extends Stage {
         slideMenu.add(serversItem);
         slideMenu.selectItem(serversItem);
 
-        slideMenu.add(new SlideItem(slideMenu, Language.getText("filemanager"), new ImageView(FileManager.FILE_ICON_20)) {
+        slideMenu.add(new SlideItem(Language.getText("filemanager"), FileManager.FILE_ICON_20) {
             @Override
             public void onClick() {
                 if (slideMenu.getSelectedItem() != null && slideMenu.getSelectedItem() != this)
@@ -186,7 +186,7 @@ public class Template extends Stage {
             }
         });
 
-        slideMenu.add(new SlideItem(slideMenu, Language.getText("website"), new ImageView(FileManager.WEBSITE_ICON_20)) {
+        slideMenu.add(new SlideItem(Language.getText("website"), FileManager.WEBSITE_ICON_20) {
             @Override
             public void onClick() {
                 try {
@@ -198,7 +198,7 @@ public class Template extends Stage {
             }
         }, SlideAlignment.BOTTOM);
 
-        slideMenu.add(new SlideItem(slideMenu, "Facebook", new ImageView(FileManager.FACEBOOK_ICON_20)) {
+        slideMenu.add(new SlideItem("Facebook", FileManager.FACEBOOK_ICON_20) {
             @Override
             public void onClick() {
                 try {
@@ -210,7 +210,7 @@ public class Template extends Stage {
             }
         }, SlideAlignment.BOTTOM);
 
-        slideMenu.add(new SlideItem(slideMenu, Language.getText("reporterror"), new ImageView(FileManager.REPORT_ICON_20)) {
+        slideMenu.add(new SlideItem(Language.getText("reporterror"), FileManager.REPORT_ICON_20) {
             @Override
             public void onClick() {
                 try {
@@ -255,8 +255,6 @@ public class Template extends Stage {
                 addNotification(notification, false);
             }
         }
-
-        settingsAnimation.setOnFinished(e -> canOpenSettings = true);
 
         Region headerRegion1 = new Region();
         HBox.setHgrow(headerRegion1, Priority.ALWAYS);
@@ -513,13 +511,17 @@ public class Template extends Stage {
                 settingsAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(300), new KeyValue(settingsBoxHeight, 0.0)));
                 isSettingsOpen = false;
                 settingsButton.setStyle(null);
-                if (!slideMenu.isOpened()) tabPane.setEffect(null);
+                settingsAnimation.setOnFinished(e -> {
+                    canOpenSettings = true;
+                    if (!slideMenu.isOpened()) tabPane.setEffect(null);
+                });
                 if (settingsContent.isNeedRestartShowing()) settingsContent.removeNeedRestartBox();
             } else {
                 settingsAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(300), new KeyValue(settingsBoxHeight, 1000.0)));
                 isSettingsOpen = true;
                 settingsButton.setStyle("-fx-background-color: -fx-defdarkcolor;");
                 tabPane.setEffect(new GaussianBlur(5));
+                settingsAnimation.setOnFinished(e -> canOpenSettings = true);
             }
             settingsAnimation.play();
         }

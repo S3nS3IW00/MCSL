@@ -8,7 +8,7 @@ public class ServerContent implements TabClass {
 
     private Server server;
 
-    public ServerContent(Server server){
+    public ServerContent(Server server) {
         this.server = server;
     }
 

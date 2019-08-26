@@ -21,6 +21,8 @@ public class Logger {
 
     private static final SimpleDateFormat SDF = new SimpleDateFormat("HH:mm:ss");
 
+    private static int WARN_COUNT, ERROR_COUNT, EXCEPTION_COUNT;
+
     public static void init() throws IOException {
         if (!LOGS_FOLDER.exists()) {
             LOGS_FOLDER.getParentFile().mkdirs();
@@ -61,7 +63,7 @@ public class Logger {
     }
 
     private static void append(String prefix, String text, LogLevel logLevel) {
-        String line = "[" + SDF.format(new Date()) + " " + logLevel.name() + "]: " + (prefix == null ? "" : "["+prefix+"] ") + text;
+        String line = "[" + SDF.format(new Date()) + " " + logLevel.name() + "]: " + (prefix == null ? "" : "[" + prefix + "] ") + text;
         try {
             System.out.println(line);
             OUT_PRINT.write(line);
@@ -72,36 +74,51 @@ public class Logger {
         }
 
         LogEvent.log(logLevel, text);
-        if(logLevel == LogLevel.EXCEPTION) new ExceptionDialog(line).show();
+        if (logLevel == LogLevel.EXCEPTION) new ExceptionDialog(line).show();
     }
 
     public static void debug(String text) {
         String className = new Exception().getStackTrace()[1].getClassName();
-        append(className.substring(className.lastIndexOf(".")+1), text, LogLevel.DEBUG);
+        append(className.substring(className.lastIndexOf(".") + 1), text, LogLevel.DEBUG);
     }
 
     public static void info(String text) {
         String className = new Exception().getStackTrace()[1].getClassName();
-        append(className.substring(className.lastIndexOf(".")+1), text, LogLevel.INFO);
+        append(className.substring(className.lastIndexOf(".") + 1), text, LogLevel.INFO);
     }
 
     public static void warn(String text) {
         String className = new Exception().getStackTrace()[1].getClassName();
-        append(className.substring(className.lastIndexOf(".")+1), text, LogLevel.WARN);
+        append(className.substring(className.lastIndexOf(".") + 1), text, LogLevel.WARN);
+        WARN_COUNT++;
     }
 
     public static void error(String text) {
         String className = new Exception().getStackTrace()[1].getClassName();
-        append(className.substring(className.lastIndexOf(".")+1), text, LogLevel.ERROR);
+        append(className.substring(className.lastIndexOf(".") + 1), text, LogLevel.ERROR);
+        ERROR_COUNT++;
     }
 
-    public static void exception(Throwable t){
+    public static void exception(Throwable t) {
         String className = new Exception().getStackTrace()[1].getClassName();
-        append(className.substring(className.lastIndexOf(".")+1), getStackTrace(t), LogLevel.EXCEPTION);
+        append(className.substring(className.lastIndexOf(".") + 1), getStackTrace(t), LogLevel.EXCEPTION);
+        EXCEPTION_COUNT++;
     }
 
-    public static void emptyLine(){
+    public static void emptyLine() {
         append(null, "", LogLevel.INFO);
     }
 
+    //GETTERS
+    public static int getWarnCount() {
+        return WARN_COUNT;
+    }
+
+    public static int getErrorCount() {
+        return ERROR_COUNT;
+    }
+
+    public static int getExceptionCount() {
+        return EXCEPTION_COUNT;
+    }
 }

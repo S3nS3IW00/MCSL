@@ -4,7 +4,7 @@ import org.json.simple.JSONArray;
 
 public class JsonMessage extends JSONArray {
 
-    public void append(JsonText jsonText){
+    public void append(JsonText jsonText) {
         add(jsonText);
     }
 

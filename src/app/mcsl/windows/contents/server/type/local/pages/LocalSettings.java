@@ -314,7 +314,7 @@ public class LocalSettings extends ScrollPane {
         Setting serverFileSetting = new Setting(Language.getText("serverfile"), serverFileComboBox, null, false) {
             @Override
             public void onChange(Object object) {
-                if (MainClass.getFileManager().getServerFilesFolder().listFiles().length > 0) {
+                if (MainClass.getFileManager().getServerFilesFolder().listFiles().length > 0 && serverFileComboBox.getSelectionModel().getSelectedItem() != null) {
                     changed.put("serverfile", serverFileComboBox.getSelectionModel().getSelectedItem().toString());
                 } else {
                     settingsProps.removeProp("serverfile");

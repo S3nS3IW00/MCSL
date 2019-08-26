@@ -15,7 +15,7 @@ public class PingIndicator extends HBox {
 
     private IntegerProperty value = new SimpleIntegerProperty(0);
 
-    public PingIndicator(int lineStroke, int maxSize, int maxValue){
+    public PingIndicator(int lineStroke, int maxSize, int maxValue) {
         this.lineStroke = lineStroke;
         this.maxSize = maxSize;
         this.maxValue = maxValue;
@@ -50,30 +50,30 @@ public class PingIndicator extends HBox {
         getChildren().addAll(pingLabel, lineBox);
         setAlignment(Pos.BOTTOM_RIGHT);
 
-        line1.setStartY(getLayoutY()-(maxSize-12));
+        line1.setStartY(getLayoutY() - (maxSize - 12));
         line1.setEndY(getLayoutY());
-        line2.setStartY(getLayoutY()-(maxSize-6));
+        line2.setStartY(getLayoutY() - (maxSize - 6));
         line2.setEndY(getLayoutY());
-        line3.setStartY(getLayoutY()-(maxSize-3));
+        line3.setStartY(getLayoutY() - (maxSize - 3));
         line3.setEndY(getLayoutY());
-        line4.setStartY(getLayoutY()-maxSize);
+        line4.setStartY(getLayoutY() - maxSize);
         line4.setEndY(getLayoutY());
 
         value.addListener((observable, oldValue, newValue) -> {
-            pingLabel.setText(newValue+"ms");
-            double percent = maxValue-((newValue.doubleValue()/maxValue)*100);
+            pingLabel.setText(newValue + "ms");
+            double percent = maxValue - ((newValue.doubleValue() / maxValue) * 100);
             int activeCount = 0;
-            if(percent < 25){
+            if (percent < 25) {
                 activeCount = 1;
-            } else if(percent >= 25 && percent < 50){
+            } else if (percent >= 25 && percent < 50) {
                 activeCount = 2;
-            } else if(percent >= 50 && percent < 75){
+            } else if (percent >= 50 && percent < 75) {
                 activeCount = 3;
-            } else if (percent > 75){
+            } else if (percent > 75) {
                 activeCount = 4;
             }
 
-            switch (activeCount){
+            switch (activeCount) {
                 case 0:
                     line1.setId("inactive-level-indicator");
                     line2.setId("inactive-level-indicator");
@@ -108,11 +108,11 @@ public class PingIndicator extends HBox {
         });
     }
 
-    public void setValue(int value){
+    public void setValue(int value) {
         this.value.setValue(value);
     }
 
-    public void disable(){
+    public void disable() {
         line1.setId("disabled-level-indicator");
         line2.setId("disabled-level-indicator");
         line3.setId("disabled-level-indicator");

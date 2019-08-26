@@ -5,9 +5,6 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
-
 public class ColorParser {
 
     private String text;
@@ -28,13 +25,13 @@ public class ColorParser {
             texts[index] = getStyledText(text);
             return texts;
         }
-        if(text.split("&")[0].length() > 0){
+        if (text.split("&")[0].length() > 0) {
             texts[0] = getStyledText(text.split("&")[0]);
             index = 1;
         }
         for (int i = index; i < text.split("&").length; i++) {
             String s = text.split("&")[i];
-            if(s.length() > 0) {
+            if (s.length() > 0) {
                 String styleCode = s.charAt(0) + "";
                 String sText = s.substring(1);
                 if (isStyleCode(styleCode)) {
@@ -51,7 +48,8 @@ public class ColorParser {
 
     private boolean isStyleCode(String styleCode) {
         if (styleCode.equalsIgnoreCase("r") || styleCode.equalsIgnoreCase("o") ||
-                styleCode.equalsIgnoreCase("l") || styleCode.equalsIgnoreCase("m")|| styleCode.equalsIgnoreCase("n")) return true;
+                styleCode.equalsIgnoreCase("l") || styleCode.equalsIgnoreCase("m") || styleCode.equalsIgnoreCase("n"))
+            return true;
         for (ChatColor type : ChatColor.values()) {
             if (type.getStyleCode().equalsIgnoreCase(styleCode)) return true;
         }
@@ -70,7 +68,7 @@ public class ColorParser {
         FontWeight fontWeight = FontWeight.NORMAL;
         FontPosture fontPosture = FontPosture.REGULAR;
         if (underlined) text.setUnderline(true);
-        if(striketrough) text.setStrikethrough(true);
+        if (striketrough) text.setStrikethrough(true);
         if (bold) fontWeight = FontWeight.BOLD;
         if (italic) fontPosture = FontPosture.ITALIC;
         text.setFont(Font.font(null, fontWeight, fontPosture, fontSize));

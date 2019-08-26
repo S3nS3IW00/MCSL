@@ -4,9 +4,9 @@ import app.mcsl.MainClass;
 import app.mcsl.events.ServerStateChangeEvent;
 import app.mcsl.events.ServerStatusChangeEvent;
 import app.mcsl.managers.Language;
+import app.mcsl.managers.file.FileManager;
 import app.mcsl.managers.server.ServerAction;
 import app.mcsl.managers.server.ServersManager;
-import app.mcsl.managers.file.FileManager;
 import app.mcsl.windows.contents.server.Server;
 import app.mcsl.windows.contents.server.ServerType;
 import app.mcsl.windows.elements.button.Button;
@@ -108,7 +108,7 @@ public class ServerCard extends StackPane {
         renameTextField.setMaxWidth(100);
         renameTextField.setId("item-box-text-area");
         renameTextField.setOnKeyPressed(e -> {
-            if(e.getCode() == KeyCode.ENTER){
+            if (e.getCode() == KeyCode.ENTER) {
                 requestFocus();
             }
         });
@@ -170,14 +170,14 @@ public class ServerCard extends StackPane {
         layer.setPickOnBounds(false);
         layer.setId("item-box-layer");
 
-        in = new FadeTransition(Duration.millis(200), layer);
+        in = new FadeTransition(Duration.millis(100), layer);
         in.setFromValue(0);
         in.setToValue(0.7);
         in.setCycleCount(1);
         in.setAutoReverse(true);
         in.setOnFinished(e -> layer.setPickOnBounds(true));
 
-        out = new FadeTransition(Duration.millis(200), layer);
+        out = new FadeTransition(Duration.millis(100), layer);
         out.setFromValue(0.7);
         out.setToValue(0);
         out.setCycleCount(1);
@@ -253,10 +253,10 @@ public class ServerCard extends StackPane {
         });
     }
 
-    public void updateInfos(String faviconBase64, String motd, int onlineplayers, int maxplayers, int latency){
+    public void updateInfos(String faviconBase64, String motd, int onlineplayers, int maxplayers, int latency) {
         Platform.runLater(() -> {
             try {
-                if(faviconBase64 != null) {
+                if (faviconBase64 != null) {
                     favicon.setImage(MainClass.getFileManager().decodeBase64ToImage(faviconBase64));
                 }
             } catch (IOException e) {
@@ -264,7 +264,7 @@ public class ServerCard extends StackPane {
             }
             motdFlow.getChildren().clear();
             motdFlow.append(motd.replaceAll("\u00A7", "§"));
-            playerCount.setText(onlineplayers+"/"+maxplayers);
+            playerCount.setText(onlineplayers + "/" + maxplayers);
             pingIndicator.setValue(latency);
         });
     }

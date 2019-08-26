@@ -21,7 +21,7 @@ public class ListBox extends ScrollPane {
     private Map<String, HBox> buttonBoxes = new HashMap<>();
     private int width, height, fontSize, boxSize;
 
-    public ListBox(int width, int height){
+    public ListBox(int width, int height) {
         this.width = width;
         this.height = height;
         body = new VBox();
@@ -33,7 +33,7 @@ public class ListBox extends ScrollPane {
         setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
     }
 
-    public ListBox(int width, int height, int fontSize, int boxSize){
+    public ListBox(int width, int height, int fontSize, int boxSize) {
         this.width = width;
         this.height = height;
         this.fontSize = fontSize;
@@ -47,13 +47,13 @@ public class ListBox extends ScrollPane {
         setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
     }
 
-    public ListBox add(Image icon, String title){
+    public ListBox add(Image icon, String title) {
         Label titleText = new Label(title);
         titleText.setStyle("-fx-text-fill: -fx-themetypecolor;-fx-font-weight: bold;");
         titleText.setFont(Font.font(fontSize != 0 ? fontSize : 15));
         titleText.setPrefHeight(boxSize != 0 ? boxSize : 30);
         titleText.setPadding(new Insets(0, 0, 0, 5));
-        if(icon != null) titleText.setGraphic(new ImageView(icon));
+        if (icon != null) titleText.setGraphic(new ImageView(icon));
 
         VBox cardBox = new VBox(titleText);
         cardBox.setMaxWidth(Double.MAX_VALUE);
@@ -64,13 +64,13 @@ public class ListBox extends ScrollPane {
         return this;
     }
 
-    public ListBox add(ImageView icon, String title){
+    public ListBox add(ImageView icon, String title) {
         Label titleText = new Label(title);
         titleText.setStyle("-fx-text-fill: -fx-themetypecolor;-fx-font-weight: bold;");
         titleText.setFont(Font.font(fontSize != 0 ? fontSize : 15));
         titleText.setPrefHeight(boxSize != 0 ? boxSize : 30);
         titleText.setPadding(new Insets(0, 0, 0, 5));
-        if(icon != null) titleText.setGraphic(icon);
+        if (icon != null) titleText.setGraphic(icon);
 
         VBox cardBox = new VBox(titleText);
         cardBox.setMaxWidth(Double.MAX_VALUE);
@@ -85,34 +85,34 @@ public class ListBox extends ScrollPane {
         return body;
     }
 
-    public Map<String, HBox> getButtonBoxes(){
+    public Map<String, HBox> getButtonBoxes() {
         return buttonBoxes;
     }
 
-    public void clear(){
+    public void clear() {
         getBody().getChildren().clear();
         getButtonBoxes().clear();
     }
 
-    public VBox getCardBox(String title){
-        for(Node box : getBody().getChildren()){
+    public VBox getCardBox(String title) {
+        for (Node box : getBody().getChildren()) {
             VBox vBox = (VBox) box;
-            if(((Label)vBox.getChildren().get(0)).getText().equalsIgnoreCase(title)){
+            if (((Label) vBox.getChildren().get(0)).getText().equalsIgnoreCase(title)) {
                 return vBox;
             }
         }
         return null;
     }
 
-    public boolean isCardBoxExists(String title){
+    public boolean isCardBoxExists(String title) {
         return getCardBox(title) != null;
     }
 
-    public HBox getButtonBox(String title){
+    public HBox getButtonBox(String title) {
         return buttonBoxes.get(title);
     }
 
-    public Label getCardBoxLabel(String title){
-        return (Label)getCardBox(title).getChildren().get(0);
+    public Label getCardBoxLabel(String title) {
+        return (Label) getCardBox(title).getChildren().get(0);
     }
 }

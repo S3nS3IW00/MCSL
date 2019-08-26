@@ -4,9 +4,9 @@ import app.mcsl.MainClass;
 import app.mcsl.events.DirectoryChangeEvent;
 import app.mcsl.managers.HashManager;
 import app.mcsl.managers.Language;
+import app.mcsl.managers.file.DirectoryType;
 import app.mcsl.managers.server.ServerAction;
 import app.mcsl.managers.server.ServersManager;
-import app.mcsl.managers.file.DirectoryType;
 import app.mcsl.utils.DataTypeUtil;
 import app.mcsl.windows.contents.server.ServerType;
 import app.mcsl.windows.contents.server.type.external.ExternalServer;
@@ -114,7 +114,7 @@ public class AddServerDialog extends Dialog {
             directoryChooser.setTitle(Language.getText("choosecustomlocation"));
             File serverLocation = directoryChooser.showDialog(MainClass.getTemplate());
             if (serverLocation != null) {
-                customLocationTextField.setText(serverLocation.getAbsolutePath()+File.separator+serverName);
+                customLocationTextField.setText(serverLocation.getAbsolutePath() + File.separator + serverName);
             }
         });
 
@@ -123,7 +123,7 @@ public class AddServerDialog extends Dialog {
 
         eulaCheckBox = new CheckBox(Language.getText("accepteula"));
         eulaCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue){
+            if (newValue) {
                 nextButton.setDisable(false);
                 eulaCheckBox.setDisable(true);
             }
@@ -178,7 +178,7 @@ public class AddServerDialog extends Dialog {
         setStepContent(stepIndex);
 
         DirectoryChangeEvent.addListener(type -> {
-            if(type == DirectoryType.SERVERFILE){
+            if (type == DirectoryType.SERVERFILE) {
                 serverFileComboBox.setItems(FXCollections.observableList(Arrays.asList(MainClass.getFileManager().getServerFilesFolder().list())));
                 serverFileComboBox.getSelectionModel().selectFirst();
             }
@@ -186,11 +186,11 @@ public class AddServerDialog extends Dialog {
     }
 
     private void setStepContent(int stepIndex) {
-        if(stepIndex < 2) {
+        if (stepIndex < 2) {
             switch (stepIndex) {
                 case 0:
                     titleLabel.setText(Language.getText("addstep1title"));
-                    descriptionLabel.setText(Language.getText("localserverdescription")+System.lineSeparator()+Language.getText("externalserverdescription"));
+                    descriptionLabel.setText(Language.getText("localserverdescription") + System.lineSeparator() + Language.getText("externalserverdescription"));
                     inputBox.getChildren().clear();
                     inputBox.getChildren().addAll(serverNameTextField, typeComboBox, serverPortTextField);
 
@@ -199,8 +199,8 @@ public class AddServerDialog extends Dialog {
                     nextButton.setDisable(false);
                     break;
                 case 1:
-                    if(!serverNameTextField.getText().isEmpty() && !serverPortTextField.getText().isEmpty() && DataTypeUtil.isInt(serverPortTextField.getText())){
-                        if(!ServersManager.isExists(serverNameTextField.getText())) {
+                    if (!serverNameTextField.getText().isEmpty() && !serverPortTextField.getText().isEmpty() && DataTypeUtil.isInt(serverPortTextField.getText())) {
+                        if (!ServersManager.isExists(serverNameTextField.getText())) {
 
                             serverName = serverNameTextField.getText();
                             if (!serverName.matches("[\\s\\p{L}0-9]+")) {
@@ -237,11 +237,11 @@ public class AddServerDialog extends Dialog {
                     break;
             }
         } else {
-            switch (ServerType.valueOf(serverType.toUpperCase())){
+            switch (ServerType.valueOf(serverType.toUpperCase())) {
                 case LOCAL:
-                    if(!ramTextField.getText().isEmpty() && DataTypeUtil.isInt(ramTextField.getText())){
+                    if (!ramTextField.getText().isEmpty() && DataTypeUtil.isInt(ramTextField.getText())) {
                         ramInMB = Integer.parseInt(ramTextField.getText());
-                        if(serverFileComboBox.getSelectionModel().getSelectedItem() != null) {
+                        if (serverFileComboBox.getSelectionModel().getSelectedItem() != null) {
                             serverFile = serverFileComboBox.getSelectionModel().getSelectedItem().toString();
 
                             try {
@@ -270,14 +270,14 @@ public class AddServerDialog extends Dialog {
                     }
                     break;
                 case EXTERNAL:
-                    if(!pluginPortTextField.getText().isEmpty() && DataTypeUtil.isInt(pluginPortTextField.getText()) && !serverIpTextField.getText().isEmpty() && !usernameTextField.getText().isEmpty() && !passwordTextField.getText().isEmpty()){
+                    if (!pluginPortTextField.getText().isEmpty() && DataTypeUtil.isInt(pluginPortTextField.getText()) && !serverIpTextField.getText().isEmpty() && !usernameTextField.getText().isEmpty() && !passwordTextField.getText().isEmpty()) {
                         pluginPort = Integer.parseInt(pluginPortTextField.getText());
                         serverIp = serverIpTextField.getText();
                         username = usernameTextField.getText();
                         password = HashManager.cuttedHash(passwordTextField.getText());
 
                         try {
-                            MainClass.getFileManager().createServer(serverName, ServerType.EXTERNAL, new String[]{serverIp, serverPort+"", pluginPort+"", username, password}, null);
+                            MainClass.getFileManager().createServer(serverName, ServerType.EXTERNAL, new String[]{serverIp, serverPort + "", pluginPort + "", username, password}, null);
                             ServerAction.add(new ExternalServer(serverName));
                         } catch (IOException e) {
                             //empty catch block
@@ -293,18 +293,18 @@ public class AddServerDialog extends Dialog {
         }
     }
 
-    private void showError(String text){
+    private void showError(String text) {
         if (!inputBox.getChildren().contains(errorLabel)) inputBox.getChildren().add(errorLabel);
         errorLabel.setText(text);
     }
 
     @Override
-    public void show(){
+    public void show() {
         reset();
         super.show();
     }
 
-    private void reset(){
+    private void reset() {
         stepIndex = 0;
         setStepContent(stepIndex);
 

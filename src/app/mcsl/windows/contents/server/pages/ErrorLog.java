@@ -20,12 +20,12 @@ public class ErrorLog extends VBox {
     private Label startUpProblemsLabel, runProblemsLabel, logTitleLabel;
     private int startUpProblemsCount = 0, runProblemsCount = 0;
 
-    public ErrorLog(){
-        startUpProblemsLabel = new Label(Language.getText("startupproblems")+": 0");
+    public ErrorLog() {
+        startUpProblemsLabel = new Label(Language.getText("startupproblems") + ": 0");
         startUpProblemsLabel.setStyle("-fx-text-fill: -fx-themetypecolor;\n" +
                 "    -fx-font-size: 20px;\n" +
                 "    -fx-font-weight: bold;");
-        runProblemsLabel = new Label(Language.getText("runtimeproblems")+": 0");
+        runProblemsLabel = new Label(Language.getText("runtimeproblems") + ": 0");
         runProblemsLabel.setStyle("-fx-text-fill: -fx-themetypecolor;\n" +
                 "    -fx-font-size: 20px;\n" +
                 "    -fx-font-weight: bold;");
@@ -71,27 +71,27 @@ public class ErrorLog extends VBox {
         switch (type) {
             case STARTING:
                 startUpLog.appendLine(line);
-                if(newMessage){
+                if (newMessage) {
                     startUpProblemsCount++;
-                    startUpProblemsLabel.setText(Language.getText("startupproblems")+": "+startUpProblemsCount);
+                    startUpProblemsLabel.setText(Language.getText("startupproblems") + ": " + startUpProblemsCount);
                 }
                 break;
             case RUNNING:
                 runtimeLog.appendLine(line);
-                if(newMessage){
+                if (newMessage) {
                     runProblemsCount++;
-                    runProblemsLabel.setText(Language.getText("runtimeproblems")+": "+runProblemsCount);
+                    runProblemsLabel.setText(Language.getText("runtimeproblems") + ": " + runProblemsCount);
                 }
         }
     }
 
-    public void clear(){
+    public void clear() {
         startUpLog.getChildren().clear();
         runtimeLog.getChildren().clear();
         startUpProblemsCount = 0;
         runProblemsCount = 0;
-        startUpProblemsLabel.setText(Language.getText("startupproblems")+": 0");
-        runProblemsLabel.setText(Language.getText("runtimeproblems")+": 0");
+        startUpProblemsLabel.setText(Language.getText("startupproblems") + ": 0");
+        runProblemsLabel.setText(Language.getText("runtimeproblems") + ": 0");
         logTitleLabel.setText(Language.getText("startupproblems"));
         consoleScroll.setContent(startUpLog);
     }

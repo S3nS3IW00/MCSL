@@ -90,7 +90,7 @@ public class ImportServerDialog extends Dialog {
 
         eulaCheckBox = new CheckBox(Language.getText("accepteula"));
         eulaCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue){
+            if (newValue) {
                 nextButton.setDisable(false);
                 eulaCheckBox.setDisable(true);
             }

@@ -12,6 +12,7 @@ public enum StatusType {
     CONNECTED("running-label", "connected", "-fx-apply");
 
     String id, text, color;
+
     StatusType(String id, String text, String color) {
         this.id = id;
         this.text = text;

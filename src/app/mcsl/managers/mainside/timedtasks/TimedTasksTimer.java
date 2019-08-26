@@ -9,11 +9,11 @@ public class TimedTasksTimer implements Runnable {
 
     @Override
     public void run() {
-        if(TimedTasksManager.getTimedTasks().size() > 0) {
+        if (TimedTasksManager.getTimedTasks().size() > 0) {
             for (TimedTask timedTask : TimedTasksManager.getTimedTasks()) {
                 final Runnable runnable1 = timedTask::run;
-                if(timedTask.isDaily()){
-                    if(DateTimeUtils.isEqualsTime(new SimpleDateFormat("HH:mm:ss").format(timedTask.getDate()))){
+                if (timedTask.isDaily()) {
+                    if (DateTimeUtils.isEqualsTime(new SimpleDateFormat("HH:mm:ss").format(timedTask.getDate()))) {
                         Platform.runLater(runnable1);
                     }
                 } else {

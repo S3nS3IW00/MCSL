@@ -8,7 +8,8 @@ public enum NotificationAlertType {
     INFO(FileManager.INFO_ICON), ERROR(FileManager.ERROR_ICON), WARNING(FileManager.WARNING_ICON);
 
     Image icon;
-    NotificationAlertType(Image icon){
+
+    NotificationAlertType(Image icon) {
         this.icon = icon;
     }
 

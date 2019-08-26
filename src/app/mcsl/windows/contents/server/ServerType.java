@@ -6,7 +6,8 @@ public enum ServerType {
     LOCAL("local"), EXTERNAL("external");
 
     String typeName;
-    ServerType(String typeName){
+
+    ServerType(String typeName) {
         this.typeName = typeName;
     }
 
@@ -14,17 +15,17 @@ public enum ServerType {
         return typeName;
     }
 
-    public static String[] displayValues(){
+    public static String[] displayValues() {
         String[] displayNames = new String[ServerType.values().length];
-        for(int i = 0; i < ServerType.values().length; i++){
+        for (int i = 0; i < ServerType.values().length; i++) {
             displayNames[i] = Language.getText(ServerType.values()[i].typeName);
         }
         return displayNames;
     }
 
-    public static ServerType getFromDisplayName(String s){
-        for(ServerType type : ServerType.values()){
-            if(Language.getText(type.typeName).equalsIgnoreCase(s)) return type;
+    public static ServerType getFromDisplayName(String s) {
+        for (ServerType type : ServerType.values()) {
+            if (Language.getText(type.typeName).equalsIgnoreCase(s)) return type;
         }
         return null;
     }

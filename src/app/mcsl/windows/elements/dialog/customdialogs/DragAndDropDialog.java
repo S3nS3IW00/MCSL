@@ -2,8 +2,8 @@ package app.mcsl.windows.elements.dialog.customdialogs;
 
 import app.mcsl.MainClass;
 import app.mcsl.managers.Language;
-import app.mcsl.managers.server.ServersManager;
 import app.mcsl.managers.file.FileManager;
+import app.mcsl.managers.server.ServersManager;
 import app.mcsl.windows.contents.server.ServerType;
 import app.mcsl.windows.elements.button.Button;
 import app.mcsl.windows.elements.button.ButtonType;
@@ -31,7 +31,7 @@ public class DragAndDropDialog extends Dialog {
     private ComboBox localServersBox;
     private VBox pluginSelectionBox, serverFileSelectionBox;
 
-    public DragAndDropDialog(){
+    public DragAndDropDialog() {
         super(350, 400, Language.getText("draganddrop"), DialogType.CUSTOM, new VBox());
 
         textLabel = new Label("What is this?", LabelType.H1);
@@ -87,11 +87,11 @@ public class DragAndDropDialog extends Dialog {
         build();
     }
 
-    public void show(File file){
+    public void show(File file) {
         this.file = file;
         textLabel.setText(Language.getText("whatisthis", file.getName()));
 
-        if(ServersManager.getServersByType(ServerType.LOCAL).size() == 0){
+        if (ServersManager.getServersByType(ServerType.LOCAL).size() == 0) {
             pluginSelectionBox.setDisable(true);
         } else {
             localServersBox.setItems(FXCollections.observableList(ServersManager.getServerNamesByType(ServerType.LOCAL)));

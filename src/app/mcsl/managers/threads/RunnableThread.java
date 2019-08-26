@@ -12,14 +12,14 @@ public abstract class RunnableThread implements Runnable {
     }
 
     public void run() {
-        while(!cancel){
+        while (!cancel) {
             onRun();
         }
     }
 
-    public void start () {
+    public void start() {
         cancel = false;
-        t = new Thread (this, threadName);
+        t = new Thread(this, threadName);
         t.start();
     }
 

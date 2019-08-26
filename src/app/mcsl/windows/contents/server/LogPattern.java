@@ -7,12 +7,12 @@ public class LogPattern {
 
     private Pattern logPattern;
 
-    public LogPattern(String patternString){
+    public LogPattern(String patternString) {
         initPattern(patternString);
     }
 
-    public void initPattern(String patternString){
-        if(patternString == null){
+    public void initPattern(String patternString) {
+        if (patternString == null) {
             logPattern = Pattern.compile("\\[\\d\\d:\\d\\d:\\d\\d (?<logLevel>[a-zA-Z]+)]: (?<message>.+)");
         } else {
             patternString = patternString.replace("[", "\\[")

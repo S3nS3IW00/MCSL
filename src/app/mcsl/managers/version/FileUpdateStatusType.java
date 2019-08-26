@@ -10,7 +10,8 @@ public enum FileUpdateStatusType {
 
     private String langCode;
     AlertType alertType;
-    FileUpdateStatusType(String langCode, AlertType alertType){
+
+    FileUpdateStatusType(String langCode, AlertType alertType) {
         this.langCode = langCode;
         this.alertType = alertType;
     }

@@ -71,7 +71,7 @@ public class SettingsContent extends StackPane {
         Setting autoupdateSetting = new Setting(Language.getText("autoupdate"), autoupdateCheckBox, null, false) {
             @Override
             public void onChange(Object object) {
-                MainClass.getFileManager().getConfigProps().setBoolProp("autoupdate", (boolean)object);
+                MainClass.getFileManager().getConfigProps().setBoolProp("autoupdate", (boolean) object);
             }
         };
 
@@ -80,7 +80,7 @@ public class SettingsContent extends StackPane {
         Setting pushNotificationsSetting = new Setting(Language.getText("pushnotifications"), pushNotificationsCheckBox, null, false) {
             @Override
             public void onChange(Object object) {
-                MainClass.getFileManager().getConfigProps().setBoolProp("notifications", (boolean)object);
+                MainClass.getFileManager().getConfigProps().setBoolProp("notifications", (boolean) object);
             }
         };
 
@@ -89,7 +89,7 @@ public class SettingsContent extends StackPane {
         Setting hideWhenExitSetting = new Setting(Language.getText("hideonexit"), hideWhenExitCheckBox, Language.getText("hidedescription"), false) {
             @Override
             public void onChange(Object object) {
-                MainClass.getFileManager().getConfigProps().setBoolProp("hideonexit", (boolean)object);
+                MainClass.getFileManager().getConfigProps().setBoolProp("hideonexit", (boolean) object);
             }
         };
 
@@ -100,7 +100,7 @@ public class SettingsContent extends StackPane {
             public void onChange(Object object) {
                 MainClass.getFileManager().getConfigProps().setProp("themecolor", ThemeManager.getColorFromDisplayName(object.toString()).name().toLowerCase());
                 ThemeManager.changeThemeColor(ThemeManager.getColorFromDisplayName(object.toString()));
-                for(ServerStage serverStage : MainClass.getTabManager().getServerStages()){
+                for (ServerStage serverStage : MainClass.getTabManager().getServerStages()) {
                     ThemeManager.applyCss(serverStage.getScene());
                 }
             }
@@ -113,7 +113,7 @@ public class SettingsContent extends StackPane {
             public void onChange(Object object) {
                 MainClass.getFileManager().getConfigProps().setProp("themetype", ThemeManager.getTypeFromDisplayName(object.toString()).name().toLowerCase());
                 ThemeManager.changeThemeType(ThemeManager.getTypeFromDisplayName(object.toString()));
-                for(ServerStage serverStage : MainClass.getTabManager().getServerStages()){
+                for (ServerStage serverStage : MainClass.getTabManager().getServerStages()) {
                     ThemeManager.applyCss(serverStage.getScene());
                 }
             }
@@ -140,7 +140,7 @@ public class SettingsContent extends StackPane {
 
         Label needRestartLabel = new Label(Language.getText("settingsrestart"), LabelType.H3);
         needRestartLabel.setMinHeight(0);
-        Button restartButton = new Button(Language.getText("restart"), ButtonType.APPLY);
+        Button restartButton = new Button(Language.getText("restart"), ButtonType.APPLY_ACTION_BUTTON);
         restartButton.setMinHeight(0);
         restartButton.setPrefWidth(100);
         restartButton.setOnAction(e -> {
@@ -175,23 +175,23 @@ public class SettingsContent extends StackPane {
         needRestartBoxFadeOut.setOnFinished(e -> removeNeedRestartBox());
     }
 
-    private void registerSettings(){
+    private void registerSettings() {
         ObservableList<Node> settingCategories = body.getChildren();
-        for(Node node : settingCategories){
+        for (Node node : settingCategories) {
             SettingCategory settingCategory = (SettingCategory) node;
-            for(Setting setting : settingCategory.getSettings()){
+            for (Setting setting : settingCategory.getSettings()) {
                 Node component = setting.getComponent();
-                if(component instanceof ComboBox){
-                    ((ComboBox)component).getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                if (component instanceof ComboBox) {
+                    ((ComboBox) component).getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                         setting.onChange(newValue);
-                        if(setting.isNotifyChange() && !isNeedRestartShowing()){
+                        if (setting.isNotifyChange() && !isNeedRestartShowing()) {
                             showNeedRestart();
                         }
                     });
-                } else if(component instanceof CheckBox){
-                    ((CheckBox)component).selectedProperty().addListener((observable, oldValue, newValue) -> {
+                } else if (component instanceof CheckBox) {
+                    ((CheckBox) component).selectedProperty().addListener((observable, oldValue, newValue) -> {
                         setting.onChange(newValue);
-                        if(setting.isNotifyChange() && !isNeedRestartShowing()){
+                        if (setting.isNotifyChange() && !isNeedRestartShowing()) {
                             showNeedRestart();
                         }
                     });
@@ -200,18 +200,18 @@ public class SettingsContent extends StackPane {
         }
     }
 
-    private void showNeedRestart(){
+    private void showNeedRestart() {
         needRestartBox.setOpacity(1);
         needRestartBox.setMaxHeight(0);
         getChildren().add(needRestartBox);
         needRestartBoxAnimation.play();
     }
 
-    private void disposeNeedRestart(){
+    private void disposeNeedRestart() {
         needRestartBoxFadeOut.play();
     }
 
-    public boolean isNeedRestartShowing(){
+    public boolean isNeedRestartShowing() {
         return getChildren().contains(needRestartBox);
     }
 

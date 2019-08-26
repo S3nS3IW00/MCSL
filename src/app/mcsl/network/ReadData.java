@@ -8,7 +8,6 @@ import javafx.application.Platform;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
@@ -34,7 +33,7 @@ public class ReadData extends Thread {
                 try {
                     client.getClient().close();
                     ServerStatusChangeEvent.change(client.getServer(), StatusType.STOPPED);
-                    Platform.runLater(() -> client.getServer().getConsole().appendLine("§a[MinecraftServerLauncher] "+ Language.getText("disconnectedfromserver")));
+                    Platform.runLater(() -> client.getServer().getConsole().appendLine("§a[MinecraftServerLauncher] " + Language.getText("disconnectedfromserver")));
                 } catch (IOException e1) {
                     //empty catch block
                 }

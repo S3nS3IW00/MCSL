@@ -12,21 +12,21 @@ public class PropertiesManager {
     File file;
     InputStream inputStream;
 
-    public PropertiesManager(){
+    public PropertiesManager() {
         properties = new Properties();
     }
 
-    public PropertiesManager(File file){
+    public PropertiesManager(File file) {
         this.file = file;
         properties = new Properties();
-        try (FileInputStream fis = new FileInputStream(file.getAbsolutePath())){
+        try (FileInputStream fis = new FileInputStream(file.getAbsolutePath())) {
             properties.load(new InputStreamReader(fis, Charset.forName("UTF-8")));
         } catch (IOException e) {
             Logger.exception(e);
         }
     }
 
-    public PropertiesManager(InputStream inputStream){
+    public PropertiesManager(InputStream inputStream) {
         this.inputStream = inputStream;
         properties = new Properties();
         try {
@@ -37,7 +37,7 @@ public class PropertiesManager {
     }
 
     public void setProp(String key, String value) {
-        try (FileOutputStream fos = new FileOutputStream(file.getAbsolutePath())){
+        try (FileOutputStream fos = new FileOutputStream(file.getAbsolutePath())) {
             properties.setProperty(key, value);
             properties.store(fos, null);
         } catch (IOException e) {
@@ -46,7 +46,7 @@ public class PropertiesManager {
     }
 
     public void setBoolProp(String key, boolean value) {
-        try (FileOutputStream fos = new FileOutputStream(file.getAbsolutePath())){
+        try (FileOutputStream fos = new FileOutputStream(file.getAbsolutePath())) {
             properties.setProperty(key, (value ? "true" : "false"));
             properties.store(fos, null);
         } catch (IOException e) {
@@ -63,7 +63,7 @@ public class PropertiesManager {
     public Integer getIntegerProp(String key) {
         try {
             return Integer.parseInt(getProp(key));
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             return null;
         }
     }
@@ -73,7 +73,7 @@ public class PropertiesManager {
     }
 
     public void removeProp(String key) {
-        try (FileOutputStream fos = new FileOutputStream(file.getAbsolutePath())){
+        try (FileOutputStream fos = new FileOutputStream(file.getAbsolutePath())) {
             properties.remove(key);
             properties.store(fos, null);
         } catch (IOException e) {
@@ -81,11 +81,11 @@ public class PropertiesManager {
         }
     }
 
-    public boolean hasProp(String key){
+    public boolean hasProp(String key) {
         return properties.containsKey(key);
     }
 
-    public void loadFile(File file){
+    public void loadFile(File file) {
         properties.clear();
         try {
             properties.load(new InputStreamReader(new FileInputStream(file.getAbsolutePath()), Charset.forName("UTF-8")));
@@ -98,15 +98,15 @@ public class PropertiesManager {
         return file;
     }
 
-    public List<Object> getKeys(){
+    public List<Object> getKeys() {
         return new ArrayList<>(properties.keySet());
     }
 
-    public List<Object> getValues(){
+    public List<Object> getValues() {
         return new ArrayList<>(properties.values());
     }
 
-    public void close(){
+    public void close() {
         properties.clear();
     }
 
@@ -114,9 +114,9 @@ public class PropertiesManager {
         return inputStream;
     }
 
-    public Map<String, String> toMap(){
+    public Map<String, String> toMap() {
         Map<String, String> map = new HashMap<>();
-        for(int i = 0; i < getKeys().size(); i++){
+        for (int i = 0; i < getKeys().size(); i++) {
             map.put(getKeys().get(i).toString(), getValues().get(i).toString());
         }
         return map;

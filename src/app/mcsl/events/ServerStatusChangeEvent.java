@@ -12,11 +12,11 @@ public class ServerStatusChangeEvent {
 
     private static List<ServerStatusChangeListener> listeners = new ArrayList<>();
 
-    public static void addListener(ServerStatusChangeListener listener){
+    public static void addListener(ServerStatusChangeListener listener) {
         listeners.add(listener);
     }
 
-    public static void change(Server server, StatusType newType){
+    public static void change(Server server, StatusType newType) {
         Platform.runLater(() -> listeners.forEach(l -> l.change(server, newType)));
 
     }

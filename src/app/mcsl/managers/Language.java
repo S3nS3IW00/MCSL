@@ -13,23 +13,23 @@ public class Language {
 
     public static String LANGUAGE;
 
-    public static void loadLanguage(String language){
+    public static void loadLanguage(String language) {
         Language.LANGUAGE = language;
 
         languageProps = new PropertiesManager(MainClass.class.getResourceAsStream("/app/mcsl/resources/languages/" + language + ".properties"));
-        for(Object key : languageProps.getKeys()){
+        for (Object key : languageProps.getKeys()) {
             texts.put(key.toString(), languageProps.getProp(key.toString()));
         }
     }
 
-    public static String getText(String key){
+    public static String getText(String key) {
         return texts.get(key);
     }
 
-    public static String getText(String key, Object... args){
+    public static String getText(String key, Object... args) {
         String text = texts.get(key);
-        for(int i = 0; i < args.length; i++){
-            text = text.replace("{"+i+"}", args[i].toString());
+        for (int i = 0; i < args.length; i++) {
+            text = text.replace("{" + i + "}", args[i].toString());
         }
 
         return text;

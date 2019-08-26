@@ -9,7 +9,8 @@ public enum ThemeColor {
     RED("red", "#e74c3c", "#c0392b");
 
     String defColor, darkDefColor, displayName;
-    ThemeColor(String displayName, String defColor, String darkDefColor){
+
+    ThemeColor(String displayName, String defColor, String darkDefColor) {
         this.displayName = displayName;
         this.defColor = defColor;
         this.darkDefColor = darkDefColor;

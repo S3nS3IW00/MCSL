@@ -1,7 +1,6 @@
 package app.mcsl.managers.tab;
 
 import app.mcsl.MainClass;
-import app.mcsl.managers.logging.Logger;
 import app.mcsl.windows.elements.slide.SlideItem;
 import javafx.scene.control.Tab;
 import javafx.scene.image.ImageView;
@@ -36,8 +35,8 @@ public class TabAction {
             MainClass.getTemplate().getTabPane().getSelectionModel().select(tab);
     }
 
-    public static void close(Tab tab){
-        if(MainClass.getTabManager().isDetached(tab)){
+    public static void close(Tab tab) {
+        if (MainClass.getTabManager().isDetached(tab)) {
             MainClass.getTabManager().attachTab(MainClass.getTabManager().getClassByTab(tab));
         }
         MainClass.getTemplate().getTabPane().getTabs().remove(tab);

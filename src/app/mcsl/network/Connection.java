@@ -43,7 +43,7 @@ public class Connection {
                         return true;
                     } catch (IOException ex) {
                         this.failed();
-                        Platform.runLater(() -> server.getConsole().appendLine("§c[MinecraftServerLauncher] "+ Language.getText("cantconnectserver")));
+                        Platform.runLater(() -> server.getConsole().appendLine("§c[MinecraftServerLauncher] " + Language.getText("cantconnectserver")));
                         ServerStatusChangeEvent.change(server, StatusType.STOPPED);
                         return false;
                     }

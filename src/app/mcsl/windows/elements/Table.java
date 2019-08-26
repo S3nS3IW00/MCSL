@@ -77,7 +77,7 @@ public class Table extends GridPane {
     }
 
     public void deleteRow(int row) {
-        if(row == 0) return;
+        if (row == 0) return;
         int defaultRowSpan = 1;
         Set<Node> deleteNodes = new HashSet<>();
         for (Node child : getChildren()) {
@@ -100,8 +100,8 @@ public class Table extends GridPane {
         rowCount--;
     }
 
-    public void deleteAllRow(){
-        for(int i = rowCount-1; i > 0; i--){
+    public void deleteAllRow() {
+        for (int i = rowCount - 1; i > 0; i--) {
             deleteRow(i);
         }
     }

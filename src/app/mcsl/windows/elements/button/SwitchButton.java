@@ -13,7 +13,10 @@ public class SwitchButton extends HBox {
     String on, off;
 
     SimpleBooleanProperty switchedOn = new SimpleBooleanProperty(false);
-    public SimpleBooleanProperty switchOnProperty() { return switchedOn; }
+
+    public SimpleBooleanProperty switchOnProperty() {
+        return switchedOn;
+    }
 
     private void init() {
 
@@ -47,7 +50,7 @@ public class SwitchButton extends HBox {
         init();
         this.on = on;
         this.off = off;
-        switchedOn.addListener((a,b,c) -> {
+        switchedOn.addListener((a, b, c) -> {
             if (c) {
                 label.setText(getOn());
                 setStyle("-fx-background-color: green;-fx-background-radius: 10;");
@@ -60,11 +63,11 @@ public class SwitchButton extends HBox {
         });
     }
 
-    public void setSwitched(boolean switched){
+    public void setSwitched(boolean switched) {
         switchedOn.set(switched);
     }
 
-    public SimpleBooleanProperty getSwitchedOn(){
+    public SimpleBooleanProperty getSwitchedOn() {
         return switchedOn;
     }
 
@@ -76,10 +79,10 @@ public class SwitchButton extends HBox {
         return on;
     }
 
-    public void setTexts(String on, String off){
+    public void setTexts(String on, String off) {
         this.on = on;
         this.off = off;
-        if(getSwitchedOn().get()){
+        if (getSwitchedOn().get()) {
             label.setText(on);
         } else {
             label.setText(off);

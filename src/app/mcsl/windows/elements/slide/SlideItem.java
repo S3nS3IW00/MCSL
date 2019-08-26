@@ -8,6 +8,7 @@ import javafx.animation.Timeline;
 import javafx.beans.value.WritableValue;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -21,10 +22,9 @@ import java.util.List;
 public abstract class SlideItem extends VBox {
 
     private String itemText;
-    private SlideMenu slideMenu;
     private VBox subItemBox;
 
-    private ImageView subIcon  = new ImageView(FileManager.MENU_ICON);
+    private ImageView subIcon = new ImageView(FileManager.MENU_ICON);
     private Region titleRightRegion;
 
     private HBox titleBox;
@@ -56,13 +56,16 @@ public abstract class SlideItem extends VBox {
 
     private List<SlideItem> subItems = new ArrayList<>();
 
-    public SlideItem(SlideMenu slideMenu, String itemText, ImageView graphic, SlideItem... subItems){
-        this.slideMenu = slideMenu;
+    public SlideItem(String itemText, Image image, SlideItem... subItems) {
         this.itemText = itemText;
 
         subItemBox = new VBox();
         subItemBox.setPrefHeight(0);
         subItemBox.setMaxHeight(Double.MAX_VALUE);
+
+        ImageView graphic = new ImageView(image);
+        graphic.setFitHeight(20);
+        graphic.setFitWidth(20);
 
         Label title = new Label();
         title.setText(itemText);
@@ -71,53 +74,73 @@ public abstract class SlideItem extends VBox {
 
         titleBox = new HBox(title);
         titleBox.setId("slide-item-box");
-        titleBox.setPrefWidth(slideMenu.getSlideMenuWidth());
+        titleBox.setPrefWidth(Double.MAX_VALUE);
         titleBox.setOnMouseClicked(e -> {
-            if(!hasSubItems()) MainClass.getTemplate().toggleMenu();
-            if(MainClass.getTemplate().isSettingsOpen()){
+            if (!hasSubItems()) MainClass.getTemplate().toggleMenu();
+            if (MainClass.getTemplate().isSettingsOpen()) {
                 MainClass.getTemplate().toggleSettings();
             }
-            if(hasSubItems()) toggleSubItem();
+            if (hasSubItems()) toggleSubItem();
             onClick();
         });
 
         titleRightRegion = new Region();
         HBox.setHgrow(titleRightRegion, Priority.ALWAYS);
 
-        for(SlideItem slideItem : subItems){
+        for (SlideItem slideItem : subItems) {
             addSubItem(slideItem);
         }
 
         getChildren().add(titleBox);
-        setPrefWidth(slideMenu.getSlideMenuWidth());
+        setPrefWidth(Double.MAX_VALUE);
     }
 
     public abstract void onClick();
 
-    public void addSubItem(SlideItem slideItem){
-        if(!subItems.contains(slideItem)){
+    public void addSubItem(SlideItem slideItem) {
+        if (!subItems.contains(slideItem)) {
             slideItem.setPadding(new Insets(0, 0, 0, 10));
             subItems.add(slideItem);
             subItemBox.getChildren().add(slideItem);
-            if(!titleBox.getChildren().contains(subIcon)){
+            if (!titleBox.getChildren().contains(subIcon)) {
                 titleBox.getChildren().addAll(titleRightRegion, subIcon);
             }
         }
     }
 
-    public void removeSubItem(SlideItem slideItem){
-        if(subItems.contains(slideItem)){
-            subItems.remove(slideItem);
-            subItemBox.getChildren().remove(slideItem);
-            titleBox.getChildren().removeAll(titleRightRegion, subIcon);
+    public void addSubItem(SlideItem... slideItems) {
+        for (SlideItem slideItem : slideItems) {
+            if (!subItems.contains(slideItem)) {
+                slideItem.setPadding(new Insets(0, 0, 0, 10));
+                subItems.add(slideItem);
+                subItemBox.getChildren().add(slideItem);
+                if (!titleBox.getChildren().contains(subIcon)) {
+                    titleBox.getChildren().addAll(titleRightRegion, subIcon);
+                }
+            }
         }
     }
 
-    public void toggleSubItem(){
+    public void removeSubItem(SlideItem slideItem) {
+        if (subItems.contains(slideItem)) {
+            subItems.remove(slideItem);
+            subItemBox.getChildren().remove(slideItem);
+        }
+        if (subItems.size() == 0) titleBox.getChildren().removeAll(titleRightRegion, subIcon);
+    }
+
+    public void clearSubItems() {
+        if (subItems.size() == 0) return;
+        subItems.clear();
+        subItemBox.getChildren().clear();
+        titleBox.getChildren().removeAll(titleRightRegion, subIcon);
+    }
+
+    public void toggleSubItem() {
         subItemAnimation.getKeyFrames().clear();
-        if(canToggleSubItems){
+        if (canToggleSubItems) {
             canToggleSubItems = false;
-            if(isSubItemsOpened){
+            if (isSubItemsOpened) {
                 subItemAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(50), new KeyValue(subItemsBoxHeight, 0.0)));
                 subItemAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(50), new KeyValue(subIconRotateValue, 0.0)));
                 subItemAnimation.setOnFinished(e -> {
@@ -127,7 +150,7 @@ public abstract class SlideItem extends VBox {
                 });
             } else {
                 this.getChildren().add(subItemBox);
-                subItemAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(50), new KeyValue(subItemsBoxHeight, subItems.size()*41.0)));
+                subItemAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(50), new KeyValue(subItemsBoxHeight, subItems.size() * 41.0)));
                 subItemAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(50), new KeyValue(subIconRotateValue, 90.0)));
                 subItemAnimation.setOnFinished(e -> {
                     canToggleSubItems = true;
@@ -138,7 +161,7 @@ public abstract class SlideItem extends VBox {
         }
     }
 
-    public boolean hasSubItems(){
+    public boolean hasSubItems() {
         return subItems.size() > 0;
     }
 
