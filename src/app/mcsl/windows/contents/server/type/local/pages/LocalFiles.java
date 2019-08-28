@@ -43,7 +43,7 @@ public class LocalFiles extends HBox {
     private File selectedFile;
     private boolean canEditFile = false;
 
-    public LocalFiles(LocalServer server) {
+    public LocalFiles(LocalServer server){
         this.server = server;
 
         treeView = new TreeView();
@@ -58,8 +58,8 @@ public class LocalFiles extends HBox {
         VBox.setVgrow(textEditor, Priority.ALWAYS);
         HBox.setHgrow(textEditor, Priority.ALWAYS);
         textEditor.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (saveButton.isDisabled() && canEditFile) saveButton.setDisable(false);
-            if (resetButton.isDisabled() && canEditFile) resetButton.setDisable(false);
+            if(saveButton.isDisabled() && canEditFile) saveButton.setDisable(false);
+            if(resetButton.isDisabled() && canEditFile) resetButton.setDisable(false);
         });
 
         saveButton = new Button(Language.getText("save"), app.mcsl.windows.elements.button.ButtonType.APPLY_ACTION_BUTTON);
@@ -82,8 +82,8 @@ public class LocalFiles extends HBox {
         resetButton.setOnAction(e -> {
             textEditor.clear();
             try {
-                for (String line : Files.readAllLines(selectedFile.toPath())) {
-                    textEditor.appendText(line + System.lineSeparator());
+                for(String line : Files.readAllLines(selectedFile.toPath())){
+                    textEditor.appendText(line+System.lineSeparator());
                 }
                 saveButton.setDisable(true);
                 resetButton.setDisable(true);
@@ -209,8 +209,8 @@ public class LocalFiles extends HBox {
     private void handleMouseClicked(MouseEvent event) {
         Node node = event.getPickResult().getIntersectedNode();
         if (node instanceof Text || (node instanceof TreeCell && ((TreeCell) node).getText() != null)) {
-            CheckBoxTreeItem<File> treeItem = (CheckBoxTreeItem<File>) treeView.getSelectionModel().getSelectedItem();
-            if (treeItem != null && treeItem.getValue() != null) {
+            CheckBoxTreeItem<File> treeItem = (CheckBoxTreeItem<File>)treeView.getSelectionModel().getSelectedItem();
+            if(treeItem != null && treeItem.getValue() != null) {
                 if (treeItem.getValue().isFile() && (FileManager.getFileExtension(treeItem.getValue()).equalsIgnoreCase(".yml") ||
                         FileManager.getFileExtension(treeItem.getValue()).equalsIgnoreCase(".properties") ||
                         FileManager.getFileExtension(treeItem.getValue()).equalsIgnoreCase(".txt") ||
@@ -238,7 +238,7 @@ public class LocalFiles extends HBox {
         }
     }
 
-    public void refreshFiles() {
+    public void refreshFiles(){
         saveButton.setDisable(true);
         resetButton.setDisable(true);
         deleteFileButton.setDisable(true);

@@ -108,19 +108,19 @@ public class ExternalSettings extends ScrollPane {
     public void save() {
         if (changed.size() == 0) return;
         for (String key : changed.keySet()) {
-            if (key.equalsIgnoreCase("password")) {
+            if(key.equalsIgnoreCase("password")) {
                 setSetting(key, HashManager.cuttedHash(changed.get(key)));
                 passwordTextField.clear();
             } else {
                 setSetting(key, changed.get(key));
             }
         }
-        if (changed.containsKey("port") || changed.containsKey("address")) server.updateInfos();
+        if(changed.containsKey("port") || changed.containsKey("address")) server.updateInfos();
         changed.clear();
     }
 
     public void loadSettings() {
-        if (MainClass.getFileManager().getServerResource(server, ResourceType.SETTINGS_PROPERTIES).exists()) {
+        if(MainClass.getFileManager().getServerResource(server, ResourceType.SETTINGS_PROPERTIES).exists()){
             settingsFile = MainClass.getFileManager().getServerResource(server, ResourceType.SETTINGS_PROPERTIES);
             settingsProps = new PropertiesManager(settingsFile);
             settings = settingsProps.toMap();
@@ -128,7 +128,7 @@ public class ExternalSettings extends ScrollPane {
 
         for (Node component : settingComponents.keySet()) {
             String setting = getSetting(settingComponents.get(component));
-            if (!settingComponents.get(component).equalsIgnoreCase("password")) {
+            if(!settingComponents.get(component).equalsIgnoreCase("password")) {
                 if (component instanceof CheckBox) {
                     ((CheckBox) component).setSelected(setting != null && Boolean.parseBoolean(setting));
                 } else if (component instanceof ComboBox) {
@@ -148,7 +148,7 @@ public class ExternalSettings extends ScrollPane {
         }
     }
 
-    public void closeSettings() {
+    public void closeSettings(){
         settingsProps.close();
         settingsProps = null;
     }

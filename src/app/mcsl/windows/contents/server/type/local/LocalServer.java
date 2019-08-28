@@ -205,7 +205,7 @@ public class LocalServer implements Server {
 
         ServerStatusChangeEvent.addListener((server, newType) -> {
             if (server == this) {
-                Logger.info("Status changed for server '" + serverName + "' to '" + newType.name() + "'.");
+                Logger.info("Status changed for server '"+serverName+"' to '" + newType.name() + "'.");
 
                 serverStatus = newType;
                 setSceneStatus(newType);
@@ -660,7 +660,7 @@ public class LocalServer implements Server {
     }
 
     private boolean openPort() {
-        Logger.info("Opening port '" + settings.getSetting("server-port") + "' for server '" + serverName + "'...");
+        Logger.info("Opening port '"+settings.getSetting("server-port")+"' for server '" + serverName + "'...");
 
         if (UPnP.isUPnPAvailable()) {
             if (!UPnP.isMappedTCP(Integer.parseInt(settings.getSetting("server-port")))) {
@@ -677,7 +677,7 @@ public class LocalServer implements Server {
     }
 
     private void closePort() {
-        Logger.info("Closing port '" + settings.getSetting("server-port") + "' for server '" + serverName + "'...");
+        Logger.info("Closing port '"+settings.getSetting("server-port")+"' for server '" + serverName + "'...");
 
         Platform.runLater(() -> {
             if (UPnP.isMappedTCP(Integer.parseInt(settings.getSetting("server-port")))) {
