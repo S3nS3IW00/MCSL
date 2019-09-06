@@ -245,10 +245,14 @@ public class LocalServer implements Server {
         });
         inputField.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.ENTER) {
-                sendCommand(inputField.getText());
-                commandHistory.add(inputField.getText());
-                commandHistoryIndex = commandHistory.size();
-                inputField.clear();
+                if (!inputField.getText().isEmpty()) {
+                    sendCommand(inputField.getText());
+                    if (commandHistory.size() == 0 || !commandHistory.get(commandHistoryIndex - 1).equalsIgnoreCase(inputField.getText())) {
+                        commandHistory.add(inputField.getText());
+                        commandHistoryIndex = commandHistory.size();
+                    }
+                    inputField.clear();
+                }
             } else if (e.getCode() == KeyCode.UP) {
                 if (commandHistory.size() > 0 && commandHistoryIndex > 0) {
                     commandHistoryIndex--;
@@ -292,10 +296,14 @@ public class LocalServer implements Server {
         sendButton.setMinWidth(50);
         sendButton.setMaxHeight(30);
         sendButton.setOnAction(e -> {
-            sendCommand(inputField.getText());
-            commandHistory.add(inputField.getText());
-            commandHistoryIndex = commandHistory.size();
-            inputField.clear();
+            if (!inputField.getText().isEmpty()) {
+                sendCommand(inputField.getText());
+                if (commandHistory.size() == 0 || !commandHistory.get(commandHistoryIndex - 1).equalsIgnoreCase(inputField.getText())) {
+                    commandHistory.add(inputField.getText());
+                    commandHistoryIndex = commandHistory.size();
+                }
+                inputField.clear();
+            }
         });
 
         inputBox = new HBox(inputField, sendButton);

@@ -93,7 +93,6 @@ public class QuitDialog extends Dialog {
 
         content = new VBox(textLabel);
 
-
         setContent(content);
         addButton(noButton, yesButton, restartButton, hideButton);
 
@@ -101,12 +100,13 @@ public class QuitDialog extends Dialog {
     }
 
     private void quit(boolean restart) {
-        Logger.info("Saving server settings...");
-        for (Server server : ServersManager.getServers()) {
-            server.saveSettings();
+        if (ServersManager.getServers().size() > 0) {
+            Logger.info("Saving server settings...");
+            for (Server server : ServersManager.getServers()) {
+                server.saveSettings();
+            }
         }
-
-        if (onlineServerCount > 0) {
+        if (ServersManager.getServers().size() > 0 && onlineServerCount > 0) {
             Logger.info("Stopping servers...");
             CompletableFuture.runAsync(() -> Platform.runLater(() -> {
                 content.getChildren().add(serversStopProgressBar);

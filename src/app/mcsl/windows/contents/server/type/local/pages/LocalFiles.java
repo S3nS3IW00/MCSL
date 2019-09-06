@@ -239,11 +239,11 @@ public class LocalFiles extends HBox {
     }
 
     public void refreshFiles(){
+        textEditor.clear();
+        displayTreeView(MainClass.getFileManager().getServerFolder(server.getName()).getAbsolutePath());
         saveButton.setDisable(true);
         resetButton.setDisable(true);
         deleteFileButton.setDisable(true);
-        textEditor.clear();
-        displayTreeView(MainClass.getFileManager().getServerFolder(server.getName()).getAbsolutePath());
     }
 
 }

@@ -96,7 +96,7 @@ public class MainClass extends Application {
             Logger.debug("Java home: " + System.getProperty("java.home"));
             Logger.emptyLine();
 
-            if (!testedOpSys) Logger.warn("Operation system not supported!");
+            if (!testedOpSys) Logger.warn("Operating system not supported!");
 
             Logger.info("Verifying session...");
             sessionFile = new File(OSManager.getRoot() + File.separator + "session");

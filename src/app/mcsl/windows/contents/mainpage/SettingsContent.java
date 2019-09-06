@@ -142,10 +142,9 @@ public class SettingsContent extends StackPane {
         needRestartLabel.setMinHeight(0);
         Button restartButton = new Button(Language.getText("restart"), ButtonType.APPLY_ACTION_BUTTON);
         restartButton.setMinHeight(0);
-        restartButton.setPrefWidth(100);
-        restartButton.setOnAction(e -> {
-            MainClass.getTemplate().getQuitDialog().restart();
-        });
+        restartButton.setMaxHeight(30);
+        restartButton.setPrefWidth(120);
+        restartButton.setOnAction(e -> MainClass.getTemplate().getQuitDialog().restart());
 
         HBox restartButtonBox = new HBox(20, restartButton);
         restartButtonBox.setAlignment(Pos.CENTER);

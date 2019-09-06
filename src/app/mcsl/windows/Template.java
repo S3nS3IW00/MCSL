@@ -149,7 +149,7 @@ public class Template extends Stage {
     public Template() {
         Font.loadFont(getClass().getResourceAsStream("Minecraftia.ttf"), 1);
         getIcons().add(new Image("/app/mcsl/resources/favicon.png"));
-        setTitle("Minecraft Server Launcher v" + MainClass.VERSION);
+        setTitle("Minecraft Server Launcher");
         build();
     }
 
