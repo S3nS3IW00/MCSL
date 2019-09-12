@@ -1,6 +1,5 @@
 package app.mcsl.windows.contents.mainpage;
 
-import app.mcsl.MainClass;
 import app.mcsl.events.DirectoryChangeEvent;
 import app.mcsl.events.ServerStateChangeEvent;
 import app.mcsl.managers.Language;
@@ -10,6 +9,7 @@ import app.mcsl.managers.logging.Logger;
 import app.mcsl.managers.server.ServersManager;
 import app.mcsl.managers.tab.TabClass;
 import app.mcsl.managers.tab.TabType;
+import app.mcsl.windows.Template;
 import app.mcsl.windows.contents.server.Server;
 import app.mcsl.windows.contents.server.StateType;
 import app.mcsl.windows.elements.GroupBox;
@@ -48,13 +48,13 @@ public class FilesContent implements TabClass {
         Table serverFilesTable = new Table();
         serverFilesTable.setAlignment(Pos.TOP_CENTER);
         serverFilesTable.addColumn(Language.getText("serverfile"), Language.getText("size"), Language.getText("delete"));
-        for (File serverFile : MainClass.getFileManager().getServerFilesFolder().listFiles()) {
+        for (File serverFile : FileManager.getServerFilesFolder().listFiles()) {
             app.mcsl.windows.elements.button.Button deleteButton = new app.mcsl.windows.elements.button.Button("", ButtonType.ROUNDED_ERROR);
             deleteButton.setGraphic(new ImageView(FileManager.DELETE_ICON));
             deleteButton.setOnAction(e -> new ConfirmationDialog(200, 400, Language.getText("delete"), Language.getText("suredeletefile", serverFile.getName())) {
                 @Override
                 public void yesAction() {
-                    MainClass.getFileManager().deleteFile(serverFile);
+                    FileManager.deleteFile(serverFile);
                     DirectoryChangeEvent.change(DirectoryType.SERVERFILE);
                     close();
                 }
@@ -83,11 +83,11 @@ public class FilesContent implements TabClass {
             fileChooser.getExtensionFilters().addAll(
                     new FileChooser.ExtensionFilter("JAR", "*.jar")
             );
-            File serverFile = fileChooser.showOpenDialog(MainClass.getTemplate());
+            File serverFile = fileChooser.showOpenDialog(Template.getStage());
             if (serverFile != null) {
                 try {
-                    MainClass.getFileManager().addServerfile(serverFile);
-                    MainClass.getTemplate().showNotification(Language.getText("serverfileadded"), LabelColor.ERROR);
+                    FileManager.addServerfile(serverFile);
+                    Template.showNotification(Language.getText("serverfileadded"), LabelColor.ERROR);
                 } catch (IOException ex) {
                     //empty catch block
                 }
@@ -118,13 +118,13 @@ public class FilesContent implements TabClass {
                 filesButton.setGraphic(new ImageView(FileManager.CHOOSE_ICON));
                 filesButton.setOnAction(e -> {
                     try {
-                        Desktop.getDesktop().open(MainClass.getFileManager().getServerFolder(s.getName()));
+                        Desktop.getDesktop().open(FileManager.getServerFolder(s.getName()));
                     } catch (IOException ex) {
                         Logger.exception(ex);
                     }
                 });
 
-                int sizeInMb = (int) FileManager.folderSize(MainClass.getFileManager().getServerFolder(s.getName())) / (1024 * 1024);
+                int sizeInMb = (int) FileManager.folderSize(FileManager.getServerFolder(s.getName())) / (1024 * 1024);
 
                 serversTable.addRow(s.getName(), s.getRoot().getAbsolutePath(), sizeInMb + "MB", filesButton);
             } else if (newType == StateType.DELETED) {
@@ -134,13 +134,13 @@ public class FilesContent implements TabClass {
                     filesButton.setGraphic(new ImageView(FileManager.CHOOSE_ICON));
                     filesButton.setOnAction(e -> {
                         try {
-                            Desktop.getDesktop().open(MainClass.getFileManager().getServerFolder(server.getName()));
+                            Desktop.getDesktop().open(FileManager.getServerFolder(server.getName()));
                         } catch (IOException ex) {
                             Logger.exception(ex);
                         }
                     });
 
-                    int sizeInMb = (int) FileManager.folderSize(MainClass.getFileManager().getServerFolder(server.getName())) / (1024 * 1024);
+                    int sizeInMb = (int) FileManager.folderSize(FileManager.getServerFolder(server.getName())) / (1024 * 1024);
 
                     serversTable.addRow(server.getName(), server.getRoot().getAbsolutePath(), sizeInMb + "MB", filesButton);
                 }
@@ -150,13 +150,13 @@ public class FilesContent implements TabClass {
         DirectoryChangeEvent.addListener(type -> {
             if (type == DirectoryType.SERVERFILE) {
                 serverFilesTable.deleteAllRow();
-                for (File serverFile : MainClass.getFileManager().getServerFilesFolder().listFiles()) {
+                for (File serverFile : FileManager.getServerFilesFolder().listFiles()) {
                     app.mcsl.windows.elements.button.Button deleteButton = new Button("", ButtonType.ROUNDED_ERROR);
                     deleteButton.setGraphic(new ImageView(FileManager.DELETE_ICON));
                     deleteButton.setOnAction(e -> new ConfirmationDialog(200, 400, Language.getText("delete"), Language.getText("suredeletefile", serverFile.getName())) {
                         @Override
                         public void yesAction() {
-                            MainClass.getFileManager().deleteFile(serverFile);
+                            FileManager.deleteFile(serverFile);
                             close();
                         }
 

@@ -1,7 +1,7 @@
 package app.mcsl.windows.elements.dialog.customdialogs;
 
-import app.mcsl.MainClass;
 import app.mcsl.managers.Language;
+import app.mcsl.managers.file.FileManager;
 import app.mcsl.managers.file.PropertiesManager;
 import app.mcsl.utils.DataTypeUtil;
 import app.mcsl.windows.elements.button.Button;
@@ -69,7 +69,7 @@ public class ImportServerDialog extends Dialog {
         descriptionLabel.setMaxWidth(350);
         descriptionLabel.setWrapText(true);
 
-        serverFileComboBox = new ComboBox(FXCollections.observableList(Arrays.asList(MainClass.getFileManager().getServerFilesFolder().list())));
+        serverFileComboBox = new ComboBox(FXCollections.observableList(Arrays.asList(FileManager.getServerFilesFolder().list())));
         serverFileComboBox.getSelectionModel().select(settingsProps.hasProp("serverfile") ? settingsProps.getProp("serverfile") : 0);
         serverFileComboBox.setPrefWidth(200);
         serverFileComboBox.getSelectionModel().selectFirst();
@@ -170,7 +170,7 @@ public class ImportServerDialog extends Dialog {
                 settingsProps.setProp("serverfile", serverFile);
                 settingsProps.setBoolProp("autostart", autostartCheckBox.isSelected());
 
-                MainClass.getFileManager().importServer(serverName, location);
+                FileManager.importServer(serverName, location);
 
                 close();
             } else {

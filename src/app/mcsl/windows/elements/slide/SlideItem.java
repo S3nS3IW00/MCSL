@@ -1,7 +1,7 @@
 package app.mcsl.windows.elements.slide;
 
-import app.mcsl.MainClass;
 import app.mcsl.managers.file.FileManager;
+import app.mcsl.windows.Template;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -76,9 +76,9 @@ public abstract class SlideItem extends VBox {
         titleBox.setId("slide-item-box");
         titleBox.setPrefWidth(Double.MAX_VALUE);
         titleBox.setOnMouseClicked(e -> {
-            if (!hasSubItems()) MainClass.getTemplate().toggleMenu();
-            if (MainClass.getTemplate().isSettingsOpen()) {
-                MainClass.getTemplate().toggleSettings();
+            if (!hasSubItems()) Template.toggleMenu();
+            if (Template.isSettingsOpen()) {
+                Template.toggleSettings();
             }
             if (hasSubItems()) toggleSubItem();
             onClick();

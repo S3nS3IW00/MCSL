@@ -49,9 +49,9 @@ import java.util.zip.ZipInputStream;
 public class FileManager {
 
     //Fields
-    private File root;
-    private PropertiesManager configProps;
-    private JsonManager timedTasksJson, notificationsJson, locationsJson;
+    private static File root;
+    private static PropertiesManager configProps;
+    private static JsonManager timedTasksJson, notificationsJson, locationsJson;
 
     //Images
     public static Image MENU_ICON = new Image("app/mcsl/resources/arrow_icon.png");
@@ -81,14 +81,13 @@ public class FileManager {
     public static Image REPORT_ICON_20 = new Image("app/mcsl/resources/report_icon.png", 20, 20, false, true);
 
     //Folders
-    private File logsFolder, imagesFolder, serversFolder, serverFilesFolder;
+    private static File logsFolder, imagesFolder, serversFolder, serverFilesFolder;
 
     //Files
-    private File licencFile, configFile, timedtasksFile, notificationsFile, locationsJsonFile;
+    private static File configFile, timedtasksFile, notificationsFile, locationsJsonFile;
 
 
-    //File checker constructor
-    public FileManager() throws IOException {
+    public static void checkFiles() throws IOException {
         root = OSManager.getRoot();
 
         //Folders
@@ -98,7 +97,6 @@ public class FileManager {
         serverFilesFolder = new File(root + File.separator + "serverfiles");
 
         //Files
-        licencFile = new File(root + File.separator + "licenc.txt");
         configFile = new File(root + File.separator + "config.properties");
         timedtasksFile = new File(root + File.separator + "timedtasks.json");
         notificationsFile = new File(root + File.separator + "notifications.json");
@@ -118,12 +116,6 @@ public class FileManager {
         if (!serverFilesFolder.exists()) {
             serverFilesFolder.mkdirs();
             Logger.info("Folder created: serverfiles");
-        }
-
-        if (!licencFile.exists()) {
-            licencFile.getParentFile().mkdirs();
-            licencFile.createNewFile();
-            Logger.info("File created: licenc.txt");
         }
 
         if (!configFile.exists()) {
@@ -195,7 +187,7 @@ public class FileManager {
         locationsJson = new JsonManager(locationsJsonFile);
     }
 
-    public void loadServers() {
+    public static void loadServers() {
         File[] files = serversFolder.listFiles();
         for (File serverFolder : files) {
             if (serverFolder != null && serverFolder.isDirectory()) {
@@ -252,7 +244,7 @@ public class FileManager {
         }
     }
 
-    public boolean checkServerFiles(String serverName) {
+    public static boolean checkServerFiles(String serverName) {
         Logger.info("Verifying files for server '" + serverName + "'...");
 
         File settingsProps = new File(getServerFolder(serverName) + File.separator + "settings.properties");
@@ -276,7 +268,7 @@ public class FileManager {
         return true;
     }
 
-    public boolean checkImportServerFiles(File directory) {
+    public static boolean checkImportServerFiles(File directory) {
         Logger.info("Verifying import server's files in directory '" + directory + "'...");
 
         File settingsProps = new File(directory + File.separator + "settings.properties");
@@ -300,7 +292,7 @@ public class FileManager {
         return true;
     }
 
-    public void repairServerFiles(String serverName) {
+    public static void repairServerFiles(String serverName) {
         Logger.info("Preparing for repair server '" + serverName + "'...");
 
         File settingsProps = new File(getServerFolder(serverName) + File.separator + "settings.properties");
@@ -323,7 +315,7 @@ public class FileManager {
         new RepairServerDialog(serverName, new PropertiesManager(settingsProps), new PropertiesManager(serverProps)).show();
     }
 
-    public File getServerFolder(String name) {
+    public static File getServerFolder(String name) {
         if (new File(serversFolder + File.separator + name).exists() && new File(serversFolder + File.separator + name).isDirectory()) {
             return new File(serversFolder + File.separator + name);
         } else if (locationsJson.getDefaults().get(name) != null) {
@@ -332,7 +324,7 @@ public class FileManager {
         return null;
     }
 
-    public File getServerFolder(Server server) {
+    public static File getServerFolder(Server server) {
         if (new File(serversFolder + File.separator + server.getName()).exists() && new File(serversFolder + File.separator + server.getName()).isDirectory()) {
             return new File(serversFolder + File.separator + server.getName());
         } else if (locationsJson.getDefaults().get(server.getName()) != null) {
@@ -341,30 +333,30 @@ public class FileManager {
         return null;
     }
 
-    public boolean isExternalServerRoot(String name) {
+    public static boolean isExternalServerRoot(String name) {
         return !new File(serversFolder + File.separator + name).exists() && locationsJson.getDefaults().containsKey(name);
     }
 
-    public boolean isExternalServerRoot(Server server) {
+    public static boolean isExternalServerRoot(Server server) {
         if (!new File(serversFolder + File.separator + server.getName()).exists() && locationsJson.getDefaults().get(server.getName()) != null) {
             return true;
         }
         return false;
     }
 
-    public File getServerResource(Server server, ResourceType type) {
+    public static File getServerResource(Server server, ResourceType type) {
         return new File(getServerFolder(server.getName()) + File.separator + type.getFileName());
     }
 
-    public File getServerPluginsFolder(String serverName) {
+    public static File getServerPluginsFolder(String serverName) {
         return new File(getServerFolder(serverName) + File.separator + "plugins");
     }
 
-    public File getServerFile(String name) {
+    public static File getServerFile(String name) {
         return new File(serverFilesFolder + File.separator + name);
     }
 
-    public void createServer(String name, ServerType type, String[] settings, String customLocation) throws IOException {
+    public static void createServer(String name, ServerType type, String[] settings, String customLocation) throws IOException {
         Logger.info("Creating server with name '" + name + "'...");
 
         File folder, settingsProps, serverProps, eula;
@@ -417,7 +409,7 @@ public class FileManager {
         }
     }
 
-    public void importServer(String name, String location) {
+    public static void importServer(String name, String location) {
         Logger.info("Importing server with name '" + name + "' from '" + location + "'...");
 
         JSONObject locationObject = new JSONObject();
@@ -428,7 +420,7 @@ public class FileManager {
         ServerAction.add(new LocalServer(name));
     }
 
-    public void deleteFile(File file) {
+    public static void deleteFile(File file) {
         File[] contents = file.listFiles();
         if (contents != null) {
             File[] arrayOfFile1;
@@ -443,7 +435,7 @@ public class FileManager {
         }
     }
 
-    public boolean renameServer(String serverName, File serverFolder, String newName) {
+    public static boolean renameServer(String serverName, File serverFolder, String newName) {
         Logger.info("Renaming server '" + serverName + "' to '" + newName + "'...");
 
         if (isExternalServerRoot(serverName)) {
@@ -457,7 +449,7 @@ public class FileManager {
         }
     }
 
-    public void deleteServer(String serverName, File serverFolder) {
+    public static void deleteServer(String serverName, File serverFolder) {
         Logger.info("Deleting server '" + serverName + "'...");
 
         if (!isExternalServerRoot(serverName)) {
@@ -480,7 +472,7 @@ public class FileManager {
         }
     }
 
-    public Image decodeBase64ToImage(String base64) throws IOException {
+    public static Image decodeBase64ToImage(String base64) throws IOException {
         String[] parts = base64.split(",");
         String imageString = parts[1];
 
@@ -511,7 +503,7 @@ public class FileManager {
         return extension;
     }
 
-    public void addPlugin(String serverName, File plugin) throws IOException {
+    public static void addPlugin(String serverName, File plugin) throws IOException {
         Logger.info("Copying plugin file from '" + plugin.getAbsolutePath() + "' to server '" + serverName + "'...");
 
         File pluginsFolder = getServerPluginsFolder(serverName);
@@ -519,7 +511,7 @@ public class FileManager {
         Files.copy(plugin.toPath(), new File(pluginsFolder + File.separator + plugin.getName()).toPath(), StandardCopyOption.REPLACE_EXISTING);
     }
 
-    public void addServerfile(File serverFile) throws IOException {
+    public static void addServerfile(File serverFile) throws IOException {
         Logger.info("Copying server file from '" + serverFile.getAbsolutePath() + "'...");
 
         File serverFilesFolder = getServerFilesFolder();
@@ -529,7 +521,7 @@ public class FileManager {
     }
 
     //Notifications
-    public void addNotification(Notification notification) {
+    public static void addNotification(Notification notification) {
         Logger.info("Adding notification...");
 
         JSONObject notifObject = new JSONObject();
@@ -542,11 +534,11 @@ public class FileManager {
         notificationsJson.save();
     }
 
-    private Notification parseNotificaion(JSONObject notifObject) {
+    private static Notification parseNotificaion(JSONObject notifObject) {
         return new Notification(notifObject.get("title").toString(), notifObject.get("text").toString(), notifObject.get("date").toString(), NotificationAlertType.valueOf(notifObject.get("type").toString()));
     }
 
-    public Notification[] getLatestNotifications(int count) {
+    public static Notification[] getLatestNotifications(int count) {
         if (count > getNotificationCount()) count = getNotificationCount();
         Notification[] notifications = new Notification[count];
         int maxIndex = notificationsJson.getDefaults().size();
@@ -557,18 +549,18 @@ public class FileManager {
         return notifications;
     }
 
-    public int getNotificationCount() {
+    public static int getNotificationCount() {
         return notificationsJson.getDefaults().size();
     }
 
-    public boolean isAvaliableExternalDir(File directory) {
+    public static boolean isAvaliableExternalDir(File directory) {
         if (!directory.isDirectory()) return false;
         if (directory.canRead() && directory.canWrite()) return true;
         return false;
     }
 
     //Timed tasks
-    public void addTimedTask(String name, String date, String server, String command, boolean isDaily) {
+    public static void addTimedTask(String name, String date, String server, String command, boolean isDaily) {
         Logger.info("Adding timed task with name '" + name + "' to server '" + server + "'...");
 
         JSONObject task = new JSONObject();
@@ -583,7 +575,7 @@ public class FileManager {
         timedTasksJson.save();
     }
 
-    public void removeTimedTask(String server, String name) {
+    public static void removeTimedTask(String server, String name) {
         Logger.info("Removing timed task with name '" + name + "' from server '" + server + "'...");
 
         JSONArray serverArray = (JSONArray) timedTasksJson.getDefaults().get(server);
@@ -600,7 +592,7 @@ public class FileManager {
         timedTasksJson.save();
     }
 
-    private void loadTimedTasks() {
+    private static void loadTimedTasks() {
         if (timedTasksJson.getDefaults().size() == 0) return;
         for (String serverName : timedTasksJson.getDefaults().keySet()) {
             JSONArray serverArray = (JSONArray) timedTasksJson.getDefaults().get(serverName);
@@ -620,7 +612,7 @@ public class FileManager {
         }
     }
 
-    public List<String> getFileNamesInJarPath(String jarPath) {
+    public static List<String> getFileNamesInJarPath(String jarPath) {
         List<String> fileNames = new ArrayList<>();
         CodeSource src = MainClass.class.getProtectionDomain().getCodeSource();
         try {
@@ -646,7 +638,7 @@ public class FileManager {
         return fileNames;
     }
 
-    public InputStream getInputStreamInExternalJar(File jarFile, String jarPath) {
+    public static InputStream getInputStreamInExternalJar(File jarFile, String jarPath) {
         InputStream in = null;
         String inputFile = "jar:file:/" + jarFile.getAbsolutePath() + "!/" + jarPath;
         URL inputURL;
@@ -675,7 +667,7 @@ public class FileManager {
         return length;
     }
 
-    public File saveImage(Image image, String fileName) {
+    public static File saveImage(Image image, String fileName) {
         BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
         try {
             ImageIO.write(bImage, "png", new File(imagesFolder + File.separator + fileName + ".png"));
@@ -685,7 +677,7 @@ public class FileManager {
         return new File(imagesFolder + File.separator + fileName + ".png");
     }
 
-    public Image screenShot(Scene scene) {
+    public static Image screenShot(Scene scene) {
         WritableImage img = new WritableImage((int) scene.getWidth(), (int) scene.getHeight());
         scene.snapshot(img);
         return img;
@@ -693,19 +685,19 @@ public class FileManager {
 
     //Getters
 
-    public PropertiesManager getConfigProps() {
+    public static PropertiesManager getConfigProps() {
         return configProps;
     }
 
-    public File getServerFilesFolder() {
+    public static File getServerFilesFolder() {
         return serverFilesFolder;
     }
 
-    public File getServersFolder() {
+    public static File getServersFolder() {
         return serversFolder;
     }
 
-    public File getRoot() {
+    public static File getRoot() {
         return root;
     }
 }

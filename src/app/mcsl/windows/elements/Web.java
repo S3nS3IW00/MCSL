@@ -35,7 +35,7 @@ public class Web extends VBox {
 
         closeButton = new Button("X", ButtonType.ERROR_ACTION_BUTTON, 13);
         closeButton.setOnAction(e -> {
-            //MainClass.getTemplate().closeWeb();
+            //Template.closeWeb();
             webEngine.loadContent("");
         });
 

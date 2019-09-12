@@ -1,7 +1,7 @@
 package app.mcsl.windows.elements.dialog.customdialogs;
 
-import app.mcsl.MainClass;
 import app.mcsl.managers.Language;
+import app.mcsl.managers.file.FileManager;
 import app.mcsl.managers.file.PropertiesManager;
 import app.mcsl.utils.DataTypeUtil;
 import app.mcsl.windows.contents.server.ServerType;
@@ -81,7 +81,7 @@ public class RepairServerDialog extends Dialog {
         typeComboBox.setPrefWidth(200);
         typeComboBox.getSelectionModel().selectFirst();
 
-        serverFileComboBox = new ComboBox(FXCollections.observableList(Arrays.asList(MainClass.getFileManager().getServerFilesFolder().list())));
+        serverFileComboBox = new ComboBox(FXCollections.observableList(Arrays.asList(FileManager.getServerFilesFolder().list())));
         serverFileComboBox.getSelectionModel().select(settingsProps.hasProp("serverfile") ? settingsProps.getProp("serverfile") : 0);
         serverFileComboBox.setPrefWidth(200);
         serverFileComboBox.getSelectionModel().selectFirst();

@@ -1,9 +1,10 @@
 package app.mcsl.windows.contents.mainpage;
 
-import app.mcsl.MainClass;
 import app.mcsl.managers.Language;
+import app.mcsl.managers.file.FileManager;
 import app.mcsl.managers.tab.TabClass;
 import app.mcsl.managers.tab.TabType;
+import app.mcsl.windows.Template;
 import app.mcsl.windows.contents.server.Server;
 import app.mcsl.windows.contents.server.ServerType;
 import app.mcsl.windows.elements.ServerCard;
@@ -82,9 +83,9 @@ public class ServersContent implements TabClass {
         importServer.setOnAction(e -> {
             DirectoryChooser directoryChooser = new DirectoryChooser();
             directoryChooser.setTitle(Language.getText("chooseserverslocation"));
-            File serverLocation = directoryChooser.showDialog(MainClass.getTemplate());
+            File serverLocation = directoryChooser.showDialog(Template.getStage());
             if (serverLocation != null) {
-                if (!MainClass.getFileManager().checkImportServerFiles(serverLocation)) {
+                if (!FileManager.checkImportServerFiles(serverLocation)) {
                     new AlertDialog(200, 400, Language.getText("error"), Language.getText("choosendirnotavaliable"), AlertType.ERROR).show();
                 }
             }

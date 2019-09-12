@@ -1,10 +1,12 @@
 package app.mcsl.windows.contents.mainpage;
 
-import app.mcsl.MainClass;
 import app.mcsl.managers.Language;
+import app.mcsl.managers.file.FileManager;
+import app.mcsl.managers.tab.TabManager;
 import app.mcsl.managers.theme.ThemeColor;
 import app.mcsl.managers.theme.ThemeManager;
 import app.mcsl.managers.theme.ThemeType;
+import app.mcsl.windows.Template;
 import app.mcsl.windows.contents.server.ServerStage;
 import app.mcsl.windows.elements.button.Button;
 import app.mcsl.windows.elements.button.ButtonType;
@@ -58,62 +60,62 @@ public class SettingsContent extends StackPane {
         SettingCategory designSettings = new SettingCategory(Language.getText("uisettings"));
 
         ComboBox languageComboBox = new ComboBox(FXCollections.observableArrayList(Arrays.asList(languages)));
-        languageComboBox.getSelectionModel().select(MainClass.getFileManager().getConfigProps().getProp("language"));
+        languageComboBox.getSelectionModel().select(FileManager.getConfigProps().getProp("language"));
         Setting languageSetting = new Setting(Language.getText("language"), languageComboBox, null, true) {
             @Override
             public void onChange(Object object) {
-                MainClass.getFileManager().getConfigProps().setProp("language", object.toString());
+                FileManager.getConfigProps().setProp("language", object.toString());
             }
         };
 
         CheckBox autoupdateCheckBox = new CheckBox();
-        autoupdateCheckBox.setSelected(MainClass.getFileManager().getConfigProps().getBoolProp("autoupdate"));
+        autoupdateCheckBox.setSelected(FileManager.getConfigProps().getBoolProp("autoupdate"));
         Setting autoupdateSetting = new Setting(Language.getText("autoupdate"), autoupdateCheckBox, null, false) {
             @Override
             public void onChange(Object object) {
-                MainClass.getFileManager().getConfigProps().setBoolProp("autoupdate", (boolean) object);
+                FileManager.getConfigProps().setBoolProp("autoupdate", (boolean) object);
             }
         };
 
         CheckBox pushNotificationsCheckBox = new CheckBox();
-        pushNotificationsCheckBox.setSelected(MainClass.getFileManager().getConfigProps().getBoolProp("notifications"));
+        pushNotificationsCheckBox.setSelected(FileManager.getConfigProps().getBoolProp("notifications"));
         Setting pushNotificationsSetting = new Setting(Language.getText("pushnotifications"), pushNotificationsCheckBox, null, false) {
             @Override
             public void onChange(Object object) {
-                MainClass.getFileManager().getConfigProps().setBoolProp("notifications", (boolean) object);
+                FileManager.getConfigProps().setBoolProp("notifications", (boolean) object);
             }
         };
 
         CheckBox hideWhenExitCheckBox = new CheckBox();
-        hideWhenExitCheckBox.setSelected(MainClass.getFileManager().getConfigProps().getBoolProp("hideonexit"));
+        hideWhenExitCheckBox.setSelected(FileManager.getConfigProps().getBoolProp("hideonexit"));
         Setting hideWhenExitSetting = new Setting(Language.getText("hideonexit"), hideWhenExitCheckBox, Language.getText("hidedescription"), false) {
             @Override
             public void onChange(Object object) {
-                MainClass.getFileManager().getConfigProps().setBoolProp("hideonexit", (boolean) object);
+                FileManager.getConfigProps().setBoolProp("hideonexit", (boolean) object);
             }
         };
 
         ComboBox themeColorsComboBox = new ComboBox(FXCollections.observableList(Arrays.asList(ThemeManager.displayColorValues())));
-        themeColorsComboBox.getSelectionModel().select(Language.getText(ThemeColor.valueOf(MainClass.getFileManager().getConfigProps().getProp("themecolor").toUpperCase()).getDisplayName()));
+        themeColorsComboBox.getSelectionModel().select(Language.getText(ThemeColor.valueOf(FileManager.getConfigProps().getProp("themecolor").toUpperCase()).getDisplayName()));
         Setting themecolorSetting = new Setting(Language.getText("themecolor"), themeColorsComboBox, null, false) {
             @Override
             public void onChange(Object object) {
-                MainClass.getFileManager().getConfigProps().setProp("themecolor", ThemeManager.getColorFromDisplayName(object.toString()).name().toLowerCase());
+                FileManager.getConfigProps().setProp("themecolor", ThemeManager.getColorFromDisplayName(object.toString()).name().toLowerCase());
                 ThemeManager.changeThemeColor(ThemeManager.getColorFromDisplayName(object.toString()));
-                for (ServerStage serverStage : MainClass.getTabManager().getServerStages()) {
+                for (ServerStage serverStage : TabManager.getServerStages()) {
                     ThemeManager.applyCss(serverStage.getScene());
                 }
             }
         };
 
         ComboBox themeTypesComboBox = new ComboBox(FXCollections.observableList(Arrays.asList(ThemeManager.displayTypeValues())));
-        themeTypesComboBox.getSelectionModel().select(Language.getText(ThemeType.valueOf(MainClass.getFileManager().getConfigProps().getProp("themetype").toUpperCase()).getDisplayName()));
+        themeTypesComboBox.getSelectionModel().select(Language.getText(ThemeType.valueOf(FileManager.getConfigProps().getProp("themetype").toUpperCase()).getDisplayName()));
         Setting themetypeSetting = new Setting(Language.getText("themetype"), themeTypesComboBox, null, false) {
             @Override
             public void onChange(Object object) {
-                MainClass.getFileManager().getConfigProps().setProp("themetype", ThemeManager.getTypeFromDisplayName(object.toString()).name().toLowerCase());
+                FileManager.getConfigProps().setProp("themetype", ThemeManager.getTypeFromDisplayName(object.toString()).name().toLowerCase());
                 ThemeManager.changeThemeType(ThemeManager.getTypeFromDisplayName(object.toString()));
-                for (ServerStage serverStage : MainClass.getTabManager().getServerStages()) {
+                for (ServerStage serverStage : TabManager.getServerStages()) {
                     ThemeManager.applyCss(serverStage.getScene());
                 }
             }
@@ -144,7 +146,7 @@ public class SettingsContent extends StackPane {
         restartButton.setMinHeight(0);
         restartButton.setMaxHeight(30);
         restartButton.setPrefWidth(120);
-        restartButton.setOnAction(e -> MainClass.getTemplate().getQuitDialog().restart());
+        restartButton.setOnAction(e -> Template.getQuitDialog().restart());
 
         HBox restartButtonBox = new HBox(20, restartButton);
         restartButtonBox.setAlignment(Pos.CENTER);

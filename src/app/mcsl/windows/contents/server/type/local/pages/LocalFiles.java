@@ -1,8 +1,8 @@
 package app.mcsl.windows.contents.server.type.local.pages;
 
-import app.mcsl.MainClass;
 import app.mcsl.managers.Language;
 import app.mcsl.managers.file.FileManager;
+import app.mcsl.windows.Template;
 import app.mcsl.windows.contents.server.type.local.LocalServer;
 import app.mcsl.windows.elements.IconCard;
 import app.mcsl.windows.elements.button.Button;
@@ -38,19 +38,19 @@ public class LocalFiles extends HBox {
 
     private TreeView treeView;
     private TextArea textEditor;
-    private Button saveButton, resetButton, filesButton, addPluginButton, deleteFileButton;
+    private Button saveButton, resetButton, filesButton, addPluginButton, deleteFileButton, refreshButton;
 
     private File selectedFile;
     private boolean canEditFile = false;
 
-    public LocalFiles(LocalServer server){
+    public LocalFiles(LocalServer server) {
         this.server = server;
 
         treeView = new TreeView();
         treeView.setMaxWidth(200);
         treeView.setMinWidth(200);
         VBox.setVgrow(treeView, Priority.ALWAYS);
-        displayTreeView(MainClass.getFileManager().getServerFolder(server.getName()).getAbsolutePath());
+        displayTreeView(FileManager.getServerFolder(server.getName()).getAbsolutePath());
         EventHandler<MouseEvent> mouseEventHandle = this::handleMouseClicked;
         treeView.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEventHandle);
 
@@ -58,8 +58,8 @@ public class LocalFiles extends HBox {
         VBox.setVgrow(textEditor, Priority.ALWAYS);
         HBox.setHgrow(textEditor, Priority.ALWAYS);
         textEditor.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(saveButton.isDisabled() && canEditFile) saveButton.setDisable(false);
-            if(resetButton.isDisabled() && canEditFile) resetButton.setDisable(false);
+            if (saveButton.isDisabled() && canEditFile) saveButton.setDisable(false);
+            if (resetButton.isDisabled() && canEditFile) resetButton.setDisable(false);
         });
 
         saveButton = new Button(Language.getText("save"), app.mcsl.windows.elements.button.ButtonType.APPLY_ACTION_BUTTON);
@@ -82,8 +82,8 @@ public class LocalFiles extends HBox {
         resetButton.setOnAction(e -> {
             textEditor.clear();
             try {
-                for(String line : Files.readAllLines(selectedFile.toPath())){
-                    textEditor.appendText(line+System.lineSeparator());
+                for (String line : Files.readAllLines(selectedFile.toPath())) {
+                    textEditor.appendText(line + System.lineSeparator());
                 }
                 saveButton.setDisable(true);
                 resetButton.setDisable(true);
@@ -97,7 +97,7 @@ public class LocalFiles extends HBox {
         deleteFileButton.setOnAction(e -> new ConfirmationDialog(200, 400, Language.getText("deletefile"), Language.getText("suredeletefile", selectedFile.getName())) {
             @Override
             public void yesAction() {
-                MainClass.getFileManager().deleteFile(selectedFile);
+                FileManager.deleteFile(selectedFile);
                 refreshFiles();
                 canEditFile = false;
                 deleteFileButton.setDisable(true);
@@ -131,11 +131,15 @@ public class LocalFiles extends HBox {
         VBox.setVgrow(editorBox, Priority.ALWAYS);
         HBox.setHgrow(editorBox, Priority.ALWAYS);
 
+        refreshButton = new Button(Language.getText("refresh"), app.mcsl.windows.elements.button.ButtonType.ACTION_BUTTON);
+        refreshButton.setMaxWidth(Double.MAX_VALUE);
+        refreshButton.setOnAction(e -> refreshFiles());
+
         filesButton = new Button(Language.getText("files"), app.mcsl.windows.elements.button.ButtonType.ACTION_BUTTON);
         filesButton.setMaxWidth(Double.MAX_VALUE);
         filesButton.setOnAction(e -> {
             try {
-                Desktop.getDesktop().open(MainClass.getFileManager().getServerFolder(server.getName()));
+                Desktop.getDesktop().open(FileManager.getServerFolder(server.getName()));
             } catch (IOException ex) {
                 //empty catch block
             }
@@ -149,11 +153,11 @@ public class LocalFiles extends HBox {
             fileChooser.getExtensionFilters().addAll(
                     new FileChooser.ExtensionFilter("JAR", "*.jar")
             );
-            File plugin = fileChooser.showOpenDialog(MainClass.getTemplate());
+            File plugin = fileChooser.showOpenDialog(Template.getStage());
             if (plugin != null) {
                 try {
-                    MainClass.getFileManager().addPlugin(server.getName(), plugin);
-                    MainClass.getTemplate().showNotification(Language.getText("pluginadded"), LabelColor.ERROR);
+                    FileManager.addPlugin(server.getName(), plugin);
+                    Template.showNotification(Language.getText("pluginadded"), LabelColor.ERROR);
                     refreshFiles();
                 } catch (IOException ex) {
                     //empty catch block
@@ -161,7 +165,7 @@ public class LocalFiles extends HBox {
             }
         });
 
-        VBox sideBox = new VBox(5, treeView, filesButton, addPluginButton);
+        VBox sideBox = new VBox(5, treeView, refreshButton, filesButton, addPluginButton);
 
         setSpacing(10);
         getChildren().addAll(sideBox, editorBox);
@@ -209,8 +213,8 @@ public class LocalFiles extends HBox {
     private void handleMouseClicked(MouseEvent event) {
         Node node = event.getPickResult().getIntersectedNode();
         if (node instanceof Text || (node instanceof TreeCell && ((TreeCell) node).getText() != null)) {
-            CheckBoxTreeItem<File> treeItem = (CheckBoxTreeItem<File>)treeView.getSelectionModel().getSelectedItem();
-            if(treeItem != null && treeItem.getValue() != null) {
+            CheckBoxTreeItem<File> treeItem = (CheckBoxTreeItem<File>) treeView.getSelectionModel().getSelectedItem();
+            if (treeItem != null && treeItem.getValue() != null) {
                 if (treeItem.getValue().isFile() && (FileManager.getFileExtension(treeItem.getValue()).equalsIgnoreCase(".yml") ||
                         FileManager.getFileExtension(treeItem.getValue()).equalsIgnoreCase(".properties") ||
                         FileManager.getFileExtension(treeItem.getValue()).equalsIgnoreCase(".txt") ||
@@ -238,9 +242,9 @@ public class LocalFiles extends HBox {
         }
     }
 
-    public void refreshFiles(){
+    public void refreshFiles() {
         textEditor.clear();
-        displayTreeView(MainClass.getFileManager().getServerFolder(server.getName()).getAbsolutePath());
+        displayTreeView(FileManager.getServerFolder(server.getName()).getAbsolutePath());
         saveButton.setDisable(true);
         resetButton.setDisable(true);
         deleteFileButton.setDisable(true);

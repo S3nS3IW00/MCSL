@@ -1,6 +1,5 @@
 package app.mcsl.windows.contents.server.type.external;
 
-import app.mcsl.MainClass;
 import app.mcsl.events.ServerStateChangeEvent;
 import app.mcsl.events.ServerStatusChangeEvent;
 import app.mcsl.managers.Language;
@@ -9,8 +8,10 @@ import app.mcsl.managers.logging.Logger;
 import app.mcsl.managers.serverside.query.MinecraftPing;
 import app.mcsl.managers.serverside.query.MinecraftPingOptions;
 import app.mcsl.managers.serverside.query.MinecraftPingReply;
+import app.mcsl.managers.tab.TabManager;
 import app.mcsl.network.Connection;
 import app.mcsl.utils.DataTypeUtil;
+import app.mcsl.windows.Template;
 import app.mcsl.windows.contents.server.Server;
 import app.mcsl.windows.contents.server.ServerType;
 import app.mcsl.windows.contents.server.StatusType;
@@ -111,7 +112,7 @@ public class ExternalServer implements Server {
 
     public ExternalServer(String serverName) {
         this.serverName = serverName;
-        root = MainClass.getFileManager().getServerFolder(this);
+        root = FileManager.getServerFolder(this);
         settings = new ExternalSettings(this);
         timedTasks = new TimedTasks(serverName);
         queryTask = () -> {
@@ -120,7 +121,7 @@ public class ExternalServer implements Server {
                 pingReply = ping.getPing(new MinecraftPingOptions().setHostname(settings.getSetting("address")).setPort(Integer.parseInt(settings.getSetting("port"))));
                 updateInfos();
                 updateOnlinePlayersListCard();
-                MainClass.getTemplate().getServersContent().getServerCardByServer(this).updateInfos(pingReply.getFavicon(), pingReply.getDescription().getText(),
+                Template.getServersContent().getServerCardByServer(this).updateInfos(pingReply.getFavicon(), pingReply.getDescription().getText(),
                         pingReply.getPlayers().getOnline(), pingReply.getPlayers().getMax(), (int) ping.getLatency());
             } catch (IOException e) {
                 //empty catch block
@@ -131,7 +132,7 @@ public class ExternalServer implements Server {
             if (server == this) {
                 switch (newType) {
                     case RENAMED:
-                        root = MainClass.getFileManager().getServerFolder(getName());
+                        root = FileManager.getServerFolder(getName());
                         settings.loadSettings();
                         break;
                 }
@@ -383,7 +384,7 @@ public class ExternalServer implements Server {
         console.appendLine("§a[MinecraftServerLauncher] " + Language.getText("loadingsettings"));
         settings.loadSettings();
         console.appendLine("§a[MinecraftServerLauncher] " + Language.getText("checkingfiles"));
-        if (MainClass.getFileManager().checkServerFiles(serverName)) {
+        if (FileManager.checkServerFiles(serverName)) {
             Logger.info("Connecting to '" + settings.getSetting("address") + "'...");
 
             connection = new Connection(this, settings.getSetting("address"), Integer.parseInt(settings.getSetting("pluginport")), settings.getSetting("username"), settings.getSetting("password"));
@@ -393,12 +394,12 @@ public class ExternalServer implements Server {
         } else {
             Text incorrectConfigText = new Text("[MinecraftServerLauncher] " + Language.getText("checkfileserrormessage"));
             incorrectConfigText.setFill(Color.RED);
-            incorrectConfigText.setOnMouseClicked(e -> MainClass.getFileManager().repairServerFiles(serverName));
+            incorrectConfigText.setOnMouseClicked(e -> FileManager.repairServerFiles(serverName));
             console.appendLine(incorrectConfigText);
 
             Notification notification = new Notification(serverName, Language.getText("checkfileserrormessage"), NotificationAlertType.ERROR);
-            notification.setOnAction(e -> MainClass.getFileManager().repairServerFiles(serverName));
-            Notifications.push(MainClass.getTabManager().getTabClassByServer(this), notification);
+            notification.setOnAction(e -> FileManager.repairServerFiles(serverName));
+            Notifications.push(TabManager.getTabClassByServer(this), notification);
             ServerStatusChangeEvent.change(this, StatusType.STOPPED);
         }
     }
@@ -523,7 +524,7 @@ public class ExternalServer implements Server {
             case "ERROR":
                 console.appendLine("§c" + line);
                 errorLog.log("§c" + line, getStatus(), true);
-                Notifications.push(MainClass.getTabManager().getTabClassByServer(this), new Notification(serverName, Language.getText("servererror"), NotificationAlertType.ERROR));
+                Notifications.push(TabManager.getTabClassByServer(this), new Notification(serverName, Language.getText("servererror"), NotificationAlertType.ERROR));
                 isStackTrace = true;
                 break;
             default:

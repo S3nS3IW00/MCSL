@@ -2,6 +2,7 @@ package app.mcsl.managers;
 
 import app.mcsl.MainClass;
 import app.mcsl.managers.file.PropertiesManager;
+import app.mcsl.managers.logging.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +15,7 @@ public class Language {
     public static String LANGUAGE;
 
     public static void loadLanguage(String language) {
+        Logger.info("Loading language '" + language + "'...");
         Language.LANGUAGE = language;
 
         languageProps = new PropertiesManager(MainClass.class.getResourceAsStream("/app/mcsl/resources/languages/" + language + ".properties"));

@@ -5,6 +5,7 @@ import app.mcsl.events.ServerStatusChangeEvent;
 import app.mcsl.managers.Language;
 import app.mcsl.managers.logging.Logger;
 import app.mcsl.managers.server.ServersManager;
+import app.mcsl.windows.Template;
 import app.mcsl.windows.contents.server.Server;
 import app.mcsl.windows.contents.server.StatusType;
 import app.mcsl.windows.elements.button.Button;
@@ -87,7 +88,7 @@ public class QuitDialog extends Dialog {
             close();
 
             Platform.setImplicitExit(false);
-            MainClass.getTemplate().hide();
+            Template.getStage().hide();
             Notifications.push(null, new Notification(Language.getText("hiding"), Language.getText("waithere"), NotificationAlertType.INFO));
         });
 

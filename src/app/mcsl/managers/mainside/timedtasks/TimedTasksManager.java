@@ -1,6 +1,6 @@
 package app.mcsl.managers.mainside.timedtasks;
 
-import app.mcsl.MainClass;
+import app.mcsl.managers.file.FileManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +15,12 @@ public class TimedTasksManager {
 
     public static void createTimedTask(TimedTask timedTask) {
         timedTaskList.add(timedTask);
-        MainClass.getFileManager().addTimedTask(timedTask.getName(), timedTask.getDateString(), timedTask.getServerName(), timedTask.getCommand(), timedTask.isDaily());
+        FileManager.addTimedTask(timedTask.getName(), timedTask.getDateString(), timedTask.getServerName(), timedTask.getCommand(), timedTask.isDaily());
     }
 
     public static void removeTimedTask(TimedTask timedTask) {
         timedTaskList.remove(timedTask);
-        MainClass.getFileManager().removeTimedTask(timedTask.getServerName(), timedTask.getName());
+        FileManager.removeTimedTask(timedTask.getServerName(), timedTask.getName());
     }
 
     public static List<TimedTask> getTimedTasks() {

@@ -1,7 +1,8 @@
 package app.mcsl.managers.theme;
 
-import app.mcsl.MainClass;
 import app.mcsl.managers.Language;
+import app.mcsl.managers.logging.Logger;
+import app.mcsl.windows.Template;
 import javafx.scene.Scene;
 
 public class ThemeManager {
@@ -10,6 +11,7 @@ public class ThemeManager {
     public static ThemeType currentType = ThemeType.LIGHT;
 
     public static void changeThemeColor(ThemeColor color) {
+        Logger.info("Changing theme color to '" + color.getDisplayName() + "'...");
         currentColor = color;
         applyCss();
     }
@@ -30,6 +32,7 @@ public class ThemeManager {
     }
 
     public static void changeThemeType(ThemeType type) {
+        Logger.info("Changing theme type to '" + type.getDisplayName() + "'...");
         currentType = type;
         applyCss();
     }
@@ -50,7 +53,7 @@ public class ThemeManager {
     }
 
     private static void applyCss() {
-        MainClass.getTemplate().getScene().getRoot().setStyle("-fx-defcolor: " + currentColor.getDefColor() + ";" +
+        Template.getStage().getScene().getRoot().setStyle("-fx-defcolor: " + currentColor.getDefColor() + ";" +
                 "-fx-defdarkcolor: " + currentColor.getDarkDefColor() + ";" +
                 "-fx-themetypecolor: " + currentType.getType() + ";" +
                 "-fx-themetypcoloropacity: " + currentType.getOpacityType() + ";" +

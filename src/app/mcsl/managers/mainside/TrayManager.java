@@ -2,7 +2,9 @@ package app.mcsl.managers.mainside;
 
 import app.mcsl.MainClass;
 import app.mcsl.managers.Language;
+import app.mcsl.managers.file.FileManager;
 import app.mcsl.managers.logging.Logger;
+import app.mcsl.windows.Template;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 
@@ -13,41 +15,39 @@ import java.awt.event.MouseEvent;
 public class TrayManager {
 
     private final static SystemTray tray = SystemTray.getSystemTray();
-    private TrayIcon trayIcon;
+    private static TrayIcon trayIcon;
 
-    public TrayManager() {
-
-        TrayIcon trayIcon = new TrayIcon(SwingFXUtils.fromFXImage(MainClass.getTemplate().getIcons().get(0), null), "");
-        trayIcon.setImageAutoSize(true);
-        trayIcon.setToolTip("Minecraft Server Launcher v" + MainClass.VERSION);
-        this.trayIcon = trayIcon;
-    }
-
-    public void displayTray(String text, TrayIcon.MessageType mt) {
+    public static void displayTray(String text, TrayIcon.MessageType mt) {
         if (SystemTray.isSupported()) {
-            if (MainClass.getFileManager().getConfigProps().getBoolProp("notifications")) {
+            if (FileManager.getConfigProps().getBoolProp("notifications")) {
                 TrayIcon[] trayicons = tray.getTrayIcons();
                 trayicons[0].displayMessage("Minecraft Server Launcher", text, mt);
             }
         }
     }
 
-    public void runTray() {
+    public static void runTray() {
+        TrayIcon trayIcon = new TrayIcon(SwingFXUtils.fromFXImage(Template.getStage().getIcons().get(0), null), "");
+        trayIcon.setImageAutoSize(true);
+        trayIcon.setToolTip("Minecraft Server Launcher v" + MainClass.VERSION);
+        TrayManager.trayIcon = trayIcon;
+
+        Logger.info("Adding system tray...");
         if (SystemTray.isSupported()) {
             try {
                 tray.add(getTrayIcon());
                 getTrayIcon().addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        if (!MainClass.getTemplate().isShowing()) {
+                        if (!Template.getStage().isShowing()) {
                             Platform.runLater(() -> {
                                 if (e.getButton() == MouseEvent.BUTTON1) {
-                                    if (MainClass.getTemplate().isShowing()) {
-                                        MainClass.getTemplate().setIconified(false);
-                                        MainClass.getTemplate().toFront();
+                                    if (Template.getStage().isShowing()) {
+                                        Template.getStage().setIconified(false);
+                                        Template.getStage().toFront();
                                     } else {
                                         Logger.info("Showing application...");
-                                        MainClass.getTemplate().show();
+                                        Template.getStage().show();
                                     }
                                 }
                             });
@@ -57,13 +57,13 @@ public class TrayManager {
 
                 MenuItem exitItem = new MenuItem(Language.getText("quit"));
                 exitItem.addActionListener(e -> Platform.runLater(() -> {
-                    if (MainClass.getTemplate().isShowing()) {
-                        MainClass.getTemplate().setIconified(false);
-                        MainClass.getTemplate().toFront();
+                    if (Template.getStage().isShowing()) {
+                        Template.getStage().setIconified(false);
+                        Template.getStage().toFront();
                     } else {
-                        MainClass.getTemplate().show();
+                        Template.getStage().show();
                     }
-                    MainClass.getTemplate().getQuitDialog().quit();
+                    Template.getQuitDialog().quit();
                 }));
 
                 PopupMenu popupMenu = new PopupMenu();
@@ -76,7 +76,7 @@ public class TrayManager {
         }
     }
 
-    public TrayIcon getTrayIcon() {
+    private static TrayIcon getTrayIcon() {
         return trayIcon;
     }
 }

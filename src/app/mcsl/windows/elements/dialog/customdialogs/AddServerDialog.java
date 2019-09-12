@@ -1,13 +1,14 @@
 package app.mcsl.windows.elements.dialog.customdialogs;
 
-import app.mcsl.MainClass;
 import app.mcsl.events.DirectoryChangeEvent;
 import app.mcsl.managers.HashManager;
 import app.mcsl.managers.Language;
 import app.mcsl.managers.file.DirectoryType;
+import app.mcsl.managers.file.FileManager;
 import app.mcsl.managers.server.ServerAction;
 import app.mcsl.managers.server.ServersManager;
 import app.mcsl.utils.DataTypeUtil;
+import app.mcsl.windows.Template;
 import app.mcsl.windows.contents.server.ServerType;
 import app.mcsl.windows.contents.server.type.external.ExternalServer;
 import app.mcsl.windows.contents.server.type.local.LocalServer;
@@ -88,7 +89,7 @@ public class AddServerDialog extends Dialog {
         typeComboBox.setPrefWidth(200);
         typeComboBox.getSelectionModel().selectFirst();
 
-        serverFileComboBox = new ComboBox(FXCollections.observableList(Arrays.asList(MainClass.getFileManager().getServerFilesFolder().list())));
+        serverFileComboBox = new ComboBox(FXCollections.observableList(Arrays.asList(FileManager.getServerFilesFolder().list())));
         serverFileComboBox.setPrefWidth(200);
         serverFileComboBox.getSelectionModel().selectFirst();
 
@@ -112,7 +113,7 @@ public class AddServerDialog extends Dialog {
         chooseLocationButton.setOnAction(e -> {
             DirectoryChooser directoryChooser = new DirectoryChooser();
             directoryChooser.setTitle(Language.getText("choosecustomlocation"));
-            File serverLocation = directoryChooser.showDialog(MainClass.getTemplate());
+            File serverLocation = directoryChooser.showDialog(Template.getStage());
             if (serverLocation != null) {
                 customLocationTextField.setText(serverLocation.getAbsolutePath() + File.separator + serverName);
             }
@@ -179,7 +180,7 @@ public class AddServerDialog extends Dialog {
 
         DirectoryChangeEvent.addListener(type -> {
             if (type == DirectoryType.SERVERFILE) {
-                serverFileComboBox.setItems(FXCollections.observableList(Arrays.asList(MainClass.getFileManager().getServerFilesFolder().list())));
+                serverFileComboBox.setItems(FXCollections.observableList(Arrays.asList(FileManager.getServerFilesFolder().list())));
                 serverFileComboBox.getSelectionModel().selectFirst();
             }
         });
@@ -210,22 +211,27 @@ public class AddServerDialog extends Dialog {
                             serverType = ServerType.getFromDisplayName(typeComboBox.getSelectionModel().getSelectedItem().toString()).getTypeName();
                             serverPort = Integer.parseInt(serverPortTextField.getText());
 
-                            inputBox.getChildren().clear();
-                            switch (ServerType.valueOf(serverType.toUpperCase())) {
-                                case LOCAL:
-                                    inputBox.getChildren().addAll(serverFileComboBox, ramTextField, chooseLocationBox, autoStartCheckBox, eulaCheckBox);
-                                    titleLabel.setText(Language.getText("addstep2localtitle"));
-                                    descriptionLabel.setText(Language.getText("addstep2localdescription"));
-                                    nextButton.setDisable(true);
-                                    break;
-                                case EXTERNAL:
-                                    inputBox.getChildren().addAll(pluginPortTextField, serverIpTextField, usernameTextField, passwordTextField);
-                                    titleLabel.setText(Language.getText("addstep2externaltitle"));
-                                    descriptionLabel.setText(Language.getText("addstep2externaldescription"));
-                                    break;
+                            if (ServerType.valueOf(serverType.toUpperCase()) == ServerType.EXTERNAL || FileManager.getServerFilesFolder().listFiles().length > 0) {
+                                inputBox.getChildren().clear();
+                                switch (ServerType.valueOf(serverType.toUpperCase())) {
+                                    case LOCAL:
+                                        inputBox.getChildren().addAll(serverFileComboBox, ramTextField, chooseLocationBox, autoStartCheckBox, eulaCheckBox);
+                                        titleLabel.setText(Language.getText("addstep2localtitle"));
+                                        descriptionLabel.setText(Language.getText("addstep2localdescription"));
+                                        nextButton.setDisable(true);
+                                        break;
+                                    case EXTERNAL:
+                                        inputBox.getChildren().addAll(pluginPortTextField, serverIpTextField, usernameTextField, passwordTextField);
+                                        titleLabel.setText(Language.getText("addstep2externaltitle"));
+                                        descriptionLabel.setText(Language.getText("addstep2externaldescription"));
+                                        break;
+                                }
+                                cancelButton.setText(Language.getText("back"));
+                                nextButton.setText(Language.getText("add"));
+                            } else {
+                                showError(Language.getText("noserverfile"));
+                                this.stepIndex--;
                             }
-                            cancelButton.setText(Language.getText("back"));
-                            nextButton.setText(Language.getText("add"));
                         } else {
                             showError(Language.getText("serverexistswiththisname"));
                             this.stepIndex--;
@@ -241,28 +247,23 @@ public class AddServerDialog extends Dialog {
                 case LOCAL:
                     if (!ramTextField.getText().isEmpty() && DataTypeUtil.isInt(ramTextField.getText())) {
                         ramInMB = Integer.parseInt(ramTextField.getText());
-                        if (serverFileComboBox.getSelectionModel().getSelectedItem() != null) {
-                            serverFile = serverFileComboBox.getSelectionModel().getSelectedItem().toString();
+                        serverFile = serverFileComboBox.getSelectionModel().getSelectedItem().toString();
 
-                            try {
-                                if (customLocationTextField.getText().isEmpty()) {
-                                    MainClass.getFileManager().createServer(serverName, ServerType.LOCAL, new String[]{serverPort + "", serverFile + "", ramInMB + "", autoStartCheckBox.isSelected() + ""}, null);
+                        try {
+                            if (customLocationTextField.getText().isEmpty()) {
+                                FileManager.createServer(serverName, ServerType.LOCAL, new String[]{serverPort + "", serverFile + "", ramInMB + "", autoStartCheckBox.isSelected() + ""}, null);
+                                close();
+                            } else {
+                                if (FileManager.isAvaliableExternalDir(new File(customLocationTextField.getText().replace(File.separator + serverName, "")))) {
+                                    FileManager.createServer(serverName, ServerType.LOCAL, new String[]{serverPort + "", serverFile + "", ramInMB + "", autoStartCheckBox.isSelected() + ""}, customLocationTextField.getText());
                                     close();
                                 } else {
-                                    if (MainClass.getFileManager().isAvaliableExternalDir(new File(customLocationTextField.getText().replace(File.separator + serverName, "")))) {
-                                        MainClass.getFileManager().createServer(serverName, ServerType.LOCAL, new String[]{serverPort + "", serverFile + "", ramInMB + "", autoStartCheckBox.isSelected() + ""}, customLocationTextField.getText());
-                                        close();
-                                    } else {
-                                        showError(Language.getText("choosendirnotavaliable"));
-                                    }
+                                    showError(Language.getText("choosendirnotavaliable"));
                                 }
-                                ServerAction.add(new LocalServer(serverName));
-                            } catch (IOException e) {
-                                showError(Language.getText("choosendirnotavaliable"));
                             }
-                        } else {
-                            showError(Language.getText("noserverfile").substring(0, Language.getText("noserverfile").indexOf("!")));
-                            this.stepIndex--;
+                            ServerAction.add(new LocalServer(serverName));
+                        } catch (IOException e) {
+                            showError(Language.getText("choosendirnotavaliable"));
                         }
                     } else {
                         showError(Language.getText("mustfillallfields"));
@@ -277,7 +278,7 @@ public class AddServerDialog extends Dialog {
                         password = HashManager.cuttedHash(passwordTextField.getText());
 
                         try {
-                            MainClass.getFileManager().createServer(serverName, ServerType.EXTERNAL, new String[]{serverIp, serverPort + "", pluginPort + "", username, password}, null);
+                            FileManager.createServer(serverName, ServerType.EXTERNAL, new String[]{serverIp, serverPort + "", pluginPort + "", username, password}, null);
                             ServerAction.add(new ExternalServer(serverName));
                         } catch (IOException e) {
                             //empty catch block

@@ -1,9 +1,9 @@
 package app.mcsl.windows.contents.server.type.local.pages;
 
-import app.mcsl.MainClass;
 import app.mcsl.events.DirectoryChangeEvent;
 import app.mcsl.managers.Language;
 import app.mcsl.managers.file.DirectoryType;
+import app.mcsl.managers.file.FileManager;
 import app.mcsl.managers.file.PropertiesManager;
 import app.mcsl.managers.file.ResourceType;
 import app.mcsl.windows.contents.server.type.local.LocalServer;
@@ -309,12 +309,12 @@ public class LocalSettings extends ScrollPane {
             }
         };
 
-        serverFileComboBox = new ComboBox(FXCollections.observableList(Arrays.asList(MainClass.getFileManager().getServerFilesFolder().list())));
+        serverFileComboBox = new ComboBox(FXCollections.observableList(Arrays.asList(FileManager.getServerFilesFolder().list())));
         settingComponents.put(serverFileComboBox, "serverfile");
         Setting serverFileSetting = new Setting(Language.getText("serverfile"), serverFileComboBox, null, false) {
             @Override
             public void onChange(Object object) {
-                if (MainClass.getFileManager().getServerFilesFolder().listFiles().length > 0 && serverFileComboBox.getSelectionModel().getSelectedItem() != null) {
+                if (FileManager.getServerFilesFolder().listFiles().length > 0 && serverFileComboBox.getSelectionModel().getSelectedItem() != null) {
                     changed.put("serverfile", serverFileComboBox.getSelectionModel().getSelectedItem().toString());
                 } else {
                     settingsProps.removeProp("serverfile");
@@ -354,7 +354,7 @@ public class LocalSettings extends ScrollPane {
 
         DirectoryChangeEvent.addListener(type -> {
             if (type == DirectoryType.SERVERFILE) {
-                serverFileComboBox.setItems(FXCollections.observableList(Arrays.asList(MainClass.getFileManager().getServerFilesFolder().list())));
+                serverFileComboBox.setItems(FXCollections.observableList(Arrays.asList(FileManager.getServerFilesFolder().list())));
                 if (settings.get("serverfile") != null) {
                     serverFileComboBox.getSelectionModel().select(settings.get("serverfile"));
                 } else {
@@ -389,13 +389,13 @@ public class LocalSettings extends ScrollPane {
     }
 
     public void loadSettings() {
-        if (MainClass.getFileManager().getServerResource(server, ResourceType.SETTINGS_PROPERTIES).exists()) {
-            settingsFile = MainClass.getFileManager().getServerResource(server, ResourceType.SETTINGS_PROPERTIES);
+        if (FileManager.getServerResource(server, ResourceType.SETTINGS_PROPERTIES).exists()) {
+            settingsFile = FileManager.getServerResource(server, ResourceType.SETTINGS_PROPERTIES);
             settingsProps = new PropertiesManager(settingsFile);
             settings = settingsProps.toMap();
         }
-        if (MainClass.getFileManager().getServerResource(server, ResourceType.SERVER_PROPERTIES).exists()) {
-            serverPropsFile = MainClass.getFileManager().getServerResource(server, ResourceType.SERVER_PROPERTIES);
+        if (FileManager.getServerResource(server, ResourceType.SERVER_PROPERTIES).exists()) {
+            serverPropsFile = FileManager.getServerResource(server, ResourceType.SERVER_PROPERTIES);
             serverProps = new PropertiesManager(serverPropsFile);
             serverSettings = serverProps.toMap();
         }

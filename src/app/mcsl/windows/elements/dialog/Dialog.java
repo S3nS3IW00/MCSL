@@ -1,7 +1,7 @@
 package app.mcsl.windows.elements.dialog;
 
-import app.mcsl.MainClass;
 import app.mcsl.managers.Language;
+import app.mcsl.windows.Template;
 import app.mcsl.windows.elements.label.LabelColor;
 import javafx.animation.FadeTransition;
 import javafx.scene.control.Button;
@@ -82,9 +82,9 @@ public class Dialog extends VBox {
         outFade.setFromValue(1);
         outFade.setToValue(0);
         outFade.setOnFinished(e -> {
-            MainClass.getTemplate().getDialogStack().getChildren().remove(this);
-            MainClass.getTemplate().getWebviewStack().setEffect(null);
-            MainClass.getTemplate().getWebviewStack().setMouseTransparent(false);
+            Template.getDialogStack().getChildren().remove(this);
+            Template.getWebviewStack().setEffect(null);
+            Template.getWebviewStack().setMouseTransparent(false);
             isShowing = false;
             if (Dialogs.hasNext()) {
                 Dialogs.showNext();
@@ -145,17 +145,17 @@ public class Dialog extends VBox {
     }
 
     public void show() {
-        if (MainClass.getTemplate().getDialogStack().getChildren().size() == 1 || MainClass.getTemplate().getDialogStack().getChildren().get(1) != this) {
+        if (Template.getDialogStack().getChildren().size() == 1 || Template.getDialogStack().getChildren().get(1) != this) {
             if (Dialogs.canShow() || Dialogs.next() == this) {
                 isShowing = true;
-                MainClass.getTemplate().getWebviewStack().setMouseTransparent(true);
-                if (MainClass.getTemplate().getDialogStack().getChildren().size() > 1) {
+                Template.getWebviewStack().setMouseTransparent(true);
+                if (Template.getDialogStack().getChildren().size() > 1) {
                     Dialogs.addDialog(this);
-                    //MainClass.getTemplate().getDialogStack().getChildren().set(1, this);
+                    //Template.getDialogStack().getChildren().set(1, this);
                 } else {
-                    MainClass.getTemplate().getDialogStack().getChildren().add(this);
+                    Template.getDialogStack().getChildren().add(this);
                 }
-                MainClass.getTemplate().getWebviewStack().setEffect(new GaussianBlur(10));
+                Template.getWebviewStack().setEffect(new GaussianBlur(10));
                 inFade.play();
             } else {
                 Dialogs.addDialog(this);

@@ -1,6 +1,5 @@
 package app.mcsl.windows.contents.server.type.local;
 
-import app.mcsl.MainClass;
 import app.mcsl.events.ServerStateChangeEvent;
 import app.mcsl.events.ServerStatusChangeEvent;
 import app.mcsl.managers.Language;
@@ -10,8 +9,10 @@ import app.mcsl.managers.mainside.OSManager;
 import app.mcsl.managers.serverside.query.MinecraftPing;
 import app.mcsl.managers.serverside.query.MinecraftPingOptions;
 import app.mcsl.managers.serverside.query.MinecraftPingReply;
+import app.mcsl.managers.tab.TabManager;
 import app.mcsl.managers.threads.RunnableThread;
 import app.mcsl.utils.DataTypeUtil;
+import app.mcsl.windows.Template;
 import app.mcsl.windows.contents.server.LogPattern;
 import app.mcsl.windows.contents.server.Server;
 import app.mcsl.windows.contents.server.ServerType;
@@ -142,7 +143,7 @@ public class LocalServer implements Server {
 
     public LocalServer(String serverName) {
         this.serverName = serverName;
-        root = MainClass.getFileManager().getServerFolder(this);
+        root = FileManager.getServerFolder(this);
         settings = new LocalSettings(this);
         localFiles = new LocalFiles(this);
         timedTasks = new TimedTasks(serverName);
@@ -152,7 +153,7 @@ public class LocalServer implements Server {
                 pingReply = ping.getPing(new MinecraftPingOptions().setHostname("localhost").setPort(Integer.parseInt(settings.getSetting("server-port"))));
                 updateInfos();
                 updateOnlinePlayersListCard();
-                MainClass.getTemplate().getServersContent().getServerCardByServer(this).updateInfos(pingReply.getFavicon(), pingReply.getDescription().getText(),
+                Template.getServersContent().getServerCardByServer(this).updateInfos(pingReply.getFavicon(), pingReply.getDescription().getText(),
                         pingReply.getPlayers().getOnline(), pingReply.getPlayers().getMax(), (int) ping.getLatency());
             } catch (IOException e) {
                 //empty catch block
@@ -163,7 +164,7 @@ public class LocalServer implements Server {
             if (server == this) {
                 switch (newType) {
                     case RENAMED:
-                        root = MainClass.getFileManager().getServerFolder(getName());
+                        root = FileManager.getServerFolder(getName());
                         settings.loadSettings();
                         initSystem();
                         break;
@@ -205,7 +206,7 @@ public class LocalServer implements Server {
 
         ServerStatusChangeEvent.addListener((server, newType) -> {
             if (server == this) {
-                Logger.info("Status changed for server '"+serverName+"' to '" + newType.name() + "'.");
+                Logger.info("Status changed for server '" + serverName + "' to '" + newType.name() + "'.");
 
                 serverStatus = newType;
                 setSceneStatus(newType);
@@ -380,13 +381,13 @@ public class LocalServer implements Server {
     private void initSystem() {
         switch (OSManager.getOs()) {
             case WINDOWS:
-                processBuilder = new ProcessBuilder("cmd", "/c", "cd /d \"" + root + "\" & java -Xms" + settings.getSetting("ram") + "M -Xmx" + settings.getSetting("ram") + "M -Dfile.encoding=UTF-8 -jar \"" + MainClass.getFileManager().getServerFile(settings.getSetting("serverfile")) + "\" nogui");
+                processBuilder = new ProcessBuilder("cmd", "/c", "cd /d \"" + root + "\" & java -Xms" + settings.getSetting("ram") + "M -Xmx" + settings.getSetting("ram") + "M -Dfile.encoding=UTF-8 -jar \"" + FileManager.getServerFile(settings.getSetting("serverfile")) + "\" nogui");
                 break;
             case UNIX:
-                processBuilder = new ProcessBuilder("bash", "-c", "cd /d \"" + root + "\" & java -Xms" + settings.getSetting("ram") + "M -Xmx" + settings.getSetting("ram") + "M -Dfile.encoding=UTF-8 -jar \"" + MainClass.getFileManager().getServerFile(settings.getSetting("serverfile")) + "\" nogui");
+                processBuilder = new ProcessBuilder("bash", "-c", "cd /d \"" + root + "\" & java -Xms" + settings.getSetting("ram") + "M -Xmx" + settings.getSetting("ram") + "M -Dfile.encoding=UTF-8 -jar \"" + FileManager.getServerFile(settings.getSetting("serverfile")) + "\" nogui");
                 break;
             case MAC:
-                processBuilder = new ProcessBuilder("#!/bin/bash", "cd /d \"" + root + "\" & exec java -Xms" + settings.getSetting("ram") + "M -Xmx" + settings.getSetting("ram") + "M -Dfile.encoding=UTF-8 -jar \"" + MainClass.getFileManager().getServerFile(settings.getSetting("serverfile")) + "\" nogui");
+                processBuilder = new ProcessBuilder("#!/bin/bash", "cd /d \"" + root + "\" & exec java -Xms" + settings.getSetting("ram") + "M -Xmx" + settings.getSetting("ram") + "M -Dfile.encoding=UTF-8 -jar \"" + FileManager.getServerFile(settings.getSetting("serverfile")) + "\" nogui");
                 break;
         }
         serverThread = new RunnableThread("ServerThread-" + serverName) {
@@ -473,7 +474,7 @@ public class LocalServer implements Server {
         console.appendLine("§a[MinecraftServerLauncher] " + Language.getText("loadingsettings"));
         settings.loadSettings();
         console.appendLine("§a[MinecraftServerLauncher] " + Language.getText("checkingfiles"));
-        if (MainClass.getFileManager().checkServerFiles(serverName)) {
+        if (FileManager.checkServerFiles(serverName)) {
             console.appendLine("§a[MinecraftServerLauncher] " + Language.getText("gettinglogpattern"));
             String logPattern = getLogPattern();
             if (logPattern != null) {
@@ -509,8 +510,8 @@ public class LocalServer implements Server {
             Text incorrectConfigText = new Text("[MinecraftServerLauncher] " + Language.getText("checkfileserrormessage"));
             incorrectConfigText.setFill(Color.RED);
             incorrectConfigText.setOnMouseClicked(e -> {
-                if (MainClass.getFileManager().getServerFilesFolder().listFiles().length > 0) {
-                    MainClass.getFileManager().repairServerFiles(serverName);
+                if (FileManager.getServerFilesFolder().listFiles().length > 0) {
+                    FileManager.repairServerFiles(serverName);
                 } else {
                     new AlertDialog(200, 400, Language.getText("error"), Language.getText("noserverfile"), AlertType.ERROR).show();
                 }
@@ -519,13 +520,13 @@ public class LocalServer implements Server {
 
             Notification notification = new Notification(serverName, Language.getText("checkfileserrormessage"), NotificationAlertType.ERROR);
             notification.setOnAction(e -> {
-                if (MainClass.getFileManager().getServerFilesFolder().listFiles().length > 0) {
-                    MainClass.getFileManager().repairServerFiles(serverName);
+                if (FileManager.getServerFilesFolder().listFiles().length > 0) {
+                    FileManager.repairServerFiles(serverName);
                 } else {
                     new AlertDialog(200, 400, Language.getText("error"), Language.getText("noserverfile"), AlertType.ERROR).show();
                 }
             });
-            Notifications.push(MainClass.getTabManager().getTabClassByServer(this), notification);
+            Notifications.push(TabManager.getTabClassByServer(this), notification);
             ServerStatusChangeEvent.change(this, StatusType.STOPPED);
         }
     }
@@ -615,7 +616,7 @@ public class LocalServer implements Server {
             ServerStatusChangeEvent.change(this, StatusType.STOPPING);
             return;
         } else if (logLevel.equalsIgnoreCase("WARN") && message.contains("FAILED TO BIND TO PORT!")) {
-            Notifications.push(MainClass.getTabManager().getTabClassByServer(this), new Notification(serverName, Language.getText("serverstarterror.portbind"), NotificationAlertType.WARNING));
+            Notifications.push(TabManager.getTabClassByServer(this), new Notification(serverName, Language.getText("serverstarterror.portbind"), NotificationAlertType.WARNING));
             console.appendLine("§c[MinecraftServerLauncher] " + Language.getText("serverstarterror.portbind"));
         }
 
@@ -631,7 +632,7 @@ public class LocalServer implements Server {
             case "ERROR":
                 console.appendLine("§c" + line);
                 errorLog.log("§c" + line, getStatus(), true);
-                Notifications.push(MainClass.getTabManager().getTabClassByServer(this), new Notification(serverName, Language.getText("servererror"), NotificationAlertType.ERROR));
+                Notifications.push(TabManager.getTabClassByServer(this), new Notification(serverName, Language.getText("servererror"), NotificationAlertType.ERROR));
                 isStackTrace = true;
                 break;
             default:
@@ -642,7 +643,7 @@ public class LocalServer implements Server {
     private String getLogPattern() {
         Logger.info("Getting log pattern for server '" + serverName + "'...");
 
-        InputStream logXML = MainClass.getFileManager().getInputStreamInExternalJar(MainClass.getFileManager().getServerFile(getSettings().getSetting("serverfile")), "log4j2.xml");
+        InputStream logXML = FileManager.getInputStreamInExternalJar(FileManager.getServerFile(getSettings().getSetting("serverfile")), "log4j2.xml");
         if (logXML != null) {
             try {
                 DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -668,7 +669,7 @@ public class LocalServer implements Server {
     }
 
     private boolean openPort() {
-        Logger.info("Opening port '"+settings.getSetting("server-port")+"' for server '" + serverName + "'...");
+        Logger.info("Opening port '" + settings.getSetting("server-port") + "' for server '" + serverName + "'...");
 
         if (UPnP.isUPnPAvailable()) {
             if (!UPnP.isMappedTCP(Integer.parseInt(settings.getSetting("server-port")))) {
@@ -685,7 +686,7 @@ public class LocalServer implements Server {
     }
 
     private void closePort() {
-        Logger.info("Closing port '"+settings.getSetting("server-port")+"' for server '" + serverName + "'...");
+        Logger.info("Closing port '" + settings.getSetting("server-port") + "' for server '" + serverName + "'...");
 
         Platform.runLater(() -> {
             if (UPnP.isMappedTCP(Integer.parseInt(settings.getSetting("server-port")))) {

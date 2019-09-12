@@ -7,7 +7,6 @@ import app.mcsl.managers.logging.Logger;
 import app.mcsl.managers.mainside.OSManager;
 import app.mcsl.managers.mainside.TrayManager;
 import app.mcsl.managers.mainside.timedtasks.TimedTasksTimer;
-import app.mcsl.managers.tab.TabManager;
 import app.mcsl.managers.theme.ThemeColor;
 import app.mcsl.managers.theme.ThemeManager;
 import app.mcsl.managers.theme.ThemeType;
@@ -43,11 +42,6 @@ import java.util.concurrent.TimeUnit;
 public class MainClass extends Application {
 
     public static final String VERSION = "2.0";
-
-    private static Template template;
-    private static TabManager tabManager;
-    private static FileManager fileManager;
-    private static TrayManager trayManager;
 
     private File sessionFile;
     private FileChannel sessionChannel;
@@ -115,31 +109,24 @@ public class MainClass extends Application {
 
             Platform.runLater(new Thread(() -> {
                 try {
-                    fileManager = new FileManager();
+                    FileManager.checkFiles();
                 } catch (IOException e) {
                     Logger.error("Can't verify the necessary files for the following reason:");
                     Logger.exception(e);
                 }
 
-                Logger.info("Loading language...");
-                Language.loadLanguage(getFileManager().getConfigProps().getProp("language"));
+                Language.loadLanguage(FileManager.getConfigProps().getProp("language"));
 
                 Logger.info("Initiating application's stage...");
-                template = new Template();
+                Template.build();
+                Template.setUpTabs();
 
-                Logger.info("Initiating and setting up tabs...");
-                tabManager = new TabManager();
-                template.setUpTabs();
+                TrayManager.runTray();
 
-                Logger.info("Adding system tray...");
-                trayManager = new TrayManager();
-                trayManager.runTray();
+                FileManager.loadServers();
 
-                getFileManager().loadServers();
-
-                Logger.info("Applying theme...");
-                ThemeManager.changeThemeColor(ThemeColor.valueOf(MainClass.getFileManager().getConfigProps().getProp("themecolor").toUpperCase()));
-                ThemeManager.changeThemeType(ThemeType.valueOf(MainClass.getFileManager().getConfigProps().getProp("themetype").toUpperCase()));
+                ThemeManager.changeThemeColor(ThemeColor.valueOf(FileManager.getConfigProps().getProp("themecolor").toUpperCase()));
+                ThemeManager.changeThemeType(ThemeType.valueOf(FileManager.getConfigProps().getProp("themetype").toUpperCase()));
 
                 Logger.info("Initiating UPnP...");
                 UPnP.waitInit();
@@ -158,8 +145,8 @@ public class MainClass extends Application {
                     Logger.warn("Update found!");
                 }
 
-                Logger.info("Showing application's stage...");
-                template.show();
+                Logger.info("Showing application's window...");
+                Template.show();
                 splash.close();
 
                 if (SHOW_WELCOME) new WelcomeDialog().show();
@@ -169,26 +156,10 @@ public class MainClass extends Application {
                 if (SHOW_FILE_UPDATE)
                     new AlertDialog(250, 400, Language.getText("fileupdate"), Language.getText(fileUpdateStatusType.getLangCode()), fileUpdateStatusType.getAlertType()).show();
                 if (fileUpdateStatusType == FileUpdateStatusType.RECREATED_WITH_COPY)
-                    getFileManager().deleteFile(new File(getFileManager().getRoot() + "_old"));
+                    FileManager.deleteFile(new File(FileManager.getRoot() + "_old"));
 
                 Logger.info("Startup done! (" + Logger.getWarnCount() + " warning, " + Logger.getErrorCount() + " error, " + Logger.getExceptionCount() + " exception)");
             }));
         }
-    }
-
-    public static FileManager getFileManager() {
-        return fileManager;
-    }
-
-    public static Template getTemplate() {
-        return template;
-    }
-
-    public static TabManager getTabManager() {
-        return tabManager;
-    }
-
-    public static TrayManager getTrayManager() {
-        return trayManager;
     }
 }

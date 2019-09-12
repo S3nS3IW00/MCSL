@@ -1,9 +1,9 @@
 package app.mcsl.windows.elements.dialog.customdialogs;
 
-import app.mcsl.MainClass;
 import app.mcsl.managers.Language;
 import app.mcsl.managers.file.FileManager;
 import app.mcsl.managers.server.ServersManager;
+import app.mcsl.windows.Template;
 import app.mcsl.windows.contents.server.ServerType;
 import app.mcsl.windows.elements.button.Button;
 import app.mcsl.windows.elements.button.ButtonType;
@@ -40,8 +40,8 @@ public class DragAndDropDialog extends Dialog {
         serverFileButton.setStyle("-fx-font-size: 13px;");
         serverFileButton.setOnAction(e -> {
             try {
-                MainClass.getFileManager().addServerfile(file);
-                MainClass.getTemplate().showNotification(Language.getText("fileaddedas", Language.getText("serverfile")), LabelColor.ERROR);
+                FileManager.addServerfile(file);
+                Template.showNotification(Language.getText("fileaddedas", Language.getText("serverfile")), LabelColor.ERROR);
             } catch (IOException ex) {
                 //empty catch block
             }
@@ -58,8 +58,8 @@ public class DragAndDropDialog extends Dialog {
         pluginButton.setStyle("-fx-font-size: 13px;");
         pluginButton.setOnAction(e -> {
             try {
-                MainClass.getFileManager().addPlugin(localServersBox.getSelectionModel().getSelectedItem().toString(), file);
-                MainClass.getTemplate().showNotification(Language.getText("fileaddedas", "plugin"), LabelColor.ERROR);
+                FileManager.addPlugin(localServersBox.getSelectionModel().getSelectedItem().toString(), file);
+                Template.showNotification(Language.getText("fileaddedas", "plugin"), LabelColor.ERROR);
             } catch (IOException ex) {
                 //empty catch block
             }

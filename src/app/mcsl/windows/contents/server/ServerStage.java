@@ -1,9 +1,9 @@
 package app.mcsl.windows.contents.server;
 
-import app.mcsl.MainClass;
 import app.mcsl.managers.Language;
 import app.mcsl.managers.file.FileManager;
 import app.mcsl.managers.tab.TabAction;
+import app.mcsl.managers.tab.TabManager;
 import app.mcsl.managers.theme.ThemeManager;
 import app.mcsl.windows.elements.button.Button;
 import app.mcsl.windows.elements.button.ButtonType;
@@ -43,7 +43,7 @@ public class ServerStage extends Stage {
 
         Button backToTabButton = new Button(Language.getText("backtotab"), ButtonType.ROUNDED);
         backToTabButton.setOnAction(e -> {
-            Tab tab = MainClass.getTabManager().getTabByClass(serverContent);
+            Tab tab = TabManager.getTabByClass(serverContent);
             TabAction.attach(tab);
             TabAction.choose(tab);
         });
@@ -72,7 +72,7 @@ public class ServerStage extends Stage {
         setMinHeight(700);
 
         setOnCloseRequest(e -> {
-            TabAction.close(MainClass.getTabManager().getTabByClass(serverContent));
+            TabAction.close(TabManager.getTabByClass(serverContent));
             e.consume();
         });
     }

@@ -1,6 +1,5 @@
 package app.mcsl.windows.contents.server.pages;
 
-import app.mcsl.MainClass;
 import app.mcsl.events.TimedTaskExecuteEvent;
 import app.mcsl.managers.Language;
 import app.mcsl.managers.file.FileManager;
@@ -8,6 +7,7 @@ import app.mcsl.managers.mainside.timedtasks.TimedTask;
 import app.mcsl.managers.mainside.timedtasks.TimedTasksManager;
 import app.mcsl.utils.DataTypeUtil;
 import app.mcsl.utils.DateTimeUtils;
+import app.mcsl.windows.Template;
 import app.mcsl.windows.elements.GroupBox;
 import app.mcsl.windows.elements.IconCard;
 import app.mcsl.windows.elements.Table;
@@ -113,13 +113,13 @@ public class TimedTasks extends ScrollPane {
                         secondField.clear();
                         dailyCheckBox.setSelected(false);
                     } else {
-                        MainClass.getTemplate().showNotification(Language.getText("latedate"), LabelColor.ERROR);
+                        Template.showNotification(Language.getText("latedate"), LabelColor.ERROR);
                     }
                 } else {
-                    MainClass.getTemplate().showNotification(Language.getText("timedtaskidexists"), LabelColor.ERROR);
+                    Template.showNotification(Language.getText("timedtaskidexists"), LabelColor.ERROR);
                 }
             } else {
-                MainClass.getTemplate().showNotification(Language.getText("mustfillallfields"), LabelColor.ERROR);
+                Template.showNotification(Language.getText("mustfillallfields"), LabelColor.ERROR);
             }
         });
 
@@ -138,14 +138,14 @@ public class TimedTasks extends ScrollPane {
         tasksBox.getBody().setPadding(new Insets(10));
 
         javafx.scene.control.Label timedtaskdescriptionLabel = new javafx.scene.control.Label(Language.getText("timedtaskdescription"));
-        timedtaskdescriptionLabel.maxWidthProperty().bind(MainClass.getTemplate().widthProperty());
+        timedtaskdescriptionLabel.maxWidthProperty().bind(Template.getStage().widthProperty());
         timedtaskdescriptionLabel.setStyle("-fx-text-fill: -fx-themetypecolor;\n" +
                 "    -fx-font-size: 15px;\n" +
                 "    -fx-font-weight: bold;");
         timedtaskdescriptionLabel.setWrapText(true);
 
         IconCard timedTaskIconCard = new IconCard(new ImageView(FileManager.TIP_ICON), timedtaskdescriptionLabel, 200, 50);
-        timedTaskIconCard.prefWidthProperty().bind(MainClass.getTemplate().widthProperty());
+        timedTaskIconCard.prefWidthProperty().bind(Template.getStage().widthProperty());
 
         VBox body = new VBox();
         body.setSpacing(20);

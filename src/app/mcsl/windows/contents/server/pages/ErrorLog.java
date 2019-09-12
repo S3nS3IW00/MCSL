@@ -1,8 +1,8 @@
 package app.mcsl.windows.contents.server.pages;
 
-import app.mcsl.MainClass;
 import app.mcsl.managers.Language;
 import app.mcsl.managers.file.FileManager;
+import app.mcsl.windows.Template;
 import app.mcsl.windows.contents.server.StatusType;
 import app.mcsl.windows.elements.IconCard;
 import app.mcsl.windows.elements.coloredtextflow.ColoredTextFlow;
@@ -36,14 +36,14 @@ public class ErrorLog extends VBox {
                 "    -fx-font-weight: bold;");
 
         IconCard startUpErrorIconCard = new IconCard(new ImageView(FileManager.ERROR_ICON), startUpProblemsLabel, 200, 50);
-        startUpErrorIconCard.prefWidthProperty().bind(MainClass.getTemplate().getScene().widthProperty());
+        startUpErrorIconCard.prefWidthProperty().bind(Template.getStage().getScene().widthProperty());
         startUpErrorIconCard.setOnMouseClicked(e -> {
             consoleScroll.setContent(startUpLog);
             logTitleLabel.setText(Language.getText("startupproblems"));
         });
 
         IconCard runtimeErrorIconCard = new IconCard(new ImageView(FileManager.ERROR_ICON), runProblemsLabel, 200, 50);
-        runtimeErrorIconCard.prefWidthProperty().bind(MainClass.getTemplate().getScene().widthProperty());
+        runtimeErrorIconCard.prefWidthProperty().bind(Template.getStage().getScene().widthProperty());
         runtimeErrorIconCard.setOnMouseClicked(e -> {
             consoleScroll.setContent(runtimeLog);
             logTitleLabel.setText(Language.getText("runtimeproblems"));

@@ -1,6 +1,5 @@
 package app.mcsl.windows;
 
-import app.mcsl.MainClass;
 import app.mcsl.managers.Language;
 import app.mcsl.managers.file.FileManager;
 import app.mcsl.managers.logging.Logger;
@@ -45,7 +44,6 @@ import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -61,47 +59,49 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class Template extends Stage {
+public class Template {
 
-    private MainContent mainContent;
-    private ServersContent serversContent;
-    private FilesContent filesContent;
-    private SettingsContent settingsContent;
+    private static Stage stage;
 
-    private TabClass currentTabClass;
+    private static MainContent mainContent;
+    private static ServersContent serversContent;
+    private static FilesContent filesContent;
+    private static SettingsContent settingsContent;
 
-    private Tab currentDraggingTab;
+    private static TabClass currentTabClass;
+
+    private static Tab currentDraggingTab;
     private static final AtomicLong idGenerator = new AtomicLong();
-    private final String draggingID = "DraggingTabPaneSupport-" + idGenerator.incrementAndGet();
-    private boolean outOfSceneDrag = false;
+    private static final String draggingID = "DraggingTabPaneSupport-" + idGenerator.incrementAndGet();
+    private static boolean outOfSceneDrag = false;
 
-    private Map<String, LabelColor> notifications = new HashMap<>();
+    private static Map<String, LabelColor> notifications = new HashMap<>();
 
-    private int newNotificationCount = 0;
+    private static int newNotificationCount = 0;
 
-    private QuitDialog quitDialog;
-    private DragAndDropDialog dragAndDropDialog;
+    private static QuitDialog quitDialog;
+    private static DragAndDropDialog dragAndDropDialog;
 
-    private app.mcsl.windows.elements.label.Label notificationLabel;
-    private Label detachTabDragLabel;
-    private Circle notificationCircle;
-    private StackPane notificationButtonStack, detachTabDragStack, headerStack;
-    private ImageView mcslImageView;
-    private StackPane tabSlide = new StackPane();
-    private app.mcsl.windows.elements.button.Button settingsButton;
-    private MenuButton notificationButton;
-    private MenuItem notificationItem;
-    private Web web;
-    private HamburgerMenuIcon hamburgerMenuIcon;
-    private Timeline settingsAnimation = new Timeline(), notificationAnimation = new Timeline(), webAnimartion = new Timeline();
-    private SlideMenu slideMenu;
-    private TabPane tabPane;
-    private Tab mainTab;
-    private VBox settingsBox, body, notificationBox;
-    private HBox header;
-    private StackPane dialogStack, settingsStack, webviewStack;
-    private boolean isSettingsOpen = false, canOpenSettings = true, isShowingNotification = false, isWebOpen = false, canOpenWeb = true;
-    private WritableValue<Double> settingsBoxHeight = new WritableValue<Double>() {
+    private static app.mcsl.windows.elements.label.Label notificationLabel;
+    private static Label detachTabDragLabel;
+    private static Circle notificationCircle;
+    private static StackPane notificationButtonStack, detachTabDragStack, headerStack;
+    private static ImageView mcslImageView;
+    private static StackPane tabSlide = new StackPane();
+    private static app.mcsl.windows.elements.button.Button settingsButton;
+    private static MenuButton notificationButton;
+    private static MenuItem notificationItem;
+    private static Web web;
+    private static HamburgerMenuIcon hamburgerMenuIcon;
+    private static Timeline settingsAnimation = new Timeline(), notificationAnimation = new Timeline(), webAnimartion = new Timeline();
+    private static SlideMenu slideMenu;
+    private static TabPane tabPane;
+    private static Tab mainTab;
+    private static VBox settingsBox, body, notificationBox;
+    private static HBox header;
+    private static StackPane dialogStack, settingsStack, webviewStack;
+    private static boolean isSettingsOpen = false, canOpenSettings = true, isShowingNotification = false, isWebOpen = false, canOpenWeb = true;
+    private static WritableValue<Double> settingsBoxHeight = new WritableValue<Double>() {
         @Override
         public Double getValue() {
             return settingsBox.getMaxHeight();
@@ -112,7 +112,7 @@ public class Template extends Stage {
             settingsBox.setMaxHeight(value);
         }
     };
-    private WritableValue<Double> webBoxHeight = new WritableValue<Double>() {
+    private static WritableValue<Double> webBoxHeight = new WritableValue<Double>() {
         @Override
         public Double getValue() {
             return web.getMaxHeight();
@@ -123,7 +123,7 @@ public class Template extends Stage {
             web.setMaxHeight(value);
         }
     };
-    private WritableValue<Double> mcslImageViewHeight = new WritableValue<Double>() {
+    private static WritableValue<Double> mcslImageViewHeight = new WritableValue<Double>() {
         @Override
         public Double getValue() {
             return mcslImageView.getFitHeight();
@@ -134,7 +134,7 @@ public class Template extends Stage {
             mcslImageView.setFitHeight(value);
         }
     };
-    private WritableValue<Double> notificationLabelHeight = new WritableValue<Double>() {
+    private static WritableValue<Double> notificationLabelHeight = new WritableValue<Double>() {
         @Override
         public Double getValue() {
             return notificationLabel.getMinHeight();
@@ -146,14 +146,12 @@ public class Template extends Stage {
         }
     };
 
-    public Template() {
-        Font.loadFont(getClass().getResourceAsStream("Minecraftia.ttf"), 1);
-        getIcons().add(new Image("/app/mcsl/resources/favicon.png"));
-        setTitle("Minecraft Server Launcher");
-        build();
-    }
+    public static void build() {
+        stage = new Stage();
 
-    public void build() {
+        stage.getIcons().add(new Image("/app/mcsl/resources/favicon.png"));
+        stage.setTitle("Minecraft Server Launcher");
+
         //mainContent = new MainContent();
         serversContent = new ServersContent();
         filesContent = new FilesContent();
@@ -190,7 +188,7 @@ public class Template extends Stage {
             @Override
             public void onClick() {
                 try {
-                    Desktop.getDesktop().browse(new URI("https://mcserverlauncher.tk"));
+                    Desktop.getDesktop().browse(new URI("https://mcsl.app"));
                 } catch (IOException | URISyntaxException e) {
                     e.printStackTrace();
                 }
@@ -250,8 +248,8 @@ public class Template extends Stage {
         notificationButtonStack = new StackPane(notificationButton);
         StackPane.setAlignment(notificationCircle, Pos.TOP_RIGHT);
 
-        if (MainClass.getFileManager().getNotificationCount() > 0) {
-            for (Notification notification : MainClass.getFileManager().getLatestNotifications(5)) {
+        if (FileManager.getNotificationCount() > 0) {
+            for (Notification notification : FileManager.getLatestNotifications(5)) {
                 addNotification(notification, false);
             }
         }
@@ -389,18 +387,18 @@ public class Template extends Stage {
         dropPane.setVisible(false);
 
         Scene scene = new Scene(new StackPane(dialogStack, dropPane), 1000, 700);
-        scene.getStylesheets().add(getClass().getResource("/app/mcsl/windows/styles/style.css").toExternalForm());
+        scene.getStylesheets().add(Template.class.getResource("/app/mcsl/windows/styles/style.css").toExternalForm());
 
-        setScene(scene);
-        setMinWidth(1000);
-        setMinHeight(700);
+        stage.setScene(scene);
+        stage.setMinWidth(1000);
+        stage.setMinHeight(700);
 
         quitDialog = new QuitDialog();
-        setOnCloseRequest(e -> {
-            setIconified(false);
-            toFront();
+        stage.setOnCloseRequest(e -> {
+            stage.setIconified(false);
+            stage.toFront();
             quitDialog.show();
-            if (MainClass.getFileManager().getConfigProps().getBoolProp("hideonexit")) quitDialog.hide();
+            if (FileManager.getConfigProps().getBoolProp("hideonexit")) quitDialog.hide();
             e.consume();
         });
 
@@ -446,8 +444,8 @@ public class Template extends Stage {
         scene.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.F1) {
                 String fileName = "Screenshot_" + new SimpleDateFormat("YYYY-MM-dd HH-mm-ss").format(new Date());
-                Image screenShot = MainClass.getFileManager().screenShot(scene);
-                File screenShotFile = MainClass.getFileManager().saveImage(screenShot, fileName);
+                Image screenShot = FileManager.screenShot(scene);
+                File screenShotFile = FileManager.saveImage(screenShot, fileName);
 
                 AlertDialog alertDialog = new AlertDialog(150, 400, Language.getText("screenshot"), Language.getText("imagesaved", fileName), AlertType.SUCCESS);
                 alertDialog.keepDefaultButton(true);
@@ -477,7 +475,7 @@ public class Template extends Stage {
             }
         });
 
-        focusedProperty().addListener((observable, oldValue, newValue) -> {
+        stage.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 if (newNotificationCount > 0) {
                     showNotification(Language.getText("newnotifications", newNotificationCount) + " --->", LabelColor.ERROR);
@@ -489,7 +487,11 @@ public class Template extends Stage {
         //web.getWebView().prefHeightProperty().bind(heightProperty());
     }
 
-    public void toggleMenu() {
+    public static void show() {
+        stage.show();
+    }
+
+    public static void toggleMenu() {
         if (slideMenu.isCanToggle()) {
             if (!hamburgerMenuIcon.isRotated()) {
                 tabPane.setEffect(new GaussianBlur(5));
@@ -503,7 +505,7 @@ public class Template extends Stage {
         }
     }
 
-    public void toggleSettings() {
+    public static void toggleSettings() {
         if (canOpenSettings) {
             canOpenSettings = false;
             settingsAnimation.getKeyFrames().clear();
@@ -556,7 +558,7 @@ public class Template extends Stage {
         }
     }*/
 
-    public void showNotification(String text, LabelColor color) {
+    public static void showNotification(String text, LabelColor color) {
         if (!isShowingNotification) {
             notifications.remove(text);
             isShowingNotification = true;
@@ -603,7 +605,7 @@ public class Template extends Stage {
         }
     }
 
-    public void addNotification(Notification notification, boolean notify) {
+    public static void addNotification(Notification notification, boolean notify) {
         if (notificationButton.getItems().size() < 6) {
             if (notificationButton.getItems().size() > 1) {
                 MenuItem[] notifications = new MenuItem[notificationButton.getItems().size()];
@@ -635,7 +637,7 @@ public class Template extends Stage {
         if (notify) newNotificationCount++;
     }
 
-    public void addDragHandlers(Tab tab) {
+    public static void addDragHandlers(Tab tab) {
         javafx.scene.control.Label label = new javafx.scene.control.Label(tab.getText(), tab.getGraphic());
         if (tab.getText() != null && !tab.getText().isEmpty()) {
             tab.setText(null);
@@ -683,63 +685,67 @@ public class Template extends Stage {
         });
     }
 
-    public void removeDragHandlers(Tab tab) {
+    public static void removeDragHandlers(Tab tab) {
         tab.getGraphic().setOnDragDetected(null);
         tab.getGraphic().setOnDragOver(null);
         tab.getGraphic().setOnDragDropped(null);
         tab.getGraphic().setOnDragDone(null);
     }
 
-    public void setUpTabs() {
+    public static void setUpTabs() {
         TabAction.add(serversContent, new ImageView(FileManager.SERVER_ICON), true);
         currentTabClass = serversContent;
     }
 
-    public Tab getMainTab() {
+    public static Stage getStage() {
+        return stage;
+    }
+
+    public static Tab getMainTab() {
         return mainTab;
     }
 
-    public void setMainTab(Tab mainTab) {
-        this.mainTab = mainTab;
+    public static void setMainTab(Tab mainTab) {
+        Template.mainTab = mainTab;
     }
 
-    public void setCurrentTabClass(TabClass currentTabClass) {
-        this.currentTabClass = currentTabClass;
+    public static void setCurrentTabClass(TabClass currentTabClass) {
+        Template.currentTabClass = currentTabClass;
     }
 
-    public TabPane getTabPane() {
+    public static TabPane getTabPane() {
         return tabPane;
     }
 
-    public SlideMenu getSlideMenu() {
+    public static SlideMenu getSlideMenu() {
         return slideMenu;
     }
 
-    public boolean isSettingsOpen() {
+    public static boolean isSettingsOpen() {
         return isSettingsOpen;
     }
 
-    public StackPane getDialogStack() {
+    public static StackPane getDialogStack() {
         return dialogStack;
     }
 
-    public VBox getSettingsBox() {
+    public static VBox getSettingsBox() {
         return settingsBox;
     }
 
-    public VBox getBody() {
+    public static VBox getBody() {
         return body;
     }
 
-    public StackPane getWebviewStack() {
+    public static StackPane getWebviewStack() {
         return webviewStack;
     }
 
-    public ServersContent getServersContent() {
+    public static ServersContent getServersContent() {
         return serversContent;
     }
 
-    public QuitDialog getQuitDialog() {
+    public static QuitDialog getQuitDialog() {
         return quitDialog;
     }
 }

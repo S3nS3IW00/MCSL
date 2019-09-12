@@ -1,6 +1,7 @@
 package app.mcsl.managers;
 
 import app.mcsl.MainClass;
+import app.mcsl.managers.logging.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,10 +13,11 @@ import java.net.URLConnection;
 public class UpdateManager {
 
     public static boolean needUpdate() {
+        Logger.info("Checking for updates...");
         String line = "false";
         try {
-            if (Inet4Address.getByName(new URL("https://mcserverlauncher.tk").getHost()).isReachable(3000)) {
-                URL url = new URL("https://mcserverlauncher.tk/app/properties.php?action=checkversion&type=app&currentversion=" + MainClass.VERSION);
+            if (Inet4Address.getByName(new URL("https://mcsl.app").getHost()).isReachable(3000)) {
+                URL url = new URL("https://mcsl.app/requests/checkupdate.php?type=app&currentversion=" + MainClass.VERSION);
                 URLConnection connection = url.openConnection();
                 connection.connect();
                 BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
