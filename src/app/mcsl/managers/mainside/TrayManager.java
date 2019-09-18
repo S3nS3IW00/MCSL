@@ -4,7 +4,9 @@ import app.mcsl.MainClass;
 import app.mcsl.managers.Language;
 import app.mcsl.managers.file.FileManager;
 import app.mcsl.managers.logging.Logger;
+import app.mcsl.managers.tab.TabManager;
 import app.mcsl.windows.Template;
+import app.mcsl.windows.contents.server.ServerStage;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 
@@ -45,9 +47,16 @@ public class TrayManager {
                                     if (Template.getStage().isShowing()) {
                                         Template.getStage().setIconified(false);
                                         Template.getStage().toFront();
+                                        for (ServerStage serverStage : TabManager.getServerStages()) {
+                                            serverStage.setIconified(false);
+                                            serverStage.toFront();
+                                        }
                                     } else {
                                         Logger.info("Showing application...");
                                         Template.getStage().show();
+                                        for (ServerStage serverStage : TabManager.getServerStages()) {
+                                            serverStage.show();
+                                        }
                                     }
                                 }
                             });

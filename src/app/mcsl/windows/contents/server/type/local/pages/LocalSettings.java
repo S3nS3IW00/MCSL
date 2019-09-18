@@ -41,7 +41,7 @@ public class LocalSettings extends ScrollPane {
             generateStructuresCheckBox, commandBlockCheckBox, onlineModeCheckBox, whitelistingCheckBox, preventProxyCheckBox, rconCheckBox, queryCheckBox, autostartCheckBox;
     private ComboBox difficultyComboBox, gamemodeComboBox, levelTypeComboBox, serverFileComboBox;
     private TextField motdTextField, respackUrlTextField, respackSha1TextField, worldNameTextField, levelSeedTextField, rconPasswordTextField, rconPortTextField,
-            playerLimitTextField, serverPortTextField, serverRamTextField;
+            playerLimitTextField, serverPortTextField, serverRamTextField, serverIpTextField;
 
     public LocalSettings(LocalServer server) {
         this.server = server;
@@ -225,6 +225,15 @@ public class LocalSettings extends ScrollPane {
         SettingCategory world = new SettingCategory(Language.getText("world"));
         world.addSetting(generateStructuresSetting, commandBlockSetting, worldNameSetting, levelSeedSetting, levelTypeSetting);
 
+        serverIpTextField = new TextField();
+        settingComponents.put(serverIpTextField, "server-ip");
+        Setting serverIpSetting = new Setting(Language.getText("server") + " IP", serverIpTextField, null, false) {
+            @Override
+            public void onChange(Object object) {
+
+            }
+        };
+
         onlineModeCheckBox = new CheckBox();
         settingComponents.put(onlineModeCheckBox, "online-mode");
         Setting onlineModeSetting = new Setting(Language.getText("onlinemode"), onlineModeCheckBox, Language.getText("onlinemodedescription"), false) {
@@ -298,7 +307,7 @@ public class LocalSettings extends ScrollPane {
         };
 
         SettingCategory networking = new SettingCategory(Language.getText("networking"));
-        networking.addSetting(onlineModeSetting, whitelistSetting, preventProxySetting, rconSetting, rconPasswordSetting, rconPortSetting, playerLimitSetting, querySetting);
+        networking.addSetting(serverIpSetting, onlineModeSetting, whitelistSetting, preventProxySetting, rconSetting, rconPasswordSetting, rconPortSetting, playerLimitSetting, querySetting);
 
         serverPortTextField = new TextField();
         settingComponents.put(serverPortTextField, "server-port");

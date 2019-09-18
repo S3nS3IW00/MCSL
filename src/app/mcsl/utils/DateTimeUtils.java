@@ -13,21 +13,19 @@ import java.util.regex.Pattern;
 public class DateTimeUtils {
 
     public static String calculateTime(long seconds) {
-        String time;
+        String time = null;
         int day = (int) TimeUnit.SECONDS.toDays(seconds);
         long hours = TimeUnit.SECONDS.toHours(seconds) - (day * 24);
         long minute = TimeUnit.SECONDS.toMinutes(seconds) - (TimeUnit.SECONDS.toHours(seconds) * 60);
         long second = TimeUnit.SECONDS.toSeconds(seconds) - (TimeUnit.SECONDS.toMinutes(seconds) * 60);
         if (seconds < 60) {
-            time = second + " másodperc";
+            time = second + " second";
         } else if (seconds >= 60 && seconds < 3600) {
-            time = minute + " perc " + second + " másodperc";
+            time = minute + " minute " + second + " second";
         } else if (seconds >= 3600 && seconds < 86400) {
-            time = hours + " óra " + minute + " perc " + second + " másodperc";
+            time = hours + " hour " + minute + " minute " + second + " second";
         } else if (seconds >= 86400) {
-            time = day + " nap " + hours + " óra " + minute + " perc " + second + " másodperc";
-        } else {
-            time = "HIBA";
+            time = day + " day " + hours + " hour " + minute + " minute " + second + " second";
         }
         return time;
     }

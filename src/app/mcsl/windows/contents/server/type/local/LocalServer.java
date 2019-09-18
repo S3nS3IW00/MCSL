@@ -100,6 +100,7 @@ public class LocalServer implements Server {
 
     private File root;
     private ErrorLog errorLog = new ErrorLog();
+    private LocalSettings settings;
     private LocalFiles localFiles;
     private TimedTasks timedTasks;
     private LogPattern logPattern;
@@ -138,8 +139,6 @@ public class LocalServer implements Server {
     private KeyValueLabel ipAddress, playerCount;
 
     private BorderPane content;
-
-    private LocalSettings settings;
 
     public LocalServer(String serverName) {
         this.serverName = serverName;

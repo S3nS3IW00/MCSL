@@ -5,8 +5,10 @@ import app.mcsl.events.ServerStatusChangeEvent;
 import app.mcsl.managers.Language;
 import app.mcsl.managers.logging.Logger;
 import app.mcsl.managers.server.ServersManager;
+import app.mcsl.managers.tab.TabManager;
 import app.mcsl.windows.Template;
 import app.mcsl.windows.contents.server.Server;
+import app.mcsl.windows.contents.server.ServerStage;
 import app.mcsl.windows.contents.server.StatusType;
 import app.mcsl.windows.elements.button.Button;
 import app.mcsl.windows.elements.button.ButtonType;
@@ -84,11 +86,11 @@ public class QuitDialog extends Dialog {
         hideButton = new Button(Language.getText("hide"), ButtonType.WARNING);
         hideButton.setOnAction(e -> {
             Logger.info("Hiding application...");
-
             close();
 
             Platform.setImplicitExit(false);
             Template.getStage().hide();
+            for (ServerStage serverStage : TabManager.getServerStages()) serverStage.hide();
             Notifications.push(null, new Notification(Language.getText("hiding"), Language.getText("waithere"), NotificationAlertType.INFO));
         });
 
