@@ -1,4 +1,4 @@
-package app.mcsl.windows.contents.mainpage;
+package app.mcsl.windows.contents.main;
 
 import app.mcsl.managers.Language;
 import app.mcsl.managers.file.FileManager;

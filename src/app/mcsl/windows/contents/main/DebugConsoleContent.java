@@ -1,4 +1,4 @@
-package app.mcsl.windows.contents.mainpage;
+package app.mcsl.windows.contents.main;
 
 import app.mcsl.events.LogEvent;
 import app.mcsl.managers.Language;

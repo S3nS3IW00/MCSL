@@ -1,4 +1,4 @@
-package app.mcsl.windows.contents.mainpage;
+package app.mcsl.windows.contents.main;
 
 import app.mcsl.events.DirectoryChangeEvent;
 import app.mcsl.events.ServerStateChangeEvent;

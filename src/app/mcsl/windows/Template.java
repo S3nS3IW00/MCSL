@@ -5,7 +5,7 @@ import app.mcsl.managers.file.FileManager;
 import app.mcsl.managers.logging.Logger;
 import app.mcsl.managers.tab.TabAction;
 import app.mcsl.managers.tab.TabClass;
-import app.mcsl.windows.contents.mainpage.*;
+import app.mcsl.windows.contents.main.*;
 import app.mcsl.windows.elements.HamburgerMenuIcon;
 import app.mcsl.windows.elements.Web;
 import app.mcsl.windows.elements.button.Button;
