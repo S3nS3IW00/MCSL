@@ -110,9 +110,10 @@ public class Downloader {
             }
         }
         if (status == null) status = DownloadStatus.SUCCESS;
-        finishEvent.onFinished(status);
         timer.cancel();
         if (status != DownloadStatus.SUCCESS) downloadedFile.delete();
+        assert finishEvent != null;
+        finishEvent.onFinished(status);
     }
 
     public void start() {

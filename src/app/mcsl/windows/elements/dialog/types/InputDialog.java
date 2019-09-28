@@ -7,7 +7,8 @@ import app.mcsl.windows.elements.dialog.Dialog;
 import app.mcsl.windows.elements.dialog.DialogType;
 import app.mcsl.windows.elements.label.Label;
 import app.mcsl.windows.elements.label.LabelType;
-import javafx.scene.control.TextField;
+import app.mcsl.windows.elements.textfield.InputType;
+import app.mcsl.windows.elements.textfield.TextField;
 import javafx.scene.layout.VBox;
 
 public abstract class InputDialog extends Dialog {
@@ -16,14 +17,14 @@ public abstract class InputDialog extends Dialog {
     private TextField inputField;
     private Label textLabel;
 
-    public InputDialog(String title, String text, boolean inputCanBeNull) {
+    public InputDialog(String title, String text, boolean inputCanBeNull, InputType type) {
         super(200, 400, title, DialogType.INPUT, new VBox());
 
         textLabel = new Label(text, LabelType.H1);
         textLabel.setMaxWidth(400);
         textLabel.setWrapText(true);
 
-        inputField = new TextField();
+        inputField = new TextField(type);
         inputField.setPrefWidth(400);
         inputField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!inputCanBeNull) {

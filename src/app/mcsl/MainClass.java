@@ -159,6 +159,7 @@ public class MainClass extends Application {
                     FileManager.deleteFile(new File(FileManager.getRoot() + "_old"));
 
                 Logger.info("Startup done! (" + Logger.getWarnCount() + " warning, " + Logger.getErrorCount() + " error, " + Logger.getExceptionCount() + " exception)");
+                Template.DEBUG_CONSOLE.init();
             }));
         }
     }

@@ -1206,13 +1206,29 @@
 }
 
 /*****************************************
-          DEBUG-CONSOLE DESIGN
+            TOOLTIP DESIGN
 *****************************************/
-#debugconsole {
-    -fx-border: hidden;
-    -fx-background-radius: 0px;
-    -fx-background-color: black;
-    -fx-text-fill: white;
-    -fx-font-family: "Inconsolata";
-    -fx-font-size: 15;
+.tooltip {
+    -fx-background-color: -fx-themetypecolor;
+    -fx-border-color: -fx-defcolor;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-text-fill: -fx-defcolor;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+
+#warning-tooltip .tooltip {
+    -fx-border-color: -fx-warning;
+    -fx-text-fill: -fx-warning;
+}
+
+#error-tooltip .tooltip {
+    -fx-border-color: -fx-error;
+    -fx-text-fill: -fx-error;
+}
+
+#apply-tooltip .tooltip {
+    -fx-border-color: -fx-apply;
+    -fx-text-fill: -fx-apply;
 }

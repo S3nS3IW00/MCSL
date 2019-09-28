@@ -5,14 +5,12 @@ import app.mcsl.managers.file.FileManager;
 import app.mcsl.managers.logging.Logger;
 import app.mcsl.managers.tab.TabAction;
 import app.mcsl.managers.tab.TabClass;
-import app.mcsl.windows.contents.mainpage.FilesContent;
-import app.mcsl.windows.contents.mainpage.MainContent;
-import app.mcsl.windows.contents.mainpage.ServersContent;
-import app.mcsl.windows.contents.mainpage.SettingsContent;
+import app.mcsl.windows.contents.mainpage.*;
 import app.mcsl.windows.elements.HamburgerMenuIcon;
 import app.mcsl.windows.elements.Web;
 import app.mcsl.windows.elements.button.Button;
 import app.mcsl.windows.elements.button.ButtonType;
+import app.mcsl.windows.elements.dialog.Dialogs;
 import app.mcsl.windows.elements.dialog.customdialogs.DragAndDropDialog;
 import app.mcsl.windows.elements.dialog.customdialogs.QuitDialog;
 import app.mcsl.windows.elements.dialog.types.AlertDialog;
@@ -67,6 +65,9 @@ public class Template {
     private static ServersContent serversContent;
     private static FilesContent filesContent;
     private static SettingsContent settingsContent;
+    public static DebugConsoleContent DEBUG_CONSOLE;
+
+    private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     private static TabClass currentTabClass;
 
@@ -156,6 +157,7 @@ public class Template {
         serversContent = new ServersContent();
         filesContent = new FilesContent();
         settingsContent = new SettingsContent();
+        DEBUG_CONSOLE = new DebugConsoleContent();
 
         hamburgerMenuIcon = new HamburgerMenuIcon(15, 3) {
             @Override
@@ -184,13 +186,21 @@ public class Template {
             }
         });
 
+        slideMenu.add(new SlideItem(Language.getText("log"), FileManager.LOG_ICON_20) {
+            @Override
+            public void onClick() {
+                if (slideMenu.getSelectedItem() != null && slideMenu.getSelectedItem() != this)
+                    TabAction.changeContent(currentTabClass, DEBUG_CONSOLE, this, null);
+            }
+        });
+
         slideMenu.add(new SlideItem(Language.getText("website"), FileManager.WEBSITE_ICON_20) {
             @Override
             public void onClick() {
                 try {
-                    Desktop.getDesktop().browse(new URI("https://mcsl.app"));
+                    Desktop.getDesktop().browse(new URI("https://mcserverlauncher.tk"));
                 } catch (IOException | URISyntaxException e) {
-                    e.printStackTrace();
+                    Logger.exception(e);
                 }
                 //openWeb("https://mcserverlauncher.tk");
             }
@@ -202,7 +212,7 @@ public class Template {
                 try {
                     Desktop.getDesktop().browse(new URI("https://fb.me/mcserverlauncher"));
                 } catch (IOException | URISyntaxException e) {
-                    e.printStackTrace();
+                    Logger.exception(e);
                 }
                 //openWeb("https://fb.me/mcserverlauncher");
             }
@@ -214,7 +224,7 @@ public class Template {
                 try {
                     Desktop.getDesktop().browse(new URI("https://github.com/S3nS3IW00/mcserverlauncher/issues/new"));
                 } catch (IOException | URISyntaxException e) {
-                    e.printStackTrace();
+                    Logger.exception(e);
                 }
                 //openWeb("https://github.com/S3nS3IW00/mcserverlauncher/issues/new");
             }
@@ -363,14 +373,14 @@ public class Template {
         body = new VBox(headerStack, tabSlide);
 
         /*web = new Web();
-        web.setMaxHeight(0);*/
+        web.setMaxHeight(0);
 
         webAnimartion.setOnFinished(e -> canOpenWeb = true);
 
-        webviewStack = new StackPane(body/*, web*/);
-        /*StackPane.setAlignment(web, Pos.BOTTOM_CENTER);*/
+        webviewStack = new StackPane(body, web);
+        StackPane.setAlignment(web, Pos.BOTTOM_CENTER);*/
 
-        dialogStack = new StackPane(webviewStack);
+        dialogStack = new StackPane(body/*webviewStack*/);
 
         Region opaqueLayer = new Region();
         opaqueLayer.setStyle("-fx-background-color: black;");
@@ -386,18 +396,18 @@ public class Template {
                 + "-fx-border-style: dashed;");
         dropPane.setVisible(false);
 
-        Scene scene = new Scene(new StackPane(dialogStack, dropPane), 1000, 700);
+        Scene scene = new Scene(new StackPane(dialogStack, dropPane), screenSize.getWidth() / 2, screenSize.getHeight() / 2);
         scene.getStylesheets().add(Template.class.getResource("/app/mcsl/windows/styles/style.css").toExternalForm());
 
         stage.setScene(scene);
-        stage.setMinWidth(1000);
-        stage.setMinHeight(700);
+        stage.setMinWidth(800);
+        stage.setMinHeight(600);
 
         quitDialog = new QuitDialog();
         stage.setOnCloseRequest(e -> {
             stage.setIconified(false);
             stage.toFront();
-            quitDialog.show();
+            quitDialog.showAndOverlay();
             if (FileManager.getConfigProps().getBoolProp("hideonexit")) quitDialog.hide();
             e.consume();
         });
@@ -484,7 +494,8 @@ public class Template {
             }
         });
 
-        //web.getWebView().prefHeightProperty().bind(heightProperty());
+        //web.getWebView().prefHeightProperty().bind(stage.heightProperty());
+        if (Dialogs.hasNext()) Dialogs.showNext();
     }
 
     public static void show() {
@@ -529,7 +540,7 @@ public class Template {
         }
     }
 
-    /*public void openWeb(String link) {
+    /*public static void openWeb(String link) {
         if (canOpenWeb) {
             canOpenWeb = false;
             webAnimartion.getKeyFrames().clear();
@@ -545,7 +556,7 @@ public class Template {
         }
     }
 
-    public void closeWeb() {
+    public static void closeWeb() {
         if (canOpenWeb) {
             canOpenWeb = false;
             webAnimartion.getKeyFrames().clear();

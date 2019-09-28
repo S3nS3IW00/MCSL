@@ -19,12 +19,13 @@ import app.mcsl.windows.elements.dialog.DialogType;
 import app.mcsl.windows.elements.label.Label;
 import app.mcsl.windows.elements.label.LabelColor;
 import app.mcsl.windows.elements.label.LabelType;
+import app.mcsl.windows.elements.textfield.InputType;
+import app.mcsl.windows.elements.textfield.TextField;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
@@ -93,15 +94,15 @@ public class AddServerDialog extends Dialog {
         serverFileComboBox.setPrefWidth(200);
         serverFileComboBox.getSelectionModel().selectFirst();
 
-        serverNameTextField = new TextField();
+        serverNameTextField = new TextField(InputType.LETTERS_AND_NUMBERS);
         serverNameTextField.setMaxWidth(200);
         serverNameTextField.setPromptText(Language.getText("servername"));
 
-        serverPortTextField = new TextField();
+        serverPortTextField = new TextField(InputType.ONLY_NUMBERS);
         serverPortTextField.setMaxWidth(200);
         serverPortTextField.setPromptText("Port");
 
-        ramTextField = new TextField();
+        ramTextField = new TextField(InputType.ONLY_NUMBERS);
         ramTextField.setMaxWidth(200);
         ramTextField.setPromptText(Language.getText("maxram"));
 
@@ -132,7 +133,7 @@ public class AddServerDialog extends Dialog {
 
         autoStartCheckBox = new CheckBox(Language.getText("autostart"));
 
-        pluginPortTextField = new TextField();
+        pluginPortTextField = new TextField(InputType.ONLY_NUMBERS);
         pluginPortTextField.setMaxWidth(200);
         pluginPortTextField.setPromptText("Plugin port");
 
@@ -168,7 +169,7 @@ public class AddServerDialog extends Dialog {
                 stepIndex--;
                 setStepContent(stepIndex);
             } else {
-                close();
+                closeAndReset();
             }
         });
 
@@ -252,11 +253,11 @@ public class AddServerDialog extends Dialog {
                         try {
                             if (customLocationTextField.getText().isEmpty()) {
                                 FileManager.createServer(serverName, ServerType.LOCAL, new String[]{serverPort + "", serverFile + "", ramInMB + "", autoStartCheckBox.isSelected() + ""}, null);
-                                close();
+                                closeAndReset();
                             } else {
                                 if (FileManager.isAvaliableExternalDir(new File(customLocationTextField.getText().replace(File.separator + serverName, "")))) {
                                     FileManager.createServer(serverName, ServerType.LOCAL, new String[]{serverPort + "", serverFile + "", ramInMB + "", autoStartCheckBox.isSelected() + ""}, customLocationTextField.getText());
-                                    close();
+                                    closeAndReset();
                                 } else {
                                     showError(Language.getText("choosendirnotavaliable"));
                                 }
@@ -284,7 +285,7 @@ public class AddServerDialog extends Dialog {
                             //empty catch block
                         }
 
-                        close();
+                        closeAndReset();
                     } else {
                         showError(Language.getText("mustfillallfields"));
                         this.stepIndex--;
@@ -294,15 +295,14 @@ public class AddServerDialog extends Dialog {
         }
     }
 
+    private void closeAndReset() {
+        reset();
+        close();
+    }
+
     private void showError(String text) {
         if (!inputBox.getChildren().contains(errorLabel)) inputBox.getChildren().add(errorLabel);
         errorLabel.setText(text);
-    }
-
-    @Override
-    public void show() {
-        reset();
-        super.show();
     }
 
     private void reset() {

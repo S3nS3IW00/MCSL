@@ -49,6 +49,7 @@ public class LocalFiles extends HBox {
         treeView = new TreeView();
         treeView.setMaxWidth(200);
         treeView.setMinWidth(200);
+        treeView.setPrefHeight(100);
         VBox.setVgrow(treeView, Priority.ALWAYS);
         displayTreeView(FileManager.getServerFolder(server.getName()).getAbsolutePath());
         EventHandler<MouseEvent> mouseEventHandle = this::handleMouseClicked;

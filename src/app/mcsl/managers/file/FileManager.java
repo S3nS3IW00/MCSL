@@ -73,6 +73,15 @@ public class FileManager {
     public static Image ERROR_ICON = new Image("app/mcsl/resources/error_icon.png", 50, 50, false, true);
     public static Image INFO_ICON = new Image("app/mcsl/resources/information_icon.png", 50, 50, false, true);
     public static Image WARNING_ICON = new Image("app/mcsl/resources/warning_icon.png", 50, 50, false, true);
+    public static Image SUCCESS_ICON = new Image("app/mcsl/resources/success_icon.jpg", 50, 50, false, true);
+    public static Image EXCEPTION_ICON = new Image("app/mcsl/resources/exception_icon.png", 50, 50, false, true);
+    public static Image LOG_ICON = new Image("app/mcsl/resources/log_icon.png", 50, 50, false, true);
+    public static Image ERROR_ICON_20 = new Image("app/mcsl/resources/error_icon.png", 20, 20, false, true);
+    public static Image INFO_ICON_20 = new Image("app/mcsl/resources/information_icon.png", 20, 20, false, true);
+    public static Image WARNING_ICON_20 = new Image("app/mcsl/resources/warning_icon.png", 20, 20, false, true);
+    public static Image SUCCESS_ICON_20 = new Image("app/mcsl/resources/success_icon.jpg", 20, 20, false, true);
+    public static Image EXCEPTION_ICON_20 = new Image("app/mcsl/resources/exception_icon.png", 20, 20, false, true);
+    public static Image LOG_ICON_20 = new Image("app/mcsl/resources/log_icon.png", 20, 20, false, true);
     public static Image TIP_ICON = new Image("app/mcsl/resources/info_icon.png", 50, 50, false, true);
 
     public static Image FACEBOOK_ICON_20 = new Image("app/mcsl/resources/facebook_icon.png", 20, 20, false, true);

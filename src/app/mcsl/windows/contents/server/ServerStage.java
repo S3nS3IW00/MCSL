@@ -19,9 +19,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.awt.*;
+
 public class ServerStage extends Stage {
 
     private ServerContent serverContent;
+
+    private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     private ImageView mcslImageView;
     private VBox body;
@@ -59,7 +63,7 @@ public class ServerStage extends Stage {
 
         body = new VBox(header, serverContent.getContent());
 
-        Scene scene = new Scene(body, 1000, 700);
+        Scene scene = new Scene(body, screenSize.getWidth() / 2, screenSize.getHeight() / 2);
         scene.getStylesheets().add(getClass().getResource("/app/mcsl/windows/styles/style.css").toExternalForm());
 
         serverContent.getContent().prefHeightProperty().bind(scene.heightProperty());
@@ -68,8 +72,8 @@ public class ServerStage extends Stage {
         ThemeManager.applyCss(scene);
 
         setScene(scene);
-        setMinWidth(1000);
-        setMinHeight(700);
+        setMinWidth(800);
+        setMinHeight(600);
 
         setOnCloseRequest(e -> {
             TabAction.close(TabManager.getTabByClass(serverContent));

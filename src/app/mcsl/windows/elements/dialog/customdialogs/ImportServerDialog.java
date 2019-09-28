@@ -11,11 +11,12 @@ import app.mcsl.windows.elements.dialog.DialogType;
 import app.mcsl.windows.elements.label.Label;
 import app.mcsl.windows.elements.label.LabelColor;
 import app.mcsl.windows.elements.label.LabelType;
+import app.mcsl.windows.elements.textfield.InputType;
+import app.mcsl.windows.elements.textfield.TextField;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 import java.util.Arrays;
@@ -74,15 +75,15 @@ public class ImportServerDialog extends Dialog {
         serverFileComboBox.setPrefWidth(200);
         serverFileComboBox.getSelectionModel().selectFirst();
 
-        serverNameTextField = new TextField();
+        serverNameTextField = new TextField(InputType.LETTERS_AND_NUMBERS);
         serverNameTextField.setMaxWidth(200);
         serverNameTextField.setPromptText(Language.getText("servername"));
 
-        serverPortTextField = new TextField(serverProps.hasProp("server-port") ? serverProps.getProp("server-port") : "");
+        serverPortTextField = new TextField(serverProps.hasProp("server-port") ? serverProps.getProp("server-port") : "", InputType.ONLY_NUMBERS);
         serverPortTextField.setMaxWidth(200);
         serverPortTextField.setPromptText("Port");
 
-        ramTextField = new TextField(settingsProps.hasProp("ram") ? settingsProps.getProp("ram") : "");
+        ramTextField = new TextField(settingsProps.hasProp("ram") ? settingsProps.getProp("ram") : "", InputType.ONLY_NUMBERS);
         ramTextField.setMaxWidth(200);
         ramTextField.setPromptText(Language.getText("maxram"));
 

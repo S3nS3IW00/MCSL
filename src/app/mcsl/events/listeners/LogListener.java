@@ -4,6 +4,6 @@ import app.mcsl.managers.logging.LogLevel;
 
 public interface LogListener {
 
-    void log(LogLevel logLevel, String text);
+    void log(LogLevel logLevel, String line, String message);
 
 }

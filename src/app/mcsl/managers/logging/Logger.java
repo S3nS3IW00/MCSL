@@ -4,6 +4,8 @@ import app.mcsl.events.LogEvent;
 import app.mcsl.managers.mainside.OSManager;
 import app.mcsl.windows.elements.dialog.customdialogs.ExceptionDialog;
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyIntegerProperty;
+import javafx.beans.property.ReadOnlyIntegerWrapper;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -13,16 +15,18 @@ import java.util.regex.Pattern;
 
 public class Logger {
 
-    private static final Pattern LOG_PATTERN = Pattern.compile("\\[(?<date>\\d\\d:\\d\\d:\\d\\d) (?<level>[A-Z])]: (?<prefix>\\[[A-Za-z]+])* (?<msg>.+)");
+    public static final Pattern LOG_PATTERN = Pattern.compile("\\[(?<date>\\d\\d:\\d\\d:\\d\\d) (?<level>[A-Z]+)]:( \\[?<prefix>[A-Za-z0-9]+])*( ?<msg>.+)*");
     private static final File LOGS_FOLDER = new File(OSManager.getRoot() + File.separator + "logs");
 
     private static final Pattern LOG_FILE_PATTERN = Pattern.compile("mcsl.log.(?<index>\\d+)");
-    private static File LOG_FILE;
+    public static File LOG_FILE;
     private static BufferedWriter OUT_PRINT;
 
     private static final SimpleDateFormat SDF = new SimpleDateFormat("HH:mm:ss");
 
-    private static int WARN_COUNT, ERROR_COUNT, EXCEPTION_COUNT;
+    private static ReadOnlyIntegerWrapper WARN_COUNT_PROP = new ReadOnlyIntegerWrapper(0),
+            ERROR_COUNT_PROP = new ReadOnlyIntegerWrapper(0),
+            EXCEPTION_COUNT_PROP = new ReadOnlyIntegerWrapper(0);
 
     public static void init() throws IOException {
         if (!LOGS_FOLDER.exists()) {
@@ -74,7 +78,7 @@ public class Logger {
             //empty catch block
         }
 
-        LogEvent.log(logLevel, text);
+        LogEvent.log(logLevel, line, text);
         if (logLevel == LogLevel.EXCEPTION) Platform.runLater(() -> new ExceptionDialog(line).show());
     }
 
@@ -91,19 +95,19 @@ public class Logger {
     public static void warn(String text) {
         String className = new Exception().getStackTrace()[1].getClassName();
         append(className.substring(className.lastIndexOf(".") + 1), text, LogLevel.WARN);
-        WARN_COUNT++;
+        WARN_COUNT_PROP.setValue(ERROR_COUNT_PROP.getValue() + 1);
     }
 
     public static void error(String text) {
         String className = new Exception().getStackTrace()[1].getClassName();
         append(className.substring(className.lastIndexOf(".") + 1), text, LogLevel.ERROR);
-        ERROR_COUNT++;
+        ERROR_COUNT_PROP.setValue(WARN_COUNT_PROP.getValue() + 1);
     }
 
     public static void exception(Throwable t) {
         String className = new Exception().getStackTrace()[1].getClassName();
         append(className.substring(className.lastIndexOf(".") + 1), getStackTrace(t), LogLevel.EXCEPTION);
-        EXCEPTION_COUNT++;
+        EXCEPTION_COUNT_PROP.setValue(EXCEPTION_COUNT_PROP.getValue() + 1);
     }
 
     public static void emptyLine() {
@@ -112,14 +116,26 @@ public class Logger {
 
     //GETTERS
     public static int getWarnCount() {
-        return WARN_COUNT;
+        return WARN_COUNT_PROP.getValue();
     }
 
     public static int getErrorCount() {
-        return ERROR_COUNT;
+        return ERROR_COUNT_PROP.getValue();
     }
 
     public static int getExceptionCount() {
-        return EXCEPTION_COUNT;
+        return EXCEPTION_COUNT_PROP.getValue();
+    }
+
+    public static ReadOnlyIntegerProperty getWarnCountProperty() {
+        return WARN_COUNT_PROP.getReadOnlyProperty();
+    }
+
+    public static ReadOnlyIntegerProperty getErrorCountProperty() {
+        return ERROR_COUNT_PROP.getReadOnlyProperty();
+    }
+
+    public static ReadOnlyIntegerProperty getExceptionCountProperty() {
+        return EXCEPTION_COUNT_PROP.getReadOnlyProperty();
     }
 }

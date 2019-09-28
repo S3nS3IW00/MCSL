@@ -85,7 +85,6 @@ public class LocalServer implements Server {
 
     private boolean isStackTrace = false;
 
-    private StopType lastStopType;
     private boolean portOpened = false;
 
     private ProcessBuilder processBuilder;
@@ -93,6 +92,7 @@ public class LocalServer implements Server {
     private RunnableThread serverThread;
     private PrintWriter commandWriter;
 
+    private MinecraftPing ping = new MinecraftPing();
     private MinecraftPingReply pingReply;
     private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> queryTimerTask;
@@ -148,7 +148,6 @@ public class LocalServer implements Server {
         timedTasks = new TimedTasks(serverName);
         queryTask = () -> {
             try {
-                MinecraftPing ping = new MinecraftPing();
                 pingReply = ping.getPing(new MinecraftPingOptions().setHostname("localhost").setPort(Integer.parseInt(settings.getSetting("server-port"))));
                 updateInfos();
                 updateOnlinePlayersListCard();
@@ -247,10 +246,10 @@ public class LocalServer implements Server {
             if (e.getCode() == KeyCode.ENTER) {
                 if (!inputField.getText().isEmpty()) {
                     sendCommand(inputField.getText());
-                    if (commandHistory.size() == 0 || !commandHistory.get(commandHistoryIndex - 1).equalsIgnoreCase(inputField.getText())) {
+                    if (commandHistory.size() == 0 || !commandHistory.get(commandHistory.size() - 1).equalsIgnoreCase(inputField.getText())) {
                         commandHistory.add(inputField.getText());
-                        commandHistoryIndex = commandHistory.size();
                     }
+                    commandHistoryIndex = commandHistory.size();
                     inputField.clear();
                 }
             } else if (e.getCode() == KeyCode.UP) {
@@ -298,10 +297,10 @@ public class LocalServer implements Server {
         sendButton.setOnAction(e -> {
             if (!inputField.getText().isEmpty()) {
                 sendCommand(inputField.getText());
-                if (commandHistory.size() == 0 || !commandHistory.get(commandHistoryIndex - 1).equalsIgnoreCase(inputField.getText())) {
+                if (commandHistory.size() == 0 || !commandHistory.get(commandHistory.size() - 1).equalsIgnoreCase(inputField.getText())) {
                     commandHistory.add(inputField.getText());
-                    commandHistoryIndex = commandHistory.size();
                 }
+                commandHistoryIndex = commandHistory.size();
                 inputField.clear();
             }
         });
@@ -347,6 +346,7 @@ public class LocalServer implements Server {
         consoleOptions = new HBox(10, chatModeCheckBox, autoScrollCheckBox);
 
         controlPanelSideBox = new VBox(10, controlInfoBox, controlsBox, consoleOptions);
+        controlPanelSideBox.setPadding(new Insets(0, 0, 10, 0));
 
         controlPanelBox = new HBox(10, consoleBox, controlPanelSideBox);
 
@@ -359,10 +359,7 @@ public class LocalServer implements Server {
             startButton.setDisable(false);
             startButton.setStyle(null);
             startButton.setType(ButtonType.ERROR_ACTION_BUTTON);
-            startButton.setOnAction(e1 -> {
-                lastStopType = StopType.USER;
-                stop();
-            });
+            startButton.setOnAction(e1 -> stop());
         });
 
         stoppingAnimation = new Timeline();
@@ -393,7 +390,6 @@ public class LocalServer implements Server {
             @Override
             public void onRun() {
                 if (!getProcess().isAlive()) {
-                    if (lastStopType == null) lastStopType = StopType.ERROR;
                     if (portOpened) closePort();
                     ServerStatusChangeEvent.change(LocalServer.this, StatusType.STOPPED);
                     if (queryTimerTask != null) queryTimerTask.cancel(false);
@@ -488,7 +484,6 @@ public class LocalServer implements Server {
                     console.appendLine("§a[MinecraftServerLauncher] " + Language.getText("executingcommand") + ": " + command.toString());
                     Logger.info("Executing command: '" + command + "'...");
                     ServerStatusChangeEvent.change(this, StatusType.STARTING);
-                    lastStopType = null;
                     try {
                         process = processBuilder.start();
                         commandWriter = new PrintWriter(new OutputStreamWriter(process.getOutputStream(), StandardCharsets.UTF_8));
@@ -769,10 +764,4 @@ public class LocalServer implements Server {
     public LocalSettings getSettings() {
         return settings;
     }
-}
-
-enum StopType {
-
-    USER, ERROR;
-
 }

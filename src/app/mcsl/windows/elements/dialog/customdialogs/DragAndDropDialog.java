@@ -99,7 +99,7 @@ public class DragAndDropDialog extends Dialog {
             pluginSelectionBox.setDisable(false);
         }
 
-        show();
+        showAndOverlay();
     }
 
 }

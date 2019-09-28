@@ -213,10 +213,10 @@ public class ExternalServer implements Server {
             if (e.getCode() == KeyCode.ENTER) {
                 if (!inputField.getText().isEmpty()) {
                     sendCommand(inputField.getText());
-                    if (commandHistory.size() == 0 || !commandHistory.get(commandHistoryIndex - 1).equalsIgnoreCase(inputField.getText())) {
+                    if (commandHistory.size() == 0 || !commandHistory.get(commandHistory.size() - 1).equalsIgnoreCase(inputField.getText())) {
                         commandHistory.add(inputField.getText());
-                        commandHistoryIndex = commandHistory.size();
                     }
+                    commandHistoryIndex = commandHistory.size();
                     inputField.clear();
                 }
             } else if (e.getCode() == KeyCode.UP) {
@@ -264,10 +264,10 @@ public class ExternalServer implements Server {
         sendButton.setOnAction(e -> {
             if (!inputField.getText().isEmpty()) {
                 sendCommand(inputField.getText());
-                if (commandHistory.size() == 0 || !commandHistory.get(commandHistoryIndex - 1).equalsIgnoreCase(inputField.getText())) {
+                if (commandHistory.size() == 0 || !commandHistory.get(commandHistory.size() - 1).equalsIgnoreCase(inputField.getText())) {
                     commandHistory.add(inputField.getText());
-                    commandHistoryIndex = commandHistory.size();
                 }
+                commandHistoryIndex = commandHistory.size();
                 inputField.clear();
             }
         });
@@ -310,6 +310,7 @@ public class ExternalServer implements Server {
         consoleOptions = new HBox(10, chatModeCheckBox, autoScrollCheckBox);
 
         controlPanelSideBox = new VBox(10, controlInfoBox, controlsBox, consoleOptions);
+        controlPanelSideBox.setPadding(new Insets(0, 0, 10, 0));
 
         controlPanelBox = new HBox(10, consoleBox, controlPanelSideBox);
 

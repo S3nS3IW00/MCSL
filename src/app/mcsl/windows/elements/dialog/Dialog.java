@@ -83,8 +83,8 @@ public class Dialog extends VBox {
         outFade.setToValue(0);
         outFade.setOnFinished(e -> {
             Template.getDialogStack().getChildren().remove(this);
-            Template.getWebviewStack().setEffect(null);
-            Template.getWebviewStack().setMouseTransparent(false);
+            Template.getBody().setEffect(null);
+            Template.getBody().setMouseTransparent(false);
             isShowing = false;
             if (Dialogs.hasNext()) {
                 Dialogs.showNext();
@@ -145,22 +145,39 @@ public class Dialog extends VBox {
     }
 
     public void show() {
+        if (Template.getStage() == null || Template.getStage().getScene() == null) {
+            Dialogs.addDialog(this);
+            return;
+        }
+
         if (Template.getDialogStack().getChildren().size() == 1 || Template.getDialogStack().getChildren().get(1) != this) {
             if (Dialogs.canShow() || Dialogs.next() == this) {
                 isShowing = true;
-                Template.getWebviewStack().setMouseTransparent(true);
+                Template.getBody().setMouseTransparent(true);
                 if (Template.getDialogStack().getChildren().size() > 1) {
                     Dialogs.addDialog(this);
-                    //Template.getDialogStack().getChildren().set(1, this);
                 } else {
                     Template.getDialogStack().getChildren().add(this);
+                    Dialogs.setCurrentDialog(this);
                 }
-                Template.getWebviewStack().setEffect(new GaussianBlur(10));
+                Template.getBody().setEffect(new GaussianBlur(10));
                 inFade.play();
             } else {
                 Dialogs.addDialog(this);
             }
         }
+    }
+
+    public void showAndOverlay() {
+        isShowing = true;
+        Template.getBody().setMouseTransparent(true);
+        if (Dialogs.getCurrentDialog() != null) {
+            Dialogs.getCurrentDialog().close();
+            Dialogs.addDialog(Dialogs.getCurrentDialog(), 0);
+        }
+        Template.getDialogStack().getChildren().add(this);
+        Template.getBody().setEffect(new GaussianBlur(10));
+        inFade.play();
     }
 
     public void close() {
@@ -181,5 +198,13 @@ public class Dialog extends VBox {
     public void keepDefaultButton(boolean keep) {
         keepDefButton = keep;
         refreshButtonBox();
+    }
+
+    public boolean isShowing() {
+        return isShowing;
+    }
+
+    public String getTitle() {
+        return title;
     }
 }
