@@ -1,6 +1,10 @@
 /*****************************************
               ROOT DESIGN
 *****************************************/
+@font-face {
+    src: url('fonts/Erica.ttf');
+}
+
 .root {
     -fx-bgcolor: #1e272e;
     -fx-lightbgcolor: #353b48;
@@ -46,6 +50,14 @@
     -fx-font-weight: bold;
     -fx-font-size: 16px;
     -fx-min-height: 0px;
+}
+
+#mcsl-logo-text {
+    -fx-font-family: 'Erica One';
+    -fx-font-size: 30px;
+    -fx-text-fill: -fx-defcolor;
+    -fx-padding: -10 0 0 0;
+    -fx-effect: innershadow(gaussian, black, 5, 0, 0, 0);
 }
 /*****************************************
               TAB MENU DESIGN
@@ -145,7 +157,7 @@
 }
 
 /*****************************************
-          LEVEL-INFICATOR DESIGN
+          LEVEL-INDICATOR DESIGN
 *****************************************/
 #active-level-indicator {
     -fx-stroke: -fx-apply;

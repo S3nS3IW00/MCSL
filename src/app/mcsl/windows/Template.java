@@ -87,7 +87,7 @@ public class Template {
     private static Label detachTabDragLabel;
     private static Circle notificationCircle;
     private static StackPane notificationButtonStack, detachTabDragStack, headerStack;
-    private static ImageView mcslImageView;
+    private static javafx.scene.control.Label mcslLogoText;
     private static StackPane tabSlide = new StackPane();
     private static app.mcsl.windows.elements.button.Button settingsButton;
     private static MenuButton notificationButton;
@@ -124,15 +124,15 @@ public class Template {
             web.setMaxHeight(value);
         }
     };
-    private static WritableValue<Double> mcslImageViewHeight = new WritableValue<Double>() {
+    private static WritableValue<Double> mcslLogoTextHeight = new WritableValue<Double>() {
         @Override
         public Double getValue() {
-            return mcslImageView.getFitHeight();
+            return mcslLogoText.getMinHeight();
         }
 
         @Override
         public void setValue(Double value) {
-            mcslImageView.setFitHeight(value);
+            mcslLogoText.setMinHeight(value);
         }
     };
     private static WritableValue<Double> notificationLabelHeight = new WritableValue<Double>() {
@@ -267,16 +267,18 @@ public class Template {
         Region headerRegion1 = new Region();
         HBox.setHgrow(headerRegion1, Priority.ALWAYS);
 
-        mcslImageView = new ImageView(FileManager.MCSL_IMAGE);
-        mcslImageView.setPickOnBounds(false);
-        mcslImageView.setFitHeight(30);
+        mcslLogoText = new Label("MINECRAFT SERVER LAUNCHER");
+        mcslLogoText.setAlignment(Pos.CENTER);
+        mcslLogoText.setPickOnBounds(false);
+        mcslLogoText.setId("mcsl-logo-text");
+        mcslLogoText.setMinHeight(30);
 
         notificationLabel = new Label("", LabelType.H2);
         notificationLabel.setPickOnBounds(false);
         notificationLabel.setMinHeight(0);
         notificationLabel.setMaxHeight(30);
 
-        notificationBox = new VBox(notificationLabel, mcslImageView);
+        notificationBox = new VBox(notificationLabel, mcslLogoText);
         notificationBox.setPickOnBounds(false);
         notificationBox.setMaxHeight(30);
         notificationBox.setAlignment(Pos.CENTER);
@@ -584,12 +586,12 @@ public class Template {
             notificationLabel.setLabelColor(color);
 
             notificationAnimation.getKeyFrames().clear();
-            notificationAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(300), new KeyValue(mcslImageViewHeight, 0.0)));
+            notificationAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(300), new KeyValue(mcslLogoTextHeight, 0.0)));
             notificationAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(300), new KeyValue(notificationLabelHeight, 30.0)));
 
             notificationAnimation.play();
             notificationAnimation.setOnFinished(e -> {
-                notificationBox.getChildren().remove(mcslImageView);
+                notificationBox.getChildren().remove(mcslLogoText);
                 notificationLabel.setMinHeight(29);
             });
             CompletableFuture.runAsync(() -> {
@@ -599,12 +601,11 @@ public class Template {
                     Logger.exception(e);
                 }
                 Platform.runLater(() -> {
-                    mcslImageView.setFitHeight(0);
-                    if (!notificationBox.getChildren().contains(mcslImageView))
-                        notificationBox.getChildren().add(mcslImageView);
+                    if (!notificationBox.getChildren().contains(mcslLogoText))
+                        notificationBox.getChildren().add(mcslLogoText);
 
                     notificationAnimation.getKeyFrames().clear();
-                    notificationAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(300), new KeyValue(mcslImageViewHeight, 30.0)));
+                    notificationAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(300), new KeyValue(mcslLogoTextHeight, 30.0)));
                     notificationAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(300), new KeyValue(notificationLabelHeight, 0.0)));
 
                     notificationAnimation.play();
