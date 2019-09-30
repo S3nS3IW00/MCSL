@@ -32,11 +32,7 @@ public class JsonManager {
                 file.getParentFile().mkdirs();
             }
             if (!file.exists() || Files.readAllBytes(file.toPath()).length == 0) {
-                PrintWriter pw = new PrintWriter(file, "UTF-8");
-                pw.print("{");
-                pw.print("}");
-                pw.flush();
-                pw.close();
+                setUpFile();
             }
             json = (JSONObject) parser.parse(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
 
@@ -44,7 +40,19 @@ public class JsonManager {
                 defaults.put(key.toString(), json.get(key));
             }
         } catch (Exception ex) {
-            Logger.exception(ex);
+            setUpFile();
+        }
+    }
+
+    private void setUpFile() {
+        try {
+            PrintWriter pw = new PrintWriter(file, "UTF-8");
+            pw.print("{");
+            pw.print("}");
+            pw.flush();
+            pw.close();
+        } catch (FileNotFoundException | UnsupportedEncodingException e) {
+            Logger.exception(e);
         }
     }
 

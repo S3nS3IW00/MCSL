@@ -5,10 +5,10 @@ import app.mcsl.managers.Language;
 public enum InputType {
 
     ANY(".", ""),
-    ONLY_LETTERS("[a-zA-Z ]", "onlyletters"),
+    ONLY_LETTERS("[\\p{L}\\s]", "onlyletters"),
     ONLY_NUMBERS("[0-9]", "onlynumbers"),
-    LETTERS_AND_NUMBERS("[a-zA-Z0-9 ]", "lettersandnumbers"),
-    EMAIL("[a-zA-Z0-9]+@[a-zA-Z]+\\.[a-zA-Z]+", "emailtexterror");
+    LETTERS_AND_NUMBERS("[\\p{L}\\s0-9]", "lettersandnumbers"),
+    EMAIL("[\\p{L}0-9]+@[\\p{L}]+\\.[\\p{L}]+", "emailtexterror");
 
     String pattern, errorString;
 

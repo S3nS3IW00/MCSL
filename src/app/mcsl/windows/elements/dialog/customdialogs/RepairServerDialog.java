@@ -199,7 +199,7 @@ public class RepairServerDialog extends Dialog {
                         settingsProps.setProp("type", "local");
                         settingsProps.setProp("ram", ramInMB + "");
                         settingsProps.setProp("serverfile", serverFile);
-                        settingsProps.setBoolProp("autostart", autostartCheckBox.isSelected());
+                        settingsProps.setProp("autostart", autostartCheckBox.isSelected());
 
                         close();
                     } else {

@@ -396,7 +396,13 @@ public class Template {
                 + "-fx-border-style: dashed;");
         dropPane.setVisible(false);
 
-        Scene scene = new Scene(new StackPane(dialogStack, dropPane), screenSize.getWidth() / 2, screenSize.getHeight() / 2);
+        if (FileManager.getConfigProps().hasProp("isMaximized") && FileManager.getConfigProps().getBoolProp("isMaximized"))
+            stage.setMaximized(true);
+        Scene scene = new Scene(new StackPane(dialogStack, dropPane),
+                FileManager.getConfigProps().hasProp("lastWidth") && (!FileManager.getConfigProps().hasProp("isMaximized") || !FileManager.getConfigProps().getBoolProp("isMaximized")) ?
+                        FileManager.getConfigProps().getDoubleProp("lastWidth") : screenSize.getWidth() / 2,
+                FileManager.getConfigProps().hasProp("lastHeight") && (!FileManager.getConfigProps().hasProp("isMaximized") || !FileManager.getConfigProps().getBoolProp("isMaximized")) ?
+                        FileManager.getConfigProps().getDoubleProp("lastHeight") : screenSize.getHeight() / 2);
         scene.getStylesheets().add(Template.class.getResource("/app/mcsl/windows/styles/style.css").toExternalForm());
 
         stage.setScene(scene);

@@ -166,19 +166,19 @@ public class FileManager {
             }
         }
         if (!configProps.hasProp("notifications")) {
-            configProps.setBoolProp("notifications", true);
+            configProps.setProp("notifications", true);
         }
         if (!configProps.hasProp("hideonexit")) {
-            configProps.setBoolProp("hideonexit", true);
+            configProps.setProp("hideonexit", true);
         }
         if (!configProps.hasProp("licence")) {
-            configProps.setBoolProp("licence", false);
+            configProps.setProp("licence", false);
         }
         if (!configProps.hasProp("debug")) {
-            configProps.setBoolProp("debug", false);
+            configProps.setProp("debug", false);
         }
         if (!configProps.hasProp("autoupdate")) {
-            configProps.setBoolProp("autoupdate", true);
+            configProps.setProp("autoupdate", true);
         }
         if (!configProps.hasProp("themecolor") || !EnumUtil.isInEnum(configProps.getProp("themecolor"), ThemeColor.class)) {
             configProps.setProp("themecolor", "default");
@@ -405,7 +405,7 @@ public class FileManager {
                 settingsPropsManager.setProp("type", type.name().toLowerCase());
                 settingsPropsManager.setProp("serverfile", settings[1]);
                 settingsPropsManager.setProp("ram", settings[2]);
-                settingsPropsManager.setBoolProp("autostart", Boolean.parseBoolean(settings[2]));
+                settingsPropsManager.setProp("autostart", Boolean.parseBoolean(settings[2]));
                 break;
             case EXTERNAL:
                 settingsPropsManager.setProp("type", type.name().toLowerCase());

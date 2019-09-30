@@ -73,7 +73,7 @@ public class SettingsContent extends StackPane {
         Setting autoupdateSetting = new Setting(Language.getText("autoupdate"), autoupdateCheckBox, null, false) {
             @Override
             public void onChange(Object object) {
-                FileManager.getConfigProps().setBoolProp("autoupdate", (boolean) object);
+                FileManager.getConfigProps().setProp("autoupdate", (boolean) object);
             }
         };
 
@@ -82,7 +82,7 @@ public class SettingsContent extends StackPane {
         Setting pushNotificationsSetting = new Setting(Language.getText("pushnotifications"), pushNotificationsCheckBox, null, false) {
             @Override
             public void onChange(Object object) {
-                FileManager.getConfigProps().setBoolProp("notifications", (boolean) object);
+                FileManager.getConfigProps().setProp("notifications", (boolean) object);
             }
         };
 
@@ -91,7 +91,7 @@ public class SettingsContent extends StackPane {
         Setting hideWhenExitSetting = new Setting(Language.getText("hideonexit"), hideWhenExitCheckBox, Language.getText("hidedescription"), false) {
             @Override
             public void onChange(Object object) {
-                FileManager.getConfigProps().setBoolProp("hideonexit", (boolean) object);
+                FileManager.getConfigProps().setProp("hideonexit", (boolean) object);
             }
         };
 

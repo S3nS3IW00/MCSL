@@ -16,7 +16,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.awt.*;
@@ -34,7 +33,6 @@ public class ServerStage extends Stage {
     public ServerStage(ServerContent serverContent) {
         this.serverContent = serverContent;
 
-        Font.loadFont(getClass().getResourceAsStream("Minecraftia.ttf"), 1);
         getIcons().add(new Image("/app/mcsl/resources/favicon.png"));
         setTitle(serverContent.getTitle());
         build();

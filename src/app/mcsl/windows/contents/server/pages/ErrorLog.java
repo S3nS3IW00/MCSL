@@ -29,10 +29,9 @@ public class ErrorLog extends VBox {
         runProblemsLabel.setStyle("-fx-text-fill: -fx-themetypecolor;\n" +
                 "    -fx-font-size: 20px;\n" +
                 "    -fx-font-weight: bold;");
-
         logTitleLabel = new Label(Language.getText("startupproblems"));
         logTitleLabel.setStyle("-fx-text-fill: -fx-defcolor;\n" +
-                "    -fx-font-size: 17px;\n" +
+                "    -fx-font-size: 20px;\n" +
                 "    -fx-font-weight: bold;");
 
         IconCard startUpErrorIconCard = new IconCard(new ImageView(FileManager.ERROR_ICON), startUpProblemsLabel, 200, 50);

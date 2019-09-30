@@ -36,16 +36,19 @@ public class DebugConsoleContent implements TabClass {
     public void init() {
         warnCountLabel = new Label(Language.getText("warningcount") + ": " + Logger.getWarnCount());
         warnCountLabel.setStyle("-fx-text-fill: -fx-themetypecolor;\n" +
-                "    -fx-font-size: 16px;\n" +
+                "    -fx-font-size: 15px;\n" +
                 "    -fx-font-weight: bold;");
+        warnCountLabel.setWrapText(true);
         errorCountLabel = new Label(Language.getText("errorcount") + ": " + Logger.getErrorCount());
         errorCountLabel.setStyle("-fx-text-fill: -fx-themetypecolor;\n" +
-                "    -fx-font-size: 16px;\n" +
+                "    -fx-font-size: 15px;\n" +
                 "    -fx-font-weight: bold;");
+        errorCountLabel.setWrapText(true);
         exceptionCountLabel = new Label(Language.getText("exceptioncount") + ": " + Logger.getExceptionCount());
         exceptionCountLabel.setStyle("-fx-text-fill: -fx-themetypecolor;\n" +
-                "    -fx-font-size: 16px;\n" +
+                "    -fx-font-size: 15px;\n" +
                 "    -fx-font-weight: bold;");
+        exceptionCountLabel.setWrapText(true);
 
         IconCard warnCountIconCard = new IconCard(new ImageView(FileManager.WARNING_ICON), warnCountLabel, 200, 50);
         warnCountIconCard.prefWidthProperty().bind(Template.getStage().getScene().widthProperty());

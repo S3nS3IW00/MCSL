@@ -36,18 +36,9 @@ public class PropertiesManager {
         }
     }
 
-    public void setProp(String key, String value) {
+    public void setProp(String key, Object value) {
         try (FileOutputStream fos = new FileOutputStream(file.getAbsolutePath())) {
-            properties.setProperty(key, value);
-            properties.store(fos, null);
-        } catch (IOException e) {
-            Logger.exception(e);
-        }
-    }
-
-    public void setBoolProp(String key, boolean value) {
-        try (FileOutputStream fos = new FileOutputStream(file.getAbsolutePath())) {
-            properties.setProperty(key, (value ? "true" : "false"));
+            properties.setProperty(key, value + "");
             properties.store(fos, null);
         } catch (IOException e) {
             Logger.exception(e);
@@ -55,21 +46,27 @@ public class PropertiesManager {
     }
 
     public String getProp(String key) {
-        String value = "";
-        value = properties.getProperty(key);
-        return value;
+        return properties.getProperty(key);
     }
 
-    public Integer getIntegerProp(String key) {
+    public int getIntProp(String key) {
         try {
             return Integer.parseInt(getProp(key));
         } catch (NumberFormatException e) {
-            return null;
+            return -1;
+        }
+    }
+
+    public double getDoubleProp(String key) {
+        try {
+            return Double.parseDouble(getProp(key));
+        } catch (NumberFormatException e) {
+            return -1;
         }
     }
 
     public boolean getBoolProp(String key) {
-        return getProp(key).equalsIgnoreCase("true");
+        return Boolean.parseBoolean(getProp(key));
     }
 
     public void removeProp(String key) {
