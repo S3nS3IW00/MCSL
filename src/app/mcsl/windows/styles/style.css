@@ -959,6 +959,7 @@
 
 .text-area {
     -fx-background-color: black;
+    -fx-font-family: 'System Regular';
     -fx-text-fill: -fx-thirdcolor;
     -fx-border-color: #2f3542;
     -fx-border-width: 2px;
