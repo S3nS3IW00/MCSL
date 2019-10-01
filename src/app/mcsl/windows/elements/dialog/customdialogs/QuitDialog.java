@@ -5,6 +5,7 @@ import app.mcsl.events.ServerStatusChangeEvent;
 import app.mcsl.managers.Language;
 import app.mcsl.managers.file.FileManager;
 import app.mcsl.managers.logging.Logger;
+import app.mcsl.managers.mainside.TrayManager;
 import app.mcsl.managers.server.ServersManager;
 import app.mcsl.managers.tab.TabManager;
 import app.mcsl.windows.Template;
@@ -15,9 +16,6 @@ import app.mcsl.windows.elements.button.Button;
 import app.mcsl.windows.elements.button.ButtonType;
 import app.mcsl.windows.elements.dialog.Dialog;
 import app.mcsl.windows.elements.dialog.DialogType;
-import app.mcsl.windows.elements.notifications.Notification;
-import app.mcsl.windows.elements.notifications.NotificationAlertType;
-import app.mcsl.windows.elements.notifications.Notifications;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -26,6 +24,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.VBox;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -43,7 +42,7 @@ public class QuitDialog extends Dialog {
     private int onlineServerCount;
 
     public QuitDialog() {
-        super(200, 450, Language.getText("quit"), DialogType.CUSTOM, new VBox());
+        super(200, 500, Language.getText("quit"), DialogType.CUSTOM, new VBox());
 
         textLabel = new Label(Language.getText("surewantquit") + (onlineServerCount > 0 ? "\n" + Language.getText("serverswillstop") : ""));
 
@@ -92,8 +91,8 @@ public class QuitDialog extends Dialog {
             Platform.setImplicitExit(false);
             Template.getStage().hide();
             for (ServerStage serverStage : TabManager.getServerStages()) serverStage.hide();
-            //TrayManager.displayTray(Language.getText("waithere"), TrayIcon.MessageType.INFO);
-            Notifications.push(null, new Notification(Language.getText("hiding"), Language.getText("waithere"), NotificationAlertType.INFO));
+            TrayManager.displayTray(Language.getText("waithere"), TrayIcon.MessageType.INFO);
+            //Notifications.push(null, new Notification(Language.getText("hiding"), Language.getText("waithere"), NotificationAlertType.INFO));
         });
 
         content = new VBox(textLabel);

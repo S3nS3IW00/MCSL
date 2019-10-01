@@ -81,13 +81,17 @@ public class ServersContent implements TabClass {
         importServer.setStyle("-fx-font-size: 15px;");
         importServer.setPrefWidth(300);
         importServer.setOnAction(e -> {
-            DirectoryChooser directoryChooser = new DirectoryChooser();
-            directoryChooser.setTitle(Language.getText("chooseserverslocation"));
-            File serverLocation = directoryChooser.showDialog(Template.getStage());
-            if (serverLocation != null) {
-                if (!FileManager.checkImportServerFiles(serverLocation)) {
-                    new AlertDialog(200, 400, Language.getText("error"), Language.getText("choosendirnotavaliable"), AlertType.ERROR).show();
+            if (FileManager.getServerFilesFolder().listFiles().length > 0) {
+                DirectoryChooser directoryChooser = new DirectoryChooser();
+                directoryChooser.setTitle(Language.getText("chooseserverslocation"));
+                File serverLocation = directoryChooser.showDialog(Template.getStage());
+                if (serverLocation != null) {
+                    if (!FileManager.checkImportServerFiles(serverLocation)) {
+                        new AlertDialog(200, 400, Language.getText("error"), Language.getText("choosendirnotavaliable"), AlertType.ERROR).show();
+                    }
                 }
+            } else {
+                new AlertDialog(200, 400, Language.getText("error"), Language.getText("noserverfile"), AlertType.ERROR).show();
             }
         });
 
@@ -119,7 +123,6 @@ public class ServersContent implements TabClass {
 
         body = new VBox(5, titleBox, serversStack, bottomRegion, buttonBox);
         body.setPadding(new Insets(10));
-
         body.setMinHeight(0);
 
         categoryComboBox.getSelectionModel().selectFirst();

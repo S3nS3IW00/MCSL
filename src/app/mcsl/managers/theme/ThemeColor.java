@@ -8,7 +8,7 @@ public enum ThemeColor {
     GREEN("green", "#6ab04c", "#009432"),
     RED("red", "#e74c3c", "#c0392b");
 
-    String defColor, darkDefColor, displayName;
+    private String defColor, darkDefColor, displayName;
 
     ThemeColor(String displayName, String defColor, String darkDefColor) {
         this.displayName = displayName;

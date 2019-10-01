@@ -139,6 +139,7 @@ public class ImportServerDialog extends Dialog {
 
                     cancelButton.setText(Language.getText("cancel"));
                     nextButton.setText(Language.getText("next"));
+                    nextButton.setDisable(false);
                     break;
                 case 1:
                     if (!serverNameTextField.getText().isEmpty() && !serverPortTextField.getText().isEmpty() && DataTypeUtil.isInt(serverPortTextField.getText())) {

@@ -1,7 +1,6 @@
 package app.mcsl.windows.contents.server;
 
 import app.mcsl.managers.Language;
-import app.mcsl.managers.file.FileManager;
 import app.mcsl.managers.tab.TabAction;
 import app.mcsl.managers.tab.TabManager;
 import app.mcsl.managers.theme.ThemeManager;
@@ -9,9 +8,9 @@ import app.mcsl.windows.elements.button.Button;
 import app.mcsl.windows.elements.button.ButtonType;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
@@ -26,7 +25,6 @@ public class ServerStage extends Stage {
 
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-    private ImageView mcslImageView;
     private VBox body;
     private HBox header;
 
@@ -39,9 +37,10 @@ public class ServerStage extends Stage {
     }
 
     public void build() {
-        mcslImageView = new ImageView(FileManager.MCSL_IMAGE);
-        mcslImageView.setPickOnBounds(false);
-        mcslImageView.setFitHeight(30);
+        Label mcslLogoText = new Label("MINECRAFT SERVER LAUNCHER");
+        mcslLogoText.setAlignment(Pos.CENTER);
+        mcslLogoText.setMinHeight(30);
+        mcslLogoText.setId("mcsl-logo-text");
 
         Button backToTabButton = new Button(Language.getText("backtotab"), ButtonType.ROUNDED);
         backToTabButton.setOnAction(e -> {
@@ -50,10 +49,10 @@ public class ServerStage extends Stage {
             TabAction.choose(tab);
         });
 
-        StackPane headerStack = new StackPane(mcslImageView, backToTabButton);
+        StackPane headerStack = new StackPane(mcslLogoText, backToTabButton);
         HBox.setHgrow(headerStack, Priority.ALWAYS);
         StackPane.setAlignment(backToTabButton, Pos.CENTER_LEFT);
-        StackPane.setAlignment(mcslImageView, Pos.CENTER);
+        StackPane.setAlignment(mcslLogoText, Pos.CENTER);
 
         header = new HBox(5, headerStack);
         header.setAlignment(Pos.CENTER);

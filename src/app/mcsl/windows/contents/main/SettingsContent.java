@@ -3,6 +3,7 @@ package app.mcsl.windows.contents.main;
 import app.mcsl.managers.Language;
 import app.mcsl.managers.file.FileManager;
 import app.mcsl.managers.tab.TabManager;
+import app.mcsl.managers.theme.FontType;
 import app.mcsl.managers.theme.ThemeColor;
 import app.mcsl.managers.theme.ThemeManager;
 import app.mcsl.managers.theme.ThemeType;
@@ -121,9 +122,22 @@ public class SettingsContent extends StackPane {
             }
         };
 
+        CheckBox fancyFontCheckBox = new CheckBox();
+        fancyFontCheckBox.setSelected(FileManager.getConfigProps().getBoolProp("fancyfont"));
+        Setting fancyFontSetting = new Setting(Language.getText("fancyfont"), fancyFontCheckBox, null, false) {
+            @Override
+            public void onChange(Object object) {
+                FileManager.getConfigProps().setProp("fancyfont", object);
+                ThemeManager.changeFontType((boolean) object ? FontType.FANCY : FontType.DEFAULT);
+                for (ServerStage serverStage : TabManager.getServerStages()) {
+                    ThemeManager.applyCss(serverStage.getScene());
+                }
+            }
+        };
+
         standardSettings.addSetting(pushNotificationsSetting, hideWhenExitSetting);
 
-        designSettings.addSetting(languageSetting, themecolorSetting, themetypeSetting);
+        designSettings.addSetting(languageSetting, themecolorSetting, themetypeSetting, fancyFontSetting);
 
         body = new VBox();
         body.setPadding(new Insets(5));

@@ -186,6 +186,9 @@ public class FileManager {
         if (!configProps.hasProp("themetype") || !EnumUtil.isInEnum(configProps.getProp("themetype"), ThemeType.class)) {
             configProps.setProp("themetype", "light");
         }
+        if (!configProps.hasProp("fancyfont")) {
+            configProps.setProp("fancyfont", false);
+        }
 
         Logger.info("Loading timed tasks...");
         timedTasksJson = new JsonManager(timedtasksFile);

@@ -7,6 +7,7 @@ import app.mcsl.managers.logging.Logger;
 import app.mcsl.managers.mainside.OSManager;
 import app.mcsl.managers.mainside.TrayManager;
 import app.mcsl.managers.mainside.timedtasks.TimedTasksTimer;
+import app.mcsl.managers.theme.FontType;
 import app.mcsl.managers.theme.ThemeColor;
 import app.mcsl.managers.theme.ThemeManager;
 import app.mcsl.managers.theme.ThemeType;
@@ -127,6 +128,7 @@ public class MainClass extends Application {
 
                 ThemeManager.changeThemeColor(ThemeColor.valueOf(FileManager.getConfigProps().getProp("themecolor").toUpperCase()));
                 ThemeManager.changeThemeType(ThemeType.valueOf(FileManager.getConfigProps().getProp("themetype").toUpperCase()));
+                if (FileManager.getConfigProps().getBoolProp("fancyfont")) ThemeManager.changeFontType(FontType.FANCY);
 
                 Logger.info("Initiating UPnP...");
                 UPnP.waitInit();

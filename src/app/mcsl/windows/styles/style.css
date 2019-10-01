@@ -5,6 +5,10 @@
     src: url('fonts/Erica.ttf');
 }
 
+@font-face {
+    src: url('fonts/Titan.ttf');
+}
+
 .root {
     -fx-bgcolor: #1e272e;
     -fx-lightbgcolor: #353b48;
