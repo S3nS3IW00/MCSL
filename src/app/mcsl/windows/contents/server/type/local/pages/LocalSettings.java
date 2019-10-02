@@ -357,8 +357,8 @@ public class LocalSettings extends ScrollPane {
         setContent(body);
         setFitToWidth(true);
 
-        registerSettings();
         loadSettings();
+        registerSettings();
         changed.clear();
 
         DirectoryChangeEvent.addListener(type -> {

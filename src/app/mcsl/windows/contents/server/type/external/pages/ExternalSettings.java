@@ -91,8 +91,8 @@ public class ExternalSettings extends ScrollPane {
         setContent(body);
         setFitToWidth(true);
 
-        registerSettings();
         loadSettings();
+        registerSettings();
         changed.clear();
     }
 

@@ -45,10 +45,10 @@ public class ServerAction {
         new ConfirmationDialog(200, 400, Language.getText("deleteserver"), Language.getText("suredeleteserver", server.getName())) {
             @Override
             public void yesAction() {
-                if (!FileManager.isExternalServerRoot(server)) close();
                 ServersManager.removeServer(server);
                 FileManager.deleteServer(server.getName(), FileManager.getServerFolder(server.getName()));
                 Template.getServersContent().removeServer(server);
+                close();
             }
 
             @Override

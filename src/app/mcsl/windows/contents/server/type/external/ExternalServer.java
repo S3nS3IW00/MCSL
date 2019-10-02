@@ -92,8 +92,8 @@ public class ExternalServer implements Server {
     private ColoredTextFlow console;
     private TextField inputField;
     private Button sendButton;
-    private VBox controlInfoBox, consoleBox, controlsBox, controlPanelSideBox;
-    private HBox inputBox, controlPanelBox, consoleOptions;
+    private VBox controlInfoBox, consoleBox, controlsBox, controlPanelSideBox, consoleOptions;
+    private HBox inputBox, controlPanelBox;
     private CheckBox chatModeCheckBox, autoScrollCheckBox;
     private List<String> commandHistory = new ArrayList<>();
     private int commandHistoryIndex = 0;
@@ -283,7 +283,7 @@ public class ExternalServer implements Server {
         ipAddress = new KeyValueLabel(Language.getText("ipaddress"), "-", LabelColor.THIRDCOLOR);
         playerCount = new KeyValueLabel(Language.getText("playercount"), "0/0", LabelColor.THIRDCOLOR);
 
-        playersCard = new ListBox(200, 160);
+        playersCard = new ListBox(200, 100);
         playersCard.getBody().setSpacing(5);
         VBox.setVgrow(playersCard, Priority.ALWAYS);
 
@@ -297,8 +297,7 @@ public class ExternalServer implements Server {
 
         controlsBox = new VBox(startButton);
         controlsBox.setAlignment(Pos.TOP_CENTER);
-        controlsBox.setMinHeight(150);
-        controlsBox.setPadding(new Insets(10, 0, 10, 0));
+        controlsBox.setMinHeight(100);
 
         chatModeCheckBox = new CheckBox(Language.getText("chatmode"));
         chatModeCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> chatMode = newValue);
@@ -307,10 +306,9 @@ public class ExternalServer implements Server {
         autoScrollCheckBox.setSelected(true);
         autoScrollCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> autoScroll = newValue);
 
-        consoleOptions = new HBox(10, chatModeCheckBox, autoScrollCheckBox);
+        consoleOptions = new VBox(5, chatModeCheckBox, autoScrollCheckBox);
 
         controlPanelSideBox = new VBox(10, controlInfoBox, controlsBox, consoleOptions);
-        controlPanelSideBox.setPadding(new Insets(0, 0, 10, 0));
 
         controlPanelBox = new HBox(10, consoleBox, controlPanelSideBox);
 

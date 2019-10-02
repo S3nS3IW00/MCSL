@@ -368,7 +368,7 @@ public class FileManager {
         return new File(serverFilesFolder + File.separator + name);
     }
 
-    public static void createServer(String name, ServerType type, String[] settings, String customLocation) throws IOException {
+    public static Server createServer(String name, ServerType type, String[] settings, String customLocation) throws IOException {
         Logger.info("Creating server with name '" + name + "'...");
 
         File folder, settingsProps, serverProps, eula;
@@ -409,7 +409,7 @@ public class FileManager {
                 settingsPropsManager.setProp("serverfile", settings[1]);
                 settingsPropsManager.setProp("ram", settings[2]);
                 settingsPropsManager.setProp("autostart", Boolean.parseBoolean(settings[2]));
-                break;
+                return new LocalServer(name);
             case EXTERNAL:
                 settingsPropsManager.setProp("type", type.name().toLowerCase());
                 settingsPropsManager.setProp("address", settings[0]);
@@ -417,8 +417,9 @@ public class FileManager {
                 settingsPropsManager.setProp("pluginport", settings[2]);
                 settingsPropsManager.setProp("username", settings[3]);
                 settingsPropsManager.setProp("password", settings[4]);
-                break;
+                return new ExternalServer(name);
         }
+        return null;
     }
 
     public static void importServer(String name, String location) {

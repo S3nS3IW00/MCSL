@@ -5,13 +5,13 @@ import app.mcsl.managers.HashManager;
 import app.mcsl.managers.Language;
 import app.mcsl.managers.file.DirectoryType;
 import app.mcsl.managers.file.FileManager;
+import app.mcsl.managers.logging.Logger;
 import app.mcsl.managers.server.ServerAction;
 import app.mcsl.managers.server.ServersManager;
 import app.mcsl.utils.DataTypeUtil;
 import app.mcsl.windows.Template;
+import app.mcsl.windows.contents.server.Server;
 import app.mcsl.windows.contents.server.ServerType;
-import app.mcsl.windows.contents.server.type.external.ExternalServer;
-import app.mcsl.windows.contents.server.type.local.LocalServer;
 import app.mcsl.windows.elements.button.Button;
 import app.mcsl.windows.elements.button.ButtonType;
 import app.mcsl.windows.elements.dialog.Dialog;
@@ -250,21 +250,21 @@ public class AddServerDialog extends Dialog {
                         ramInMB = Integer.parseInt(ramTextField.getText());
                         serverFile = serverFileComboBox.getSelectionModel().getSelectedItem().toString();
 
+                        Server server;
                         try {
-                            if (customLocationTextField.getText().isEmpty()) {
-                                FileManager.createServer(serverName, ServerType.LOCAL, new String[]{serverPort + "", serverFile + "", ramInMB + "", autoStartCheckBox.isSelected() + ""}, null);
-                                closeAndReset();
-                            } else {
-                                if (FileManager.isAvaliableExternalDir(new File(customLocationTextField.getText().replace(File.separator + serverName, "")))) {
-                                    FileManager.createServer(serverName, ServerType.LOCAL, new String[]{serverPort + "", serverFile + "", ramInMB + "", autoStartCheckBox.isSelected() + ""}, customLocationTextField.getText());
-                                    closeAndReset();
-                                } else {
-                                    showError(Language.getText("choosendirnotavaliable"));
-                                }
-                            }
-                            ServerAction.add(new LocalServer(serverName));
+                            server = FileManager.createServer(serverName,
+                                    ServerType.LOCAL,
+                                    new String[]{serverPort + "", serverFile + "", ramInMB + "", autoStartCheckBox.isSelected() + ""},
+                                    customLocationTextField.getText().isEmpty() ? null : customLocationTextField.getText());
                         } catch (IOException e) {
                             showError(Language.getText("choosendirnotavaliable"));
+                            this.stepIndex--;
+                            return;
+                        }
+
+                        synchronized (server) {
+                            ServerAction.add(server);
+                            closeAndReset();
                         }
                     } else {
                         showError(Language.getText("mustfillallfields"));
@@ -279,10 +279,9 @@ public class AddServerDialog extends Dialog {
                         password = HashManager.cuttedHash(passwordTextField.getText());
 
                         try {
-                            FileManager.createServer(serverName, ServerType.EXTERNAL, new String[]{serverIp, serverPort + "", pluginPort + "", username, password}, null);
-                            ServerAction.add(new ExternalServer(serverName));
+                            ServerAction.add(FileManager.createServer(serverName, ServerType.EXTERNAL, new String[]{serverIp, serverPort + "", pluginPort + "", username, password}, null));
                         } catch (IOException e) {
-                            //empty catch block
+                            Logger.exception(e);
                         }
 
                         closeAndReset();
