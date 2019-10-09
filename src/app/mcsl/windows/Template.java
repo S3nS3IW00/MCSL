@@ -5,9 +5,11 @@ import app.mcsl.managers.file.FileManager;
 import app.mcsl.managers.logging.Logger;
 import app.mcsl.managers.tab.TabAction;
 import app.mcsl.managers.tab.TabClass;
-import app.mcsl.windows.contents.main.*;
+import app.mcsl.windows.contents.main.DebugConsoleContent;
+import app.mcsl.windows.contents.main.FilesContent;
+import app.mcsl.windows.contents.main.ServersContent;
+import app.mcsl.windows.contents.main.SettingsContent;
 import app.mcsl.windows.elements.HamburgerMenuIcon;
-import app.mcsl.windows.elements.Web;
 import app.mcsl.windows.elements.button.Button;
 import app.mcsl.windows.elements.button.ButtonType;
 import app.mcsl.windows.elements.dialog.Dialogs;
@@ -61,7 +63,6 @@ public class Template {
 
     private static Stage stage;
 
-    private static MainContent mainContent;
     private static ServersContent serversContent;
     private static FilesContent filesContent;
     private static SettingsContent settingsContent;
@@ -74,7 +75,6 @@ public class Template {
     private static Tab currentDraggingTab;
     private static final AtomicLong idGenerator = new AtomicLong();
     private static final String draggingID = "DraggingTabPaneSupport-" + idGenerator.incrementAndGet();
-    private static boolean outOfSceneDrag = false;
 
     private static Map<String, LabelColor> notifications = new HashMap<>();
 
@@ -92,16 +92,15 @@ public class Template {
     private static app.mcsl.windows.elements.button.Button settingsButton;
     private static MenuButton notificationButton;
     private static MenuItem notificationItem;
-    private static Web web;
     private static HamburgerMenuIcon hamburgerMenuIcon;
-    private static Timeline settingsAnimation = new Timeline(), notificationAnimation = new Timeline(), webAnimartion = new Timeline();
+    private static Timeline settingsAnimation = new Timeline(), notificationAnimation = new Timeline();
     private static SlideMenu slideMenu;
     private static TabPane tabPane;
     private static Tab mainTab;
     private static VBox settingsBox, body, notificationBox;
     private static HBox header;
-    private static StackPane dialogStack, settingsStack, webviewStack;
-    private static boolean isSettingsOpen = false, canOpenSettings = true, isShowingNotification = false, isWebOpen = false, canOpenWeb = true;
+    private static StackPane dialogStack, settingsStack;
+    private static boolean isSettingsOpen = false, canOpenSettings = true, isShowingNotification = false;
     private static WritableValue<Double> settingsBoxHeight = new WritableValue<Double>() {
         @Override
         public Double getValue() {
@@ -111,17 +110,6 @@ public class Template {
         @Override
         public void setValue(Double value) {
             settingsBox.setMaxHeight(value);
-        }
-    };
-    private static WritableValue<Double> webBoxHeight = new WritableValue<Double>() {
-        @Override
-        public Double getValue() {
-            return web.getMaxHeight();
-        }
-
-        @Override
-        public void setValue(Double value) {
-            web.setMaxHeight(value);
         }
     };
     private static WritableValue<Double> mcslLogoTextHeight = new WritableValue<Double>() {
@@ -153,7 +141,6 @@ public class Template {
         stage.getIcons().add(new Image("/app/mcsl/resources/favicon.png"));
         stage.setTitle("Minecraft Server Launcher");
 
-        //mainContent = new MainContent();
         serversContent = new ServersContent();
         filesContent = new FilesContent();
         settingsContent = new SettingsContent();
@@ -202,7 +189,6 @@ public class Template {
                 } catch (IOException | URISyntaxException e) {
                     Logger.exception(e);
                 }
-                //openWeb("https://mcserverlauncher.tk");
             }
         }, SlideAlignment.BOTTOM);
 
@@ -214,7 +200,6 @@ public class Template {
                 } catch (IOException | URISyntaxException e) {
                     Logger.exception(e);
                 }
-                //openWeb("https://fb.me/mcserverlauncher");
             }
         }, SlideAlignment.BOTTOM);
 
@@ -226,7 +211,6 @@ public class Template {
                 } catch (IOException | URISyntaxException e) {
                     Logger.exception(e);
                 }
-                //openWeb("https://github.com/S3nS3IW00/mcserverlauncher/issues/new");
             }
         }, SlideAlignment.BOTTOM);
 
@@ -374,15 +358,7 @@ public class Template {
 
         body = new VBox(headerStack, tabSlide);
 
-        /*web = new Web();
-        web.setMaxHeight(0);
-
-        webAnimartion.setOnFinished(e -> canOpenWeb = true);
-
-        webviewStack = new StackPane(body, web);
-        StackPane.setAlignment(web, Pos.BOTTOM_CENTER);*/
-
-        dialogStack = new StackPane(body/*webviewStack*/);
+        dialogStack = new StackPane(body);
 
         Region opaqueLayer = new Region();
         opaqueLayer.setStyle("-fx-background-color: black;");
@@ -502,7 +478,6 @@ public class Template {
             }
         });
 
-        //web.getWebView().prefHeightProperty().bind(stage.heightProperty());
         Dialogs.init();
     }
 
@@ -547,35 +522,6 @@ public class Template {
             settingsAnimation.play();
         }
     }
-
-    /*public static void openWeb(String link) {
-        if (canOpenWeb) {
-            canOpenWeb = false;
-            webAnimartion.getKeyFrames().clear();
-            if (!isWebOpen) {
-                webAnimartion.getKeyFrames().add(new KeyFrame(Duration.millis(300), new KeyValue(webBoxHeight, 1080.0)));
-                webAnimartion.setOnFinished(e -> {
-                    canOpenWeb = true;
-                    web.loadLink(link);
-                });
-                isWebOpen = true;
-            }
-            webAnimartion.play();
-        }
-    }
-
-    public static void closeWeb() {
-        if (canOpenWeb) {
-            canOpenWeb = false;
-            webAnimartion.getKeyFrames().clear();
-            if (isWebOpen) {
-                webAnimartion.getKeyFrames().add(new KeyFrame(Duration.millis(300), new KeyValue(webBoxHeight, 0.0)));
-                webAnimartion.setOnFinished(e -> canOpenWeb = true);
-                isWebOpen = false;
-            }
-            webAnimartion.play();
-        }
-    }*/
 
     public static void showNotification(String text, LabelColor color) {
         if (!isShowingNotification) {
@@ -750,10 +696,6 @@ public class Template {
     public static VBox getBody() {
         return body;
     }
-
-    /*public static StackPane getWebviewStack() {
-        return webviewStack;
-    }*/
 
     public static ServersContent getServersContent() {
         return serversContent;

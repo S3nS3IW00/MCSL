@@ -51,6 +51,8 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -314,6 +316,14 @@ public class LocalServer implements Server {
         HBox.setHgrow(consoleBox, Priority.ALWAYS);
 
         ipAddress = new KeyValueLabel(Language.getText("ipaddress"), "localhost", LabelColor.THIRDCOLOR);
+        ipAddress.setOnValueClick(e -> {
+            ClipboardContent clipboardContent = new ClipboardContent();
+            clipboardContent.putString((UPnP.getExternalIP() != null ? UPnP.getExternalIP() : "localhost") + (DataTypeUtil.isInt(settings.getSetting("server-port")) ? Integer.parseInt(settings.getSetting("server-port")) == 25565 ? "" : ":" + settings.getSetting("server-port") : ""));
+            Clipboard.getSystemClipboard().setContent(clipboardContent);
+
+            Template.showNotification(Language.getText("ipcopied"), LabelColor.ERROR);
+        });
+
         playerCount = new KeyValueLabel(Language.getText("playercount"), "0/0", LabelColor.THIRDCOLOR);
 
         playersCard = new ListBox(200, 100);
@@ -654,8 +664,8 @@ public class LocalServer implements Server {
 
     public void updateInfos() {
         Platform.runLater(() -> {
-            ipAddress.setValue(UPnP.getExternalIP() + (DataTypeUtil.isInt(settings.getSetting("server-port")) ? Integer.parseInt(settings.getSetting("server-port")) == 25565 ? "" : ":" + settings.getSetting("server-port") : ""));
-            playerCount.setValue((pingReply == null ? 0 : pingReply.getPlayers().getOnline()) + "/" + settings.getSetting("max-players"));
+            ipAddress.setValue((UPnP.getExternalIP() != null ? UPnP.getExternalIP() : "localhost") + (DataTypeUtil.isInt(settings.getSetting("server-port")) ? Integer.parseInt(settings.getSetting("server-port")) == 25565 ? "" : ":" + settings.getSetting("server-port") : ""));
+            playerCount.setValue((pingReply == null ? 0 : pingReply.getPlayers().getOnline()) + "/" + (settings.getSetting("max-players") == null ? "0" : settings.getSetting("max-players")));
         });
     }
 

@@ -44,6 +44,8 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -281,6 +283,14 @@ public class ExternalServer implements Server {
         HBox.setHgrow(consoleBox, Priority.ALWAYS);
 
         ipAddress = new KeyValueLabel(Language.getText("ipaddress"), "-", LabelColor.THIRDCOLOR);
+        ipAddress.setOnValueClick(e -> {
+            ClipboardContent clipboardContent = new ClipboardContent();
+            clipboardContent.putString(settings.getSetting("address") + (DataTypeUtil.isInt(settings.getSetting("port")) ? Integer.parseInt(settings.getSetting("port")) == 25565 ? "" : ":" + settings.getSetting("port") : ""));
+            Clipboard.getSystemClipboard().setContent(clipboardContent);
+
+            Template.showNotification(Language.getText("ipcopied"), LabelColor.ERROR);
+        });
+
         playerCount = new KeyValueLabel(Language.getText("playercount"), "0/0", LabelColor.THIRDCOLOR);
 
         playersCard = new ListBox(200, 100);
@@ -534,7 +544,7 @@ public class ExternalServer implements Server {
     public void updateInfos() {
         Platform.runLater(() -> {
             ipAddress.setValue(settings.getSetting("address") + (DataTypeUtil.isInt(settings.getSetting("port")) ? Integer.parseInt(settings.getSetting("port")) == 25565 ? "" : ":" + settings.getSetting("port") : ""));
-            playerCount.setValue(pingReply == null ? "-/-" : pingReply.getPlayers().getOnline() + "/" + pingReply.getPlayers().getMax());
+            playerCount.setValue(pingReply == null ? "0/0" : pingReply.getPlayers().getOnline() + "/" + pingReply.getPlayers().getMax());
         });
     }
 

@@ -1,9 +1,7 @@
 package app.mcsl.windows.elements.coloredtextflow;
 
-import app.mcsl.windows.elements.coloredtextflow.json.JsonParser;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import org.json.simple.parser.ParseException;
 
 public class ColoredTextFlow extends TextFlow {
 
@@ -26,26 +24,14 @@ public class ColoredTextFlow extends TextFlow {
     }
 
     public void append(String sText) {
-        try {
-            for (Text text : new JsonParser(sText).parse()) {
-                if (text != null) getChildren().add(text);
-            }
-        } catch (ParseException e) {
-            for (Text text : new ColorParser(sText, fontSize).parse()) {
-                if (text != null) getChildren().add(text);
-            }
+        for (Text text : new ColorParser(sText, fontSize).parse()) {
+            if (text != null) getChildren().add(text);
         }
     }
 
     public void appendLine(String sText) {
-        try {
-            for (Text text : new JsonParser(sText).parse()) {
-                if (text != null) getChildren().add(text);
-            }
-        } catch (ParseException e) {
-            for (Text text : new ColorParser(sText, fontSize).parse()) {
-                if (text != null) getChildren().add(text);
-            }
+        for (Text text : new ColorParser(sText, fontSize).parse()) {
+            if (text != null) getChildren().add(text);
         }
         getChildren().add(new Text(System.lineSeparator()));
     }
