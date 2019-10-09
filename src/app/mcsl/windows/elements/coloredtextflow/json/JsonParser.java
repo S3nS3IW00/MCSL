@@ -1,8 +1,9 @@
 package app.mcsl.windows.elements.coloredtextflow.json;
 
 import app.mcsl.managers.logging.Logger;
-import app.mcsl.windows.elements.MouseTooltip;
 import app.mcsl.windows.elements.coloredtextflow.ChatColor;
+import app.mcsl.windows.elements.tooltip.Tooltip;
+import app.mcsl.windows.elements.tooltip.TooltipType;
 import javafx.scene.Cursor;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
@@ -101,7 +102,8 @@ public class JsonParser {
                             JSONObject hoText = (JSONObject) ho;
                             hoverTextBuilder.append(hoText.get("text").toString());
                         }
-                        MouseTooltip.install(hoverTextBuilder.toString(), text);
+                        Tooltip tooltip = new Tooltip(hoverTextBuilder.toString(), TooltipType.DEFAULT);
+                        tooltip.setFollowMouseOnControl(text);
                     }
                     break;
             }

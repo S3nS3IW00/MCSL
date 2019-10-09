@@ -50,7 +50,7 @@ public class QuitDialog extends Dialog {
         onlineServerCount = onlineServers.size();
 
         serversStopProgressBar = new ProgressBar();
-        serversStopProgressBar.setPrefSize(400, 30);
+        serversStopProgressBar.setPrefSize(500, 30);
 
         noButton = new Button(Language.getText("no"), ButtonType.ERROR);
         noButton.setOnAction(e -> close());

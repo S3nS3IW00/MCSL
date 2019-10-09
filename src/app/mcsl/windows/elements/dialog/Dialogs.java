@@ -7,6 +7,10 @@ public class Dialogs {
     private static LinkedList<Dialog> dialogList = new LinkedList<>();
     private static Dialog currentDialog = null;
 
+    public static void init() {
+        if (Dialogs.hasNext()) Dialogs.showNext();
+    }
+
     static void addDialog(Dialog dialog) {
         dialogList.add(dialog);
     }
@@ -19,7 +23,7 @@ public class Dialogs {
         dialogList.remove(dialog);
     }
 
-    public static void showNext() {
+    static void showNext() {
         dialogList.get(0).show();
         dialogList.remove(dialogList.get(0));
     }
@@ -44,7 +48,7 @@ public class Dialogs {
         return currentDialog != null && currentDialog.isShowing() ? currentDialog : null;
     }
 
-    public static void setCurrentDialog(Dialog currentDialog) {
+    static void setCurrentDialog(Dialog currentDialog) {
         Dialogs.currentDialog = currentDialog;
     }
 }

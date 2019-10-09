@@ -462,8 +462,10 @@ public class FileManager {
         }
     }
 
-    public static void deleteServer(String serverName, File serverFolder) {
+    public static void deleteServer(String serverName) {
         Logger.info("Deleting server '" + serverName + "'...");
+
+        File serverFolder = getServerFolder(serverName);
 
         if (!isExternalServerRoot(serverName)) {
             deleteFile(serverFolder);
@@ -564,12 +566,6 @@ public class FileManager {
 
     public static int getNotificationCount() {
         return notificationsJson.getDefaults().size();
-    }
-
-    public static boolean isAvaliableExternalDir(File directory) {
-        if (!directory.isDirectory()) return false;
-        if (directory.canRead() && directory.canWrite()) return true;
-        return false;
     }
 
     //Timed tasks

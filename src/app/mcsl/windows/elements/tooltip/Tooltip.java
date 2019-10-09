@@ -9,6 +9,11 @@ public class Tooltip extends javafx.scene.control.Tooltip {
         setType(type);
     }
 
+    public Tooltip(String text, TooltipType type) {
+        setText(text);
+        setType(type);
+    }
+
     public void setType(TooltipType type) {
         setId(type.getId());
         setGraphic(new ImageView(type.getIcon()));

@@ -503,7 +503,7 @@ public class Template {
         });
 
         //web.getWebView().prefHeightProperty().bind(stage.heightProperty());
-        if (Dialogs.hasNext()) Dialogs.showNext();
+        Dialogs.init();
     }
 
     public static void show() {
@@ -747,17 +747,13 @@ public class Template {
         return dialogStack;
     }
 
-    public static VBox getSettingsBox() {
-        return settingsBox;
-    }
-
     public static VBox getBody() {
         return body;
     }
 
-    public static StackPane getWebviewStack() {
+    /*public static StackPane getWebviewStack() {
         return webviewStack;
-    }
+    }*/
 
     public static ServersContent getServersContent() {
         return serversContent;

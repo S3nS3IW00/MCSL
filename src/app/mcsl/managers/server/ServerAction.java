@@ -46,7 +46,7 @@ public class ServerAction {
             @Override
             public void yesAction() {
                 ServersManager.removeServer(server);
-                FileManager.deleteServer(server.getName(), FileManager.getServerFolder(server.getName()));
+                FileManager.deleteServer(server.getName());
                 Template.getServersContent().removeServer(server);
                 close();
             }

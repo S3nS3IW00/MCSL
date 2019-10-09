@@ -33,7 +33,7 @@ public class Downloader {
 
     private int contentLength;
 
-    public DoubleProperty progress = new SimpleDoubleProperty(0.0);
+    private DoubleProperty progress = new SimpleDoubleProperty(0.0);
 
     private DownloadStatus status;
     private DownloadFinishEvent finishEvent;

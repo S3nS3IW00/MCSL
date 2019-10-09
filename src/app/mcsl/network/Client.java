@@ -17,7 +17,6 @@ public class Client {
     private Socket client;
     private String username;
     private String password;
-    private boolean isAuth;
     private CommandManager commandManager;
     private ExternalServer server;
 
@@ -59,14 +58,6 @@ public class Client {
 
     public Socket getClient() {
         return client;
-    }
-
-    public void setAuth(boolean isAuth) {
-        this.isAuth = isAuth;
-    }
-
-    public boolean isAuth() {
-        return isAuth;
     }
 
     public ExternalServer getServer() {

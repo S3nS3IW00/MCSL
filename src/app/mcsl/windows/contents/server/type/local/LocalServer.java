@@ -479,7 +479,6 @@ public class LocalServer implements Server {
                     for (String cmd : processBuilder.command()) {
                         command.append(cmd).append(" ");
                     }
-                    console.appendLine("§a[MinecraftServerLauncher] " + Language.getText("executingcommand") + ": " + command.toString());
                     Logger.info("Executing command: '" + command + "'...");
                     ServerStatusChangeEvent.change(this, StatusType.STARTING);
                     try {
