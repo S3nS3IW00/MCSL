@@ -154,7 +154,7 @@ public class QuitDialog extends Dialog {
         onlineServers = FXCollections.observableList(ServersManager.getOnlineServers());
         onlineServerCount = onlineServers.size();
         textLabel.setText(Language.getText("surewantquit") + (onlineServerCount > 0 ? "\n" + Language.getText("serverswillstop") : ""));
-        super.show();
+        super.showAndOverlay();
     }
 
     public void hide() {

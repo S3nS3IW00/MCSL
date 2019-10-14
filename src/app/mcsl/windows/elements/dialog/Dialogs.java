@@ -5,7 +5,6 @@ import java.util.LinkedList;
 public class Dialogs {
 
     private static LinkedList<Dialog> dialogList = new LinkedList<>();
-    private static Dialog currentDialog = null;
 
     public static void init() {
         if (Dialogs.hasNext()) Dialogs.showNext();
@@ -42,13 +41,5 @@ public class Dialogs {
 
     static Dialog next() {
         return dialogList.get(0);
-    }
-
-    public static Dialog getCurrentDialog() {
-        return currentDialog != null && currentDialog.isShowing() ? currentDialog : null;
-    }
-
-    static void setCurrentDialog(Dialog currentDialog) {
-        Dialogs.currentDialog = currentDialog;
     }
 }

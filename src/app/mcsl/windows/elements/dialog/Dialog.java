@@ -154,12 +154,7 @@ public class Dialog extends VBox {
             if (Dialogs.canShow() || Dialogs.next() == this) {
                 isShowing = true;
                 Template.getBody().setMouseTransparent(true);
-                if (Template.getDialogStack().getChildren().size() > 1) {
-                    Dialogs.addDialog(this);
-                } else {
-                    Template.getDialogStack().getChildren().add(this);
-                    Dialogs.setCurrentDialog(this);
-                }
+                Template.getDialogStack().getChildren().add(this);
                 Template.getBody().setEffect(new GaussianBlur(10));
                 inFade.play();
             } else {
@@ -169,15 +164,21 @@ public class Dialog extends VBox {
     }
 
     public void showAndOverlay() {
-        isShowing = true;
-        Template.getBody().setMouseTransparent(true);
-        if (Dialogs.getCurrentDialog() != null) {
-            Dialogs.getCurrentDialog().close();
-            Dialogs.addDialog(Dialogs.getCurrentDialog(), 0);
+        if (Template.getStage() == null || Template.getStage().getScene() == null) {
+            Dialogs.addDialog(this, 0);
+            return;
         }
-        Template.getDialogStack().getChildren().add(this);
-        Template.getBody().setEffect(new GaussianBlur(10));
-        inFade.play();
+
+        if (Template.getDialogStack().getChildren().size() == 1 || Template.getDialogStack().getChildren().get(1) != this) {
+            if (Template.getDialogStack().getChildren().size() > 1) {
+                Dialogs.addDialog(this, 0);
+                Dialog currentDialog = (Dialog) Template.getDialogStack().getChildren().get(1);
+                Dialogs.addDialog(currentDialog, 1);
+                currentDialog.close();
+            } else {
+                show();
+            }
+        }
     }
 
     public void close() {
