@@ -1,4 +1,4 @@
-package app.mcsl.managers.threads;
+package app.mcsl.manager.thread;
 
 public abstract class RunnableThread implements Runnable {
 
