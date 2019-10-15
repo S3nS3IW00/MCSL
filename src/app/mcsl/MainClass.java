@@ -6,7 +6,7 @@ import app.mcsl.manager.file.FileManager;
 import app.mcsl.manager.logging.Logger;
 import app.mcsl.manager.mainside.OSManager;
 import app.mcsl.manager.mainside.TrayManager;
-import app.mcsl.manager.mainside.timedtasks.TimedTasksTimer;
+import app.mcsl.manager.mainside.timedtask.TimedTasksTimer;
 import app.mcsl.manager.theme.FontType;
 import app.mcsl.manager.theme.ThemeColor;
 import app.mcsl.manager.theme.ThemeManager;

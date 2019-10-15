@@ -1,4 +1,4 @@
-package app.mcsl.manager.mainside.timedtasks;
+package app.mcsl.manager.mainside.timedtask;
 
 import app.mcsl.event.TimedTaskExecuteEvent;
 import app.mcsl.manager.logging.Logger;

@@ -1,4 +1,4 @@
-package app.mcsl.utils;
+package app.mcsl.util;
 
 public class EnumUtil {
 

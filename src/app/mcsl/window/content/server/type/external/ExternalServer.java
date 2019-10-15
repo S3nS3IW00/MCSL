@@ -10,7 +10,7 @@ import app.mcsl.manager.serverside.query.MinecraftPingOptions;
 import app.mcsl.manager.serverside.query.MinecraftPingReply;
 import app.mcsl.manager.tab.TabManager;
 import app.mcsl.network.Connection;
-import app.mcsl.utils.DataTypeUtil;
+import app.mcsl.util.DataTypeUtil;
 import app.mcsl.window.Template;
 import app.mcsl.window.content.server.Server;
 import app.mcsl.window.content.server.ServerType;

@@ -1,4 +1,4 @@
-package app.mcsl.utils;
+package app.mcsl.util;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;

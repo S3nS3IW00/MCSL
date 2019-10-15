@@ -11,7 +11,7 @@ import app.mcsl.manager.serverside.query.MinecraftPingOptions;
 import app.mcsl.manager.serverside.query.MinecraftPingReply;
 import app.mcsl.manager.tab.TabManager;
 import app.mcsl.manager.thread.RunnableThread;
-import app.mcsl.utils.DataTypeUtil;
+import app.mcsl.util.DataTypeUtil;
 import app.mcsl.window.Template;
 import app.mcsl.window.content.server.LogPattern;
 import app.mcsl.window.content.server.Server;

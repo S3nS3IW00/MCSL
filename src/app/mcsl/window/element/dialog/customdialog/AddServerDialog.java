@@ -8,7 +8,7 @@ import app.mcsl.manager.file.FileManager;
 import app.mcsl.manager.logging.Logger;
 import app.mcsl.manager.server.ServerAction;
 import app.mcsl.manager.server.ServersManager;
-import app.mcsl.utils.DataTypeUtil;
+import app.mcsl.util.DataTypeUtil;
 import app.mcsl.window.Template;
 import app.mcsl.window.content.server.Server;
 import app.mcsl.window.content.server.ServerType;

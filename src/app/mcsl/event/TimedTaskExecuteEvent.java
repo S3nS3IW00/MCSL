@@ -1,7 +1,7 @@
 package app.mcsl.event;
 
 import app.mcsl.event.listener.TimedTaskExecuteListener;
-import app.mcsl.manager.mainside.timedtasks.TimedTask;
+import app.mcsl.manager.mainside.timedtask.TimedTask;
 import javafx.application.Platform;
 
 import java.util.ArrayList;

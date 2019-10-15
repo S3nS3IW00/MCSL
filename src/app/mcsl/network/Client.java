@@ -1,7 +1,7 @@
 package app.mcsl.network;
 
 import app.mcsl.manager.logging.Logger;
-import app.mcsl.utils.Crypter;
+import app.mcsl.util.Crypter;
 import app.mcsl.window.content.server.type.external.CommandManager;
 import app.mcsl.window.content.server.type.external.ExternalServer;
 import javafx.application.Platform;

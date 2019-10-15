@@ -3,7 +3,7 @@ package app.mcsl.window.element.dialog.customdialog;
 import app.mcsl.manager.Language;
 import app.mcsl.manager.file.FileManager;
 import app.mcsl.manager.file.PropertiesManager;
-import app.mcsl.utils.DataTypeUtil;
+import app.mcsl.util.DataTypeUtil;
 import app.mcsl.window.element.button.Button;
 import app.mcsl.window.element.button.ButtonType;
 import app.mcsl.window.element.dialog.Dialog;

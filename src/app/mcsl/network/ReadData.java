@@ -2,7 +2,7 @@ package app.mcsl.network;
 
 import app.mcsl.event.ServerStatusChangeEvent;
 import app.mcsl.manager.Language;
-import app.mcsl.utils.Crypter;
+import app.mcsl.util.Crypter;
 import app.mcsl.window.content.server.StatusType;
 import javafx.application.Platform;
 

@@ -1,4 +1,4 @@
-package app.mcsl.utils;
+package app.mcsl.util;
 
 import app.mcsl.manager.logging.Logger;
 

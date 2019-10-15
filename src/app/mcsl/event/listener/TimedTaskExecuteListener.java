@@ -1,6 +1,6 @@
 package app.mcsl.event.listener;
 
-import app.mcsl.manager.mainside.timedtasks.TimedTask;
+import app.mcsl.manager.mainside.timedtask.TimedTask;
 
 public interface TimedTaskExecuteListener {
 
