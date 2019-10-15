@@ -57,7 +57,6 @@ public class FileManager {
     public static Image MENU_ICON = new Image("app/mcsl/resource/arrow_icon.png");
     public static Image SETTINGS_ICON = new Image("app/mcsl/resource/settings_icon.png");
     public static Image NOTIFICATION_ICON = new Image("app/mcsl/resource/notification_icon.png");
-    public static Image MCSL_IMAGE = new Image("app/mcsl/resource/MinecraftServerLauncher.png", 500, 30, false, true);
     public static Image FILE_ICON = new Image("app/mcsl/resource/file_icon.png", 50, 50, false, true);
     public static Image FILE_ICON_20 = new Image("app/mcsl/resource/file_icon.png", 20, 20, false, true);
     public static Image FILE_ICON_100 = new Image("app/mcsl/resource/file_icon.png", 100, 100, false, true);
