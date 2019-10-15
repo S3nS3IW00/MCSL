@@ -1,9 +1,9 @@
 package app.mcsl.network;
 
-import app.mcsl.managers.logging.Logger;
+import app.mcsl.manager.logging.Logger;
 import app.mcsl.utils.Crypter;
-import app.mcsl.windows.contents.server.type.external.CommandManager;
-import app.mcsl.windows.contents.server.type.external.ExternalServer;
+import app.mcsl.window.content.server.type.external.CommandManager;
+import app.mcsl.window.content.server.type.external.ExternalServer;
 import javafx.application.Platform;
 
 import java.io.IOException;

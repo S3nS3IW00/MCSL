@@ -1,6 +1,6 @@
 package app.mcsl.utils;
 
-import app.mcsl.managers.logging.Logger;
+import app.mcsl.manager.logging.Logger;
 
 import java.text.DateFormat;
 import java.text.ParseException;

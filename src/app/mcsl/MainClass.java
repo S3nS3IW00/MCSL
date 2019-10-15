@@ -1,26 +1,26 @@
 package app.mcsl;
 
-import app.mcsl.managers.Language;
-import app.mcsl.managers.UpdateManager;
-import app.mcsl.managers.file.FileManager;
-import app.mcsl.managers.logging.Logger;
-import app.mcsl.managers.mainside.OSManager;
-import app.mcsl.managers.mainside.TrayManager;
-import app.mcsl.managers.mainside.timedtasks.TimedTasksTimer;
-import app.mcsl.managers.theme.FontType;
-import app.mcsl.managers.theme.ThemeColor;
-import app.mcsl.managers.theme.ThemeManager;
-import app.mcsl.managers.theme.ThemeType;
-import app.mcsl.managers.version.FileUpdateStatusType;
-import app.mcsl.managers.version.FileUpdater;
-import app.mcsl.windows.Splash;
-import app.mcsl.windows.Template;
-import app.mcsl.windows.elements.button.Button;
-import app.mcsl.windows.elements.button.ButtonType;
-import app.mcsl.windows.elements.dialog.customdialogs.ChangelogDialog;
-import app.mcsl.windows.elements.dialog.customdialogs.WelcomeDialog;
-import app.mcsl.windows.elements.dialog.types.AlertDialog;
-import app.mcsl.windows.elements.dialog.types.AlertType;
+import app.mcsl.manager.Language;
+import app.mcsl.manager.UpdateManager;
+import app.mcsl.manager.file.FileManager;
+import app.mcsl.manager.logging.Logger;
+import app.mcsl.manager.mainside.OSManager;
+import app.mcsl.manager.mainside.TrayManager;
+import app.mcsl.manager.mainside.timedtasks.TimedTasksTimer;
+import app.mcsl.manager.theme.FontType;
+import app.mcsl.manager.theme.ThemeColor;
+import app.mcsl.manager.theme.ThemeManager;
+import app.mcsl.manager.theme.ThemeType;
+import app.mcsl.manager.version.FileUpdateStatusType;
+import app.mcsl.manager.version.FileUpdater;
+import app.mcsl.window.Splash;
+import app.mcsl.window.Template;
+import app.mcsl.window.element.button.Button;
+import app.mcsl.window.element.button.ButtonType;
+import app.mcsl.window.element.dialog.customdialog.ChangelogDialog;
+import app.mcsl.window.element.dialog.customdialog.WelcomeDialog;
+import app.mcsl.window.element.dialog.type.AlertDialog;
+import app.mcsl.window.element.dialog.type.AlertType;
 import com.dosse.upnp.UPnP;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -38,11 +38,10 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author S3nS3IW00
- * @version 2.0
  */
 public class MainClass extends Application {
 
-    public static final String VERSION = "2.0";
+    public static final String VERSION = "0.1.0-beta";
 
     private File sessionFile;
     private FileChannel sessionChannel;
@@ -52,7 +51,6 @@ public class MainClass extends Application {
     private ScheduledFuture<?> timedTasksTask;
 
     public static boolean SHOW_WELCOME = false;
-    public static boolean SHOW_FILE_UPDATE = false;
     public static boolean SHOW_UPDATED = false;
 
     private boolean testedOpSys = false;
@@ -74,7 +72,6 @@ public class MainClass extends Application {
         try {
             fileUpdateStatusType = fileUpdater.updateFiles();
         } catch (IOException e) {
-            SHOW_FILE_UPDATE = true;
             fileUpdateStatusType = FileUpdateStatusType.CANNOT_UPDATE;
         }
 
@@ -155,10 +152,11 @@ public class MainClass extends Application {
                 if (!testedOpSys)
                     new AlertDialog(300, 400, Language.getText("warning"), Language.getText("nottestedopsys"), AlertType.WARNING).show();
                 if (SHOW_UPDATED) new ChangelogDialog().show();
-                if (SHOW_FILE_UPDATE)
+                if (fileUpdateStatusType != FileUpdateStatusType.NOTHING) {
                     new AlertDialog(250, 400, Language.getText("fileupdate"), Language.getText(fileUpdateStatusType.getLangCode()), fileUpdateStatusType.getAlertType()).show();
-                if (fileUpdateStatusType == FileUpdateStatusType.RECREATED_WITH_COPY)
-                    FileManager.deleteFile(new File(FileManager.getRoot() + "_old"));
+                    if (fileUpdateStatusType == FileUpdateStatusType.RECREATED_WITH_COPY)
+                        FileManager.deleteFile(new File(FileManager.getRoot() + "_old"));
+                }
 
                 Logger.info("Startup done! (" + Logger.getWarnCount() + " warning, " + Logger.getErrorCount() + " error, " + Logger.getExceptionCount() + " exception)");
                 Template.DEBUG_CONSOLE.init();

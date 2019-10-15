@@ -1,9 +1,9 @@
 package app.mcsl.network;
 
-import app.mcsl.events.ServerStatusChangeEvent;
-import app.mcsl.managers.Language;
-import app.mcsl.windows.contents.server.StatusType;
-import app.mcsl.windows.contents.server.type.external.ExternalServer;
+import app.mcsl.event.ServerStatusChangeEvent;
+import app.mcsl.manager.Language;
+import app.mcsl.window.content.server.StatusType;
+import app.mcsl.window.content.server.type.external.ExternalServer;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 

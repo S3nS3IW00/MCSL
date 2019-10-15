@@ -1,9 +1,9 @@
 package app.mcsl.network;
 
-import app.mcsl.events.ServerStatusChangeEvent;
-import app.mcsl.managers.Language;
+import app.mcsl.event.ServerStatusChangeEvent;
+import app.mcsl.manager.Language;
 import app.mcsl.utils.Crypter;
-import app.mcsl.windows.contents.server.StatusType;
+import app.mcsl.window.content.server.StatusType;
 import javafx.application.Platform;
 
 import java.io.BufferedReader;
