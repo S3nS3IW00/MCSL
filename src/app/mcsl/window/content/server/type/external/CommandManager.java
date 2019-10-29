@@ -3,9 +3,13 @@ package app.mcsl.window.content.server.type.external;
 import app.mcsl.event.ServerStatusChangeEvent;
 import app.mcsl.manager.Language;
 import app.mcsl.manager.logging.Logger;
+import app.mcsl.manager.tab.TabManager;
 import app.mcsl.window.content.server.StatusType;
 import app.mcsl.window.element.dialog.type.AlertDialog;
 import app.mcsl.window.element.dialog.type.AlertType;
+import app.mcsl.window.element.notification.Notification;
+import app.mcsl.window.element.notification.NotificationAlertType;
+import app.mcsl.window.element.notification.Notifications;
 import javafx.application.Platform;
 
 import java.io.IOException;
@@ -46,16 +50,19 @@ public class CommandManager {
                     case "showerror":
                         if (getArgs(data).length > 0) {
                             server.getConsole().appendLine("§c[MinecraftServerLauncher] " + Language.getText(getArgs(data)[0]));
+                            Notifications.push(TabManager.getTabClassByServer(server), new Notification(server.getName(), Language.getText(getArgs(data)[0]), NotificationAlertType.ERROR));
                         }
                         break;
                     case "showinfo":
                         if (getArgs(data).length > 0) {
                             server.getConsole().appendLine("§a[MinecraftServerLauncher] " + Language.getText(getArgs(data)[0]));
+                            Notifications.push(TabManager.getTabClassByServer(server), new Notification(server.getName(), Language.getText(getArgs(data)[0]), NotificationAlertType.INFO));
                         }
                         break;
                     case "showwarn":
                         if (getArgs(data).length > 0) {
                             server.getConsole().appendLine("§e[MinecraftServerLauncher] " + Language.getText(getArgs(data)[0]));
+                            Notifications.push(TabManager.getTabClassByServer(server), new Notification(server.getName(), Language.getText(getArgs(data)[0]), NotificationAlertType.WARNING));
                         }
                         break;
                     case "showerrordialog":

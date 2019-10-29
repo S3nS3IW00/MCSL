@@ -26,9 +26,12 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.util.concurrent.Executors;
@@ -137,6 +140,14 @@ public class MainClass extends Application {
                 if (UpdateManager.needUpdate()) {
                     AlertDialog updateAlert = new AlertDialog(150, 400, Language.getText("update"), Language.getText("updateavailable"), AlertType.SUCCESS);
                     Button downloadButton = new Button(Language.getText("download"), ButtonType.APPLY);
+                    downloadButton.setOnAction(e -> {
+                        try {
+                            Desktop.getDesktop().browse(new URI("https://mcsl.app/download"));
+                        } catch (IOException | URISyntaxException ex) {
+                            Logger.exception(ex);
+                        }
+                        updateAlert.close();
+                    });
                     updateAlert.addButton(downloadButton);
                     updateAlert.keepDefaultButton(true);
                     updateAlert.show();

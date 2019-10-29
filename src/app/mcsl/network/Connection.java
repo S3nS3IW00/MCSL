@@ -2,8 +2,12 @@ package app.mcsl.network;
 
 import app.mcsl.event.ServerStatusChangeEvent;
 import app.mcsl.manager.Language;
+import app.mcsl.manager.tab.TabManager;
 import app.mcsl.window.content.server.StatusType;
 import app.mcsl.window.content.server.type.external.ExternalServer;
+import app.mcsl.window.element.notification.Notification;
+import app.mcsl.window.element.notification.NotificationAlertType;
+import app.mcsl.window.element.notification.Notifications;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 
@@ -43,7 +47,10 @@ public class Connection {
                         return true;
                     } catch (IOException ex) {
                         this.failed();
-                        Platform.runLater(() -> server.getConsole().appendLine("§c[MinecraftServerLauncher] " + Language.getText("cantconnectserver")));
+                        Platform.runLater(() -> {
+                            server.getConsole().appendLine("§c[MinecraftServerLauncher] " + Language.getText("cantconnectserver"));
+                            Notifications.push(TabManager.getTabClassByServer(server), new Notification(server.getName(), Language.getText("cantconnectserver"), NotificationAlertType.ERROR));
+                        });
                         ServerStatusChangeEvent.change(server, StatusType.STOPPED);
                         return false;
                     }

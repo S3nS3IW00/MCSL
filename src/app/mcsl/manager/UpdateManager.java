@@ -17,7 +17,7 @@ public class UpdateManager {
         String line = "false";
         try {
             if (Inet4Address.getByName(new URL("https://mcsl.app").getHost()).isReachable(3000)) {
-                URL url = new URL("https://mcsl.app/requests/checkupdate.php?type=app&currentversion=" + MainClass.VERSION);
+                URL url = new URL("https://mcsl.app/requests/checkupdate.php?type=application&version=" + MainClass.VERSION);
                 URLConnection connection = url.openConnection();
                 connection.connect();
                 BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));

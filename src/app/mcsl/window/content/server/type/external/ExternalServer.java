@@ -36,7 +36,6 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -188,7 +187,7 @@ public class ExternalServer implements Server {
      ****************/
     private void initControlPage() {
         console = new ColoredTextFlow(13);
-        console.getChildren().addListener((ListChangeListener<Node>) c -> {
+        console.heightProperty().addListener((observable, oldValue, newValue) -> {
             if (autoScroll) {
                 consoleScroll.setVvalue(1.0);
             }
@@ -310,7 +309,14 @@ public class ExternalServer implements Server {
         controlsBox.setMinHeight(100);
 
         chatModeCheckBox = new CheckBox(Language.getText("chatmode"));
-        chatModeCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> chatMode = newValue);
+        chatModeCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            chatMode = newValue;
+            if (newValue) {
+                inputField.setPromptText(Language.getText("chatinputprompt"));
+            } else {
+                inputField.setPromptText(Language.getText("inputfieldprompt"));
+            }
+        });
 
         autoScrollCheckBox = new CheckBox(Language.getText("autoscroll"));
         autoScrollCheckBox.setSelected(true);

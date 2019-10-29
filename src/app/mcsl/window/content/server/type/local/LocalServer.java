@@ -43,7 +43,6 @@ import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.WritableValue;
-import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -195,7 +194,6 @@ public class LocalServer implements Server {
         tabMenu.addIem(Language.getText("settings"), settings);
         tabMenu.addIem(Language.getText("errorlog"), errorLog);
         tabMenu.addIem(Language.getText("filemanager"), localFiles);
-        //tabMenu.addIem(Language.getText("playermanager"), null);
         tabMenu.addIem(Language.getText("timedtasks"), timedTasks);
 
         content = new BorderPane();
@@ -221,7 +219,7 @@ public class LocalServer implements Server {
      ****************/
     private void initControlPage() {
         console = new ColoredTextFlow(13);
-        console.getChildren().addListener((ListChangeListener<Node>) c -> {
+        console.heightProperty().addListener((observable, oldValue, newValue) -> {
             if (autoScroll) {
                 consoleScroll.setVvalue(1.0);
             }
@@ -230,6 +228,7 @@ public class LocalServer implements Server {
         consoleScroll = new ScrollPane();
         consoleScroll.setId("console");
         consoleScroll.setContent(console);
+
         VBox.setVgrow(consoleScroll, Priority.ALWAYS);
 
         inputField = new TextField();
@@ -346,7 +345,14 @@ public class LocalServer implements Server {
         controlsBox.setMinHeight(100);
 
         chatModeCheckBox = new CheckBox(Language.getText("chatmode"));
-        chatModeCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> chatMode = newValue);
+        chatModeCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            chatMode = newValue;
+            if (newValue) {
+                inputField.setPromptText(Language.getText("chatinputprompt"));
+            } else {
+                inputField.setPromptText(Language.getText("inputfieldprompt"));
+            }
+        });
 
         autoScrollCheckBox = new CheckBox(Language.getText("autoscroll"));
         autoScrollCheckBox.setSelected(true);
@@ -681,7 +687,8 @@ public class LocalServer implements Server {
                 console.appendLine("§a[MinecraftServerLauncher] " + Language.getText("portalreadyopened", settings.getSetting("server-port")));
             }
         } else {
-            console.appendLine("§c[MinecraftServerLauncher] " + Language.getText("upnperrormessage"));
+            console.appendLine("§e[MinecraftServerLauncher] " + Language.getText("upnperrormessage"));
+            Notifications.push(TabManager.getTabClassByServer(this), new Notification(serverName, Language.getText("upnperrormessage"), NotificationAlertType.WARNING));
         }
         return true;
     }

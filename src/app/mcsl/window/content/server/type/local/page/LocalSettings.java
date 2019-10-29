@@ -427,6 +427,7 @@ public class LocalSettings extends ScrollPane {
                 ((TextField) component).setText(setting == null ? "" : setting);
             }
         }
+        changed.clear();
     }
 
     public void closeSettings() {

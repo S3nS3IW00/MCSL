@@ -24,6 +24,7 @@ import app.mcsl.window.element.dialog.type.AlertType;
 import app.mcsl.window.element.dialog.type.ConfirmationDialog;
 import app.mcsl.window.element.notification.Notification;
 import app.mcsl.window.element.notification.NotificationAlertType;
+import app.mcsl.window.element.notification.Notifications;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -249,11 +250,13 @@ public class FileManager {
                         locationsJson.getDefaults().remove(name);
                         locationsJson.save();
                         Logger.warn("Server with name '" + name + "' not contains settings file! Server removed.");
+                        Notifications.push(null, new Notification(Language.getText("error"), Language.getText("nosettingsserverremoved", name), NotificationAlertType.ERROR));
                     }
                 } else {
                     locationsJson.getDefaults().remove(name);
                     locationsJson.save();
                     Logger.warn("Server with name '" + name + "' is not exists! Server removed.");
+                    Notifications.push(null, new Notification(Language.getText("error"), Language.getText("servernotfoundremoved", name), NotificationAlertType.ERROR));
                 }
             }
         }

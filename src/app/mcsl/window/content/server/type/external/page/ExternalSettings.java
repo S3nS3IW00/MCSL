@@ -76,7 +76,7 @@ public class ExternalSettings extends ScrollPane {
 
         passwordTextField = new PasswordField();
         settingComponents.put(passwordTextField, "password");
-        passwordSetting = new Setting(Language.getText("pluginpassword"), passwordTextField, null, false) {
+        passwordSetting = new Setting(Language.getText("pluginpassword"), passwordTextField, Language.getText("pluginpassdesc"), false) {
             @Override
             public void onChange(Object object) {
 
@@ -146,6 +146,7 @@ public class ExternalSettings extends ScrollPane {
                 }
             }
         }
+        changed.clear();
     }
 
     public void closeSettings() {
