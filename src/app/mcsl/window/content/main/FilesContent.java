@@ -22,6 +22,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -187,5 +188,10 @@ public class FilesContent implements TabClass {
     @Override
     public String getTitle() {
         return Language.getText("filemanager");
+    }
+
+    @Override
+    public Image getIcon() {
+        return FileManager.FILE_ICON_20;
     }
 }

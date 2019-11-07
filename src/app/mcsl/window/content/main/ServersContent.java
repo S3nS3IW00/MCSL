@@ -20,6 +20,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.DirectoryChooser;
 
@@ -225,4 +226,8 @@ public class ServersContent implements TabClass {
         return Language.getText("servers");
     }
 
+    @Override
+    public Image getIcon() {
+        return FileManager.SERVER_ICON;
+    }
 }

@@ -21,8 +21,8 @@ public class TabAction {
         TabManager.attachTab(TabManager.getClassByTab(tab));
     }
 
-    public static void changeContent(TabClass changeClass, TabClass tabClass, SlideItem slideItem, ImageView graphic) {
-        TabManager.changeContent(changeClass, tabClass, slideItem, graphic);
+    public static void changeContent(TabClass changeClass, TabClass tabClass, SlideItem slideItem) {
+        TabManager.changeContent(changeClass, tabClass, slideItem);
     }
 
     public static void choose(TabClass tabClass) {

@@ -72,12 +72,12 @@ public class TabManager {
         return tab;
     }
 
-    static void changeContent(TabClass changeClass, TabClass tabClass, SlideItem slideItem, ImageView graphic) {
+    static void changeContent(TabClass changeClass, TabClass tabClass, SlideItem slideItem) {
         Logger.info("Changing '" + changeClass.getTitle() + "' tab's content to '" + tabClass.getTitle() + "'...");
 
         switch (changeClass.getType()) {
             case MAIN:
-                if (graphic != null) Template.getMainTab().setGraphic(graphic);
+                if (tabClass.getIcon() != null) Template.getMainTab().setGraphic(new ImageView(tabClass.getIcon()));
                 Template.getMainTab().setContent(tabClass.getContent());
                 Template.getMainTab().setText(tabClass.getTitle());
                 Template.getSlideMenu().selectItem(slideItem);
@@ -85,7 +85,8 @@ public class TabManager {
                 TabAction.choose(Template.getMainTab());
                 break;
             case SERVER:
-                if (graphic != null) getTabByClass(changeClass).setGraphic(graphic);
+                if (tabClass.getIcon() != null)
+                    getTabByClass(changeClass).setGraphic(new ImageView(tabClass.getIcon()));
                 getTabByClass(changeClass).setContent(tabClass.getContent());
                 getTabByClass(changeClass).setText(tabClass.getTitle());
                 break;

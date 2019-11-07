@@ -5,10 +5,7 @@ import app.mcsl.manager.file.FileManager;
 import app.mcsl.manager.logging.Logger;
 import app.mcsl.manager.tab.TabAction;
 import app.mcsl.manager.tab.TabClass;
-import app.mcsl.window.content.main.DebugConsoleContent;
-import app.mcsl.window.content.main.FilesContent;
-import app.mcsl.window.content.main.ServersContent;
-import app.mcsl.window.content.main.SettingsContent;
+import app.mcsl.window.content.main.*;
 import app.mcsl.window.element.HamburgerMenuIcon;
 import app.mcsl.window.element.button.Button;
 import app.mcsl.window.element.button.ButtonType;
@@ -66,6 +63,7 @@ public class Template {
     private static ServersContent serversContent;
     private static FilesContent filesContent;
     private static SettingsContent settingsContent;
+    private static DownloadsContent downloadsContent;
     public static DebugConsoleContent DEBUG_CONSOLE;
 
     private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -144,6 +142,7 @@ public class Template {
         serversContent = new ServersContent();
         filesContent = new FilesContent();
         settingsContent = new SettingsContent();
+        downloadsContent = new DownloadsContent();
         DEBUG_CONSOLE = new DebugConsoleContent();
 
         hamburgerMenuIcon = new HamburgerMenuIcon(15, 3) {
@@ -159,7 +158,7 @@ public class Template {
             @Override
             public void onClick() {
                 if (slideMenu.getSelectedItem() != null && slideMenu.getSelectedItem() != this)
-                    TabAction.changeContent(currentTabClass, serversContent, this, null);
+                    TabAction.changeContent(currentTabClass, serversContent, this);
             }
         };
         slideMenu.add(serversItem);
@@ -169,7 +168,15 @@ public class Template {
             @Override
             public void onClick() {
                 if (slideMenu.getSelectedItem() != null && slideMenu.getSelectedItem() != this)
-                    TabAction.changeContent(currentTabClass, filesContent, this, null);
+                    TabAction.changeContent(currentTabClass, filesContent, this);
+            }
+        });
+
+        slideMenu.add(new SlideItem(Language.getText("downloads"), FileManager.DOWNLOAD_ICON_20) {
+            @Override
+            public void onClick() {
+                if (slideMenu.getSelectedItem() != null && slideMenu.getSelectedItem() != this)
+                    TabAction.changeContent(currentTabClass, downloadsContent, this);
             }
         });
 
@@ -177,7 +184,7 @@ public class Template {
             @Override
             public void onClick() {
                 if (slideMenu.getSelectedItem() != null && slideMenu.getSelectedItem() != this)
-                    TabAction.changeContent(currentTabClass, DEBUG_CONSOLE, this, null);
+                    TabAction.changeContent(currentTabClass, DEBUG_CONSOLE, this);
             }
         });
 

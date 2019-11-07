@@ -60,10 +60,11 @@ public class FileManager {
     public static Image NOTIFICATION_ICON = new Image("app/mcsl/resource/notification_icon.png");
     public static Image FILE_ICON = new Image("app/mcsl/resource/file_icon.png", 50, 50, false, true);
     public static Image FILE_ICON_20 = new Image("app/mcsl/resource/file_icon.png", 20, 20, false, true);
-    public static Image FILE_ICON_100 = new Image("app/mcsl/resource/file_icon.png", 100, 100, false, true);
+    public static Image FILE_ICON_80 = new Image("app/mcsl/resource/file_icon.png", 80, 80, false, true);
+    //public static Image FILE_ICON_100 = new Image("app/mcsl/resource/file_icon.png", 100, 100, false, true);
     public static Image SERVER_ICON = new Image("app/mcsl/resource/server_icon.png");
     public static Image EXTERNAL_SERVER_ICON = new Image("app/mcsl/resource/connect_icon.png", 20, 20, false, true);
-    public static Image HOUSE_ICON = new Image("app/mcsl/resource/house_icon.png");
+    //public static Image HOUSE_ICON = new Image("app/mcsl/resource/house_icon.png");
     public static Image CHOOSE_ICON = new Image("app/mcsl/resource/choose_icon_mini.png");
     public static Image RENAME_ICON = new Image("app/mcsl/resource/rename_icon_mini.png");
     public static Image DELETE_ICON = new Image("app/mcsl/resource/delete_icon_mini.png");
@@ -73,19 +74,22 @@ public class FileManager {
     public static Image ERROR_ICON = new Image("app/mcsl/resource/error_icon.png", 50, 50, false, true);
     public static Image INFO_ICON = new Image("app/mcsl/resource/information_icon.png", 50, 50, false, true);
     public static Image WARNING_ICON = new Image("app/mcsl/resource/warning_icon.png", 50, 50, false, true);
-    public static Image SUCCESS_ICON = new Image("app/mcsl/resource/success_icon.jpg", 50, 50, false, true);
+    //public static Image SUCCESS_ICON = new Image("app/mcsl/resource/success_icon.jpg", 50, 50, false, true);
     public static Image EXCEPTION_ICON = new Image("app/mcsl/resource/exception_icon.png", 50, 50, false, true);
-    public static Image LOG_ICON = new Image("app/mcsl/resource/log_icon.png", 50, 50, false, true);
+    //public static Image LOG_ICON = new Image("app/mcsl/resource/log_icon.png", 50, 50, false, true);
     public static Image ERROR_ICON_20 = new Image("app/mcsl/resource/error_icon.png", 20, 20, false, true);
     public static Image INFO_ICON_20 = new Image("app/mcsl/resource/information_icon.png", 20, 20, false, true);
     public static Image WARNING_ICON_20 = new Image("app/mcsl/resource/warning_icon.png", 20, 20, false, true);
     public static Image SUCCESS_ICON_20 = new Image("app/mcsl/resource/success_icon.jpg", 20, 20, false, true);
-    public static Image EXCEPTION_ICON_20 = new Image("app/mcsl/resource/exception_icon.png", 20, 20, false, true);
+    //public static Image EXCEPTION_ICON_20 = new Image("app/mcsl/resource/exception_icon.png", 20, 20, false, true);
     public static Image LOG_ICON_20 = new Image("app/mcsl/resource/log_icon.png", 20, 20, false, true);
+    public static Image DOWNLOAD_ICON_20 = new Image("app/mcsl/resource/download_icon.png", 20, 20, false, true);
+    public static Image DOWNLOAD_ICON_100 = new Image("app/mcsl/resource/download_icon.png", 100, 100, false, true);
+    public static Image CANCEL_ICON_100 = new Image("app/mcsl/resource/cancel_icon.png", 100, 100, false, true);
     public static Image TIP_ICON = new Image("app/mcsl/resource/info_icon.png", 50, 50, false, true);
 
     public static Image FACEBOOK_ICON_20 = new Image("app/mcsl/resource/facebook_icon.png", 20, 20, false, true);
-    public static Image GITHUB_ICON_20 = new Image("app/mcsl/resource/github_icon.png", 20, 20, false, true);
+    //public static Image GITHUB_ICON_20 = new Image("app/mcsl/resource/github_icon.png", 20, 20, false, true);
     public static Image WEBSITE_ICON_20 = new Image("app/mcsl/resource/website_icon.png", 20, 20, false, true);
     public static Image REPORT_ICON_20 = new Image("app/mcsl/resource/report_icon.png", 20, 20, false, true);
 

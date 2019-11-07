@@ -15,6 +15,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -110,6 +111,11 @@ public class DebugConsoleContent implements TabClass {
     @Override
     public String getTitle() {
         return Language.getText("log");
+    }
+
+    @Override
+    public Image getIcon() {
+        return FileManager.LOG_ICON_20;
     }
 
     private void log(String line) {
