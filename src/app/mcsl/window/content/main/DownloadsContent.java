@@ -14,10 +14,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 public class DownloadsContent implements TabClass {
 
+    private ScrollPane bodyScroll;
     private VBox body;
     private VBox[] typeBoxes;
 
@@ -52,11 +54,18 @@ public class DownloadsContent implements TabClass {
         }
         body.setSpacing(20);
         body.setPadding(new Insets(10));
+
+        bodyScroll = new ScrollPane();
+        VBox.setVgrow(bodyScroll, Priority.ALWAYS);
+        bodyScroll.setFitToWidth(true);
+        bodyScroll.setContent(body);
+        bodyScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        bodyScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
     }
 
     @Override
     public Node getContent() {
-        return body;
+        return bodyScroll;
     }
 
     @Override
