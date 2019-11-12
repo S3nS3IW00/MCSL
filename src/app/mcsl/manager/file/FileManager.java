@@ -87,6 +87,7 @@ public class FileManager {
     public static Image DOWNLOAD_ICON_100 = new Image("app/mcsl/resource/download_icon.png", 100, 100, false, true);
     public static Image CANCEL_ICON_100 = new Image("app/mcsl/resource/cancel_icon.png", 100, 100, false, true);
     public static Image TIP_ICON = new Image("app/mcsl/resource/info_icon.png", 50, 50, false, true);
+    public static Image TIP_ICON_20 = new Image("app/mcsl/resource/info_icon.png", 20, 20, false, true);
 
     public static Image FACEBOOK_ICON_20 = new Image("app/mcsl/resource/facebook_icon.png", 20, 20, false, true);
     //public static Image GITHUB_ICON_20 = new Image("app/mcsl/resource/github_icon.png", 20, 20, false, true);
@@ -231,6 +232,13 @@ public class FileManager {
                 String name = o.toString();
                 Logger.info("Loading server '" + name + "'...");
                 JSONObject locationObject = (JSONObject) locationsJson.getDefaults().get(name);
+                if (!locationObject.containsKey("location")) {
+                    locationsJson.getDefaults().remove(name);
+                    locationsJson.save();
+                    Logger.warn("Server with name '" + name + "' has no location specified! Server removed from the list.");
+                    Notifications.push(null, new Notification(Language.getText("error"), Language.getText("nolocationspecified", name), NotificationAlertType.ERROR));
+                    continue;
+                }
                 File directory = new File(locationObject.get("location").toString());
                 if (directory.exists()) {
                     File settingsProps = new File(directory + File.separator + "settings.properties");
@@ -253,13 +261,13 @@ public class FileManager {
                     } else {
                         locationsJson.getDefaults().remove(name);
                         locationsJson.save();
-                        Logger.warn("Server with name '" + name + "' not contains settings file! Server removed.");
+                        Logger.warn("Server with name '" + name + "' not contains settings file! Server removed from the list.");
                         Notifications.push(null, new Notification(Language.getText("error"), Language.getText("nosettingsserverremoved", name), NotificationAlertType.ERROR));
                     }
                 } else {
                     locationsJson.getDefaults().remove(name);
                     locationsJson.save();
-                    Logger.warn("Server with name '" + name + "' is not exists! Server removed.");
+                    Logger.warn("Server with name '" + name + "' is not exists! Server removed from the list.");
                     Notifications.push(null, new Notification(Language.getText("error"), Language.getText("servernotfoundremoved", name), NotificationAlertType.ERROR));
                 }
             }

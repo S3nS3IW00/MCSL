@@ -192,7 +192,18 @@ public class Template {
             @Override
             public void onClick() {
                 try {
-                    Desktop.getDesktop().browse(new URI("https://mcserverlauncher.tk"));
+                    Desktop.getDesktop().browse(new URI("https://mcsl.app"));
+                } catch (IOException | URISyntaxException e) {
+                    Logger.exception(e);
+                }
+            }
+        }, SlideAlignment.BOTTOM);
+
+        slideMenu.add(new SlideItem("Wiki", FileManager.TIP_ICON_20) {
+            @Override
+            public void onClick() {
+                try {
+                    Desktop.getDesktop().browse(new URI("https://mcsl.app/wiki"));
                 } catch (IOException | URISyntaxException e) {
                     Logger.exception(e);
                 }
@@ -448,7 +459,7 @@ public class Template {
                 Image screenShot = FileManager.screenShot(scene);
                 File screenShotFile = FileManager.saveImage(screenShot, fileName);
 
-                AlertDialog alertDialog = new AlertDialog(150, 400, Language.getText("screenshot"), Language.getText("imagesaved", fileName), AlertType.SUCCESS);
+                AlertDialog alertDialog = new AlertDialog(200, 400, Language.getText("screenshot"), Language.getText("imagesaved", fileName), AlertType.SUCCESS);
                 alertDialog.keepDefaultButton(true);
 
                 Button openButton = new Button(Language.getText("open"), ButtonType.DEFAULT);
