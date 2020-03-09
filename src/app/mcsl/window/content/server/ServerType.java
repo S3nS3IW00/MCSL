@@ -1,18 +1,26 @@
 package app.mcsl.window.content.server;
 
 import app.mcsl.manager.Language;
+import app.mcsl.manager.file.FileManager;
+import javafx.scene.image.Image;
 
 public enum ServerType {
-    LOCAL("local"), EXTERNAL("external");
+    LOCAL("local", FileManager.SERVER_ICON), EXTERNAL("external", FileManager.EXTERNAL_SERVER_ICON), BUNGEE("bungee", FileManager.PROXY_ICON);
 
     String typeName;
+    Image icon;
 
-    ServerType(String typeName) {
+    ServerType(String typeName, Image icon) {
         this.typeName = typeName;
+        this.icon = icon;
     }
 
     public String getTypeName() {
         return typeName;
+    }
+
+    public Image getIcon() {
+        return icon;
     }
 
     public static String[] displayValues() {

@@ -1,28 +1,33 @@
-package app.mcsl.window.content.server.type.external;
+package app.mcsl.window.content.server.type.bungee;
 
 import app.mcsl.event.ServerStateChangeEvent;
 import app.mcsl.event.ServerStatusChangeEvent;
 import app.mcsl.manager.Language;
 import app.mcsl.manager.file.FileManager;
 import app.mcsl.manager.logging.Logger;
+import app.mcsl.manager.mainside.OSManager;
 import app.mcsl.manager.serverside.query.MinecraftPing;
 import app.mcsl.manager.serverside.query.MinecraftPingOptions;
 import app.mcsl.manager.serverside.query.MinecraftPingReply;
 import app.mcsl.manager.tab.TabManager;
-import app.mcsl.network.Connection;
+import app.mcsl.manager.thread.RunnableThread;
 import app.mcsl.util.DataTypeUtil;
 import app.mcsl.window.Template;
+import app.mcsl.window.content.server.LogPattern;
 import app.mcsl.window.content.server.Server;
 import app.mcsl.window.content.server.ServerType;
 import app.mcsl.window.content.server.StatusType;
 import app.mcsl.window.content.server.page.ErrorLog;
 import app.mcsl.window.content.server.page.TimedTasks;
-import app.mcsl.window.content.server.type.external.page.ExternalSettings;
+import app.mcsl.window.content.server.type.bungee.page.BungeeFiles;
+import app.mcsl.window.content.server.type.bungee.page.BungeeSettings;
 import app.mcsl.window.element.ListBox;
 import app.mcsl.window.element.TabMenu;
 import app.mcsl.window.element.button.Button;
 import app.mcsl.window.element.button.ButtonType;
 import app.mcsl.window.element.coloredtextflow.ColoredTextFlow;
+import app.mcsl.window.element.dialog.type.AlertDialog;
+import app.mcsl.window.element.dialog.type.AlertType;
 import app.mcsl.window.element.label.KeyValueLabel;
 import app.mcsl.window.element.label.Label;
 import app.mcsl.window.element.label.LabelColor;
@@ -30,12 +35,14 @@ import app.mcsl.window.element.label.LabelType;
 import app.mcsl.window.element.notification.Notification;
 import app.mcsl.window.element.notification.NotificationAlertType;
 import app.mcsl.window.element.notification.Notifications;
+import com.dosse.upnp.UPnP;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.WritableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -51,10 +58,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.Inet4Address;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -63,17 +70,23 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class ExternalServer implements Server {
+public class BungeeServer implements Server {
 
     private String serverName;
     private StatusType serverStatus = StatusType.STOPPED;
+    private boolean restart = false;
 
-    private Pattern logPattern = Pattern.compile("\\[\\d\\d:\\d\\d:\\d\\d (?<logLevel>[a-zA-Z]+)]: (?<message>.+)");
-    private boolean isStackTrace = false, reconnect = false;
+    private boolean isStackTrace = false;
 
+    private boolean portOpened = false;
+
+    private ProcessBuilder processBuilder;
+    private Process process;
+    private RunnableThread serverThread;
+    private PrintWriter commandWriter;
+
+    private MinecraftPing ping = new MinecraftPing();
     private MinecraftPingReply pingReply;
     private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> queryTimerTask;
@@ -81,9 +94,10 @@ public class ExternalServer implements Server {
 
     private File root;
     private ErrorLog errorLog = new ErrorLog();
+    private BungeeSettings settings;
+    private BungeeFiles bungeeFiles;
     private TimedTasks timedTasks;
-
-    private Connection connection;
+    private LogPattern logPattern;
 
     /*****************
      CONTROL PANEL
@@ -98,9 +112,20 @@ public class ExternalServer implements Server {
     private CheckBox chatModeCheckBox, autoScrollCheckBox;
     private List<String> commandHistory = new ArrayList<>();
     private int commandHistoryIndex = 0;
-    private Button startButton;
+    private Button startButton, restartButton;
     private Timeline runningAnimation, stoppingAnimation;
     private IntegerProperty stopColorPercentage = new SimpleIntegerProperty(0);
+    private WritableValue<Double> restartButtonHeight = new WritableValue<Double>() {
+        @Override
+        public Double getValue() {
+            return restartButton.getMaxHeight();
+        }
+
+        @Override
+        public void setValue(Double value) {
+            restartButton.setMaxHeight(value);
+        }
+    };
 
     //stats
     private ListBox playersCard;
@@ -109,17 +134,15 @@ public class ExternalServer implements Server {
 
     private BorderPane content;
 
-    private ExternalSettings settings;
-
-    public ExternalServer(String serverName) {
+    public BungeeServer(String serverName) {
         this.serverName = serverName;
         root = FileManager.getServerFolder(this);
-        settings = new ExternalSettings(this);
+        settings = new BungeeSettings(this);
+        bungeeFiles = new BungeeFiles(this);
         timedTasks = new TimedTasks(this);
         queryTask = () -> {
             try {
-                MinecraftPing ping = new MinecraftPing();
-                pingReply = ping.getPing(new MinecraftPingOptions().setHostname(settings.getSetting("address")).setPort(Integer.parseInt(settings.getSetting("port"))));
+                pingReply = ping.getPing(new MinecraftPingOptions().setHostname("localhost").setPort(Integer.parseInt(settings.getSetting("server-port"))));
                 updateInfos();
                 updateOnlinePlayersListCard();
                 Template.getServersContent().getServerCardByServer(this).updateInfos(pingReply.getFavicon(), pingReply.getDescription().getText(),
@@ -135,6 +158,7 @@ public class ExternalServer implements Server {
                     case RENAMED:
                         root = FileManager.getServerFolder(getName());
                         settings.loadSettings();
+                        initSystem();
                         break;
                 }
             }
@@ -151,7 +175,7 @@ public class ExternalServer implements Server {
         TabMenu tabMenu = new TabMenu(20) {
             @Override
             public void setContent(Node content) {
-                ExternalServer.this.content.setCenter(content);
+                BungeeServer.this.content.setCenter(content);
             }
 
             @Override
@@ -162,6 +186,7 @@ public class ExternalServer implements Server {
         tabMenu.addIem(Language.getText("controlpanel"), controlPanelBox);
         tabMenu.addIem(Language.getText("settings"), settings);
         tabMenu.addIem(Language.getText("errorlog"), errorLog);
+        tabMenu.addIem(Language.getText("filemanager"), bungeeFiles);
         tabMenu.addIem(Language.getText("timedtasks"), timedTasks);
 
         content = new BorderPane();
@@ -196,6 +221,7 @@ public class ExternalServer implements Server {
         consoleScroll = new ScrollPane();
         consoleScroll.setId("console");
         consoleScroll.setContent(console);
+
         VBox.setVgrow(consoleScroll, Priority.ALWAYS);
 
         inputField = new TextField();
@@ -281,10 +307,10 @@ public class ExternalServer implements Server {
         VBox.setVgrow(consoleBox, Priority.ALWAYS);
         HBox.setHgrow(consoleBox, Priority.ALWAYS);
 
-        ipAddress = new KeyValueLabel(Language.getText("ipaddress"), "-", LabelColor.THIRDCOLOR);
+        ipAddress = new KeyValueLabel(Language.getText("ipaddress"), "localhost", LabelColor.THIRDCOLOR);
         ipAddress.setOnValueClick(e -> {
             ClipboardContent clipboardContent = new ClipboardContent();
-            clipboardContent.putString(settings.getSetting("address") + (DataTypeUtil.isInt(settings.getSetting("port")) ? Integer.parseInt(settings.getSetting("port")) == 25565 ? "" : ":" + settings.getSetting("port") : ""));
+            clipboardContent.putString((UPnP.getExternalIP() != null ? UPnP.getExternalIP() : "localhost") + (DataTypeUtil.isInt(settings.getSetting("server-port")) ? Integer.parseInt(settings.getSetting("server-port")) == 25565 ? "" : ":" + settings.getSetting("server-port") : ""));
             Clipboard.getSystemClipboard().setContent(clipboardContent);
 
             Template.showNotification(Language.getText("ipcopied"), LabelColor.ERROR);
@@ -301,10 +327,13 @@ public class ExternalServer implements Server {
         VBox.setVgrow(controlInfoBox, Priority.ALWAYS);
         controlInfoBox.setStyle("-fx-border-color: -fx-defcolor;-fx-border-width: 4px 0px 4px 0px;");
 
-        startButton = new Button(Language.getText("start"), ButtonType.ACTION_BUTTON);
-        startButton.setStyle("-fx-background-color: -fx-apply;");
+        startButton = new Button(Language.getText("start"), ButtonType.APPLY_ACTION_BUTTON);
 
-        controlsBox = new VBox(startButton);
+        restartButton = new Button(Language.getText("restart"), ButtonType.WARNING_ACTION_BUTTON);
+        restartButton.setMaxHeight(0);
+        restartButton.setOnAction(e -> restart());
+
+        controlsBox = new VBox(startButton, restartButton);
         controlsBox.setAlignment(Pos.TOP_CENTER);
         controlsBox.setMinHeight(100);
 
@@ -332,47 +361,95 @@ public class ExternalServer implements Server {
 
         runningAnimation = new Timeline();
         runningAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(200), new KeyValue(stopColorPercentage, 100)));
+        runningAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(200), new KeyValue(restartButtonHeight, 40.0)));
         runningAnimation.setOnFinished(e -> {
+            startButton.setDisable(false);
             startButton.setStyle(null);
             startButton.setType(ButtonType.ERROR_ACTION_BUTTON);
-            startButton.setDisable(false);
             startButton.setOnAction(e1 -> stop());
         });
 
         stoppingAnimation = new Timeline();
         stoppingAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(200), new KeyValue(stopColorPercentage, 0)));
-        stoppingAnimation.setOnFinished(e -> {
-            startButton.setStyle(null);
-            startButton.setType(ButtonType.APPLY_ACTION_BUTTON);
-            startButton.setDisable(false);
-            startButton.setOnAction(e1 -> start());
-        });
+        stoppingAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(200), new KeyValue(restartButtonHeight, 0.0)));
+
+        logPattern = new LogPattern(null);
 
         updateInfos();
     }
 
+    /*****************
+     SYSTEM
+     ****************/
+    private void initSystem() {
+        switch (OSManager.getOs()) {
+            case WINDOWS:
+                processBuilder = new ProcessBuilder("cmd", "/c", "cd /d \"" + root + "\" & java -Djline.terminal=jline.UnsupportedTerminal -Xms" + settings.getSetting("ram") + "M -Xmx" + settings.getSetting("ram") + "M -Dfile.encoding=UTF-8 -jar \"" + FileManager.getServerFile(settings.getSetting("serverfile")) + "\" nogui");
+                break;
+            case UNIX:
+                processBuilder = new ProcessBuilder("bash", "-c", "cd /d \"" + root + "\" & java -Djline.terminal=jline.UnsupportedTerminal -Xms" + settings.getSetting("ram") + "M -Xmx" + settings.getSetting("ram") + "M -Dfile.encoding=UTF-8 -jar \"" + FileManager.getServerFile(settings.getSetting("serverfile")) + "\" nogui");
+                break;
+            case MAC:
+                processBuilder = new ProcessBuilder("#!/bin/bash", "cd /d \"" + root + "\" & exec java -Djline.terminal=jline.UnsupportedTerminal -Xms" + settings.getSetting("ram") + "M -Xmx" + settings.getSetting("ram") + "M -Dfile.encoding=UTF-8 -jar \"" + FileManager.getServerFile(settings.getSetting("serverfile")) + "\" nogui");
+                break;
+        }
+        serverThread = new RunnableThread("ServerThread-" + serverName) {
+            @Override
+            public void onRun() {
+                if (!getProcess().isAlive()) {
+                    if (portOpened) closePort();
+                    ServerStatusChangeEvent.change(BungeeServer.this, StatusType.STOPPED);
+                    if (queryTimerTask != null) queryTimerTask.cancel(false);
+                    cancel();
+                }
+                try {
+                    final BufferedReader reader = new BufferedReader(
+                            new InputStreamReader(getProcess().getInputStream(), StandardCharsets.UTF_8));
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        String l = line;
+                        Platform.runLater(() -> parseLine(l));
+                    }
+                    reader.close();
+                } catch (final Exception e) {
+                    //empty catch block
+                }
+            }
+        };
+    }
+
     private void setSceneStatus(StatusType type) {
         switch (type) {
-            case CONNECTING:
+            case STARTING:
                 startButton.setDisable(true);
-                startButton.setText(Language.getText("connecting"));
+                startButton.setText(Language.getText("starting"));
                 break;
-            case CONNECTED:
-                startButton.setText(Language.getText("disconnect"));
+            case RUNNING:
+                startButton.setText(Language.getText("stop"));
                 runningAnimation.play();
                 settings.loadSettings();
+                bungeeFiles.refreshFiles();
                 queryTimerTask = scheduledExecutorService.scheduleAtFixedRate(queryTask, 0, 5, TimeUnit.SECONDS);
                 break;
-            case STOPPED:
-                startButton.setText(Language.getText("connect"));
+            case STOPPING:
+                startButton.setText(Language.getText("stopping"));
+                restartButton.setDisable(true);
+                startButton.setDisable(true);
                 stoppingAnimation.play();
-                playersCard.clear();
-                playerCount.setValue("0/0");
-                if (queryTimerTask != null) queryTimerTask.cancel(false);
-                if (reconnect) {
+                break;
+            case STOPPED:
+                restartButton.setDisable(false);
+                startButton.setText(Language.getText("start"));
+                startButton.setDisable(false);
+                startButton.setStyle(null);
+                startButton.setType(ButtonType.APPLY_ACTION_BUTTON);
+                startButton.setOnAction(e1 -> start());
+                if (restart) {
                     start();
-                    reconnect = false;
+                    restart = false;
                 }
+                playersCard.clear();
+                playerCount.setValue("0/" + /*settings.getSetting("max-players")*/1);
                 break;
             case PREPARING:
                 startButton.setDisable(true);
@@ -390,9 +467,9 @@ public class ExternalServer implements Server {
     public void start() {
         Logger.info("Starting server '" + serverName + "'...");
 
+        ServerStatusChangeEvent.change(this, StatusType.PREPARING);
         console.getChildren().clear();
         errorLog.clear();
-        ServerStatusChangeEvent.change(this, StatusType.PREPARING);
         console.appendLine("§a[MinecraftServerLauncher] " + Language.getText("preparingforstart"));
         console.appendLine("§a[MinecraftServerLauncher] " + Language.getText("savingsettings"));
         settings.save();
@@ -400,20 +477,55 @@ public class ExternalServer implements Server {
         settings.loadSettings();
         console.appendLine("§a[MinecraftServerLauncher] " + Language.getText("checkingfiles"));
         if (FileManager.checkServerFiles(serverName)) {
-            Logger.info("Connecting to '" + settings.getSetting("address") + "'...");
-
-            connection = new Connection(this, settings.getSetting("address"), Integer.parseInt(settings.getSetting("pluginport")), settings.getSetting("username"), settings.getSetting("password"));
-            connection.connect();
-            ServerStatusChangeEvent.change(this, StatusType.CONNECTING);
-            console.appendLine("§a[MinecraftServerLauncher] " + Language.getText("connectingtoserver"));
+            console.appendLine("§a[MinecraftServerLauncher] " + Language.getText("gettinglogpattern"));
+            String logPattern = getLogPattern();
+            if (logPattern != null) {
+                this.logPattern.initPattern(logPattern);
+                initSystem();
+                console.appendLine("§a[MinecraftServerLauncher] " + Language.getText("openingport"));
+                if (openPort()) {
+                    StringBuilder command = new StringBuilder();
+                    for (String cmd : processBuilder.command()) {
+                        command.append(cmd).append(" ");
+                    }
+                    Logger.info("Executing command: '" + command + "'...");
+                    ServerStatusChangeEvent.change(this, StatusType.STARTING);
+                    try {
+                        process = processBuilder.start();
+                        commandWriter = new PrintWriter(new OutputStreamWriter(process.getOutputStream(), StandardCharsets.UTF_8));
+                        serverThread.start();
+                    } catch (IOException e) {
+                        Logger.exception(e);
+                    }
+                } else {
+                    ServerStatusChangeEvent.change(this, StatusType.STOPPED);
+                }
+            } else {
+                console.appendLine("§c[MinecraftServerLauncher] " + Language.getText("logpatternerrorline1"));
+                console.appendLine("§c[MinecraftServerLauncher] " + Language.getText("logpatternerrorline2"));
+                console.appendLine("§c[MinecraftServerLauncher] " + Language.getText("logpatternerrorline3"));
+                ServerStatusChangeEvent.change(this, StatusType.STOPPED);
+            }
         } else {
             Text incorrectConfigText = new Text("[MinecraftServerLauncher] " + Language.getText("checkfileserrormessage"));
             incorrectConfigText.setFill(Color.RED);
-            incorrectConfigText.setOnMouseClicked(e -> FileManager.repairServerFiles(serverName));
+            incorrectConfigText.setOnMouseClicked(e -> {
+                if (FileManager.getServerFilesFolder().listFiles().length > 0) {
+                    FileManager.repairServerFiles(serverName);
+                } else {
+                    new AlertDialog(200, 400, Language.getText("error"), Language.getText("noserverfile"), AlertType.ERROR).show();
+                }
+            });
             console.appendLine(incorrectConfigText);
 
             Notification notification = new Notification(serverName, Language.getText("checkfileserrormessage"), NotificationAlertType.ERROR);
-            notification.setOnAction(e -> FileManager.repairServerFiles(serverName));
+            notification.setOnAction(e -> {
+                if (FileManager.getServerFilesFolder().listFiles().length > 0) {
+                    FileManager.repairServerFiles(serverName);
+                } else {
+                    new AlertDialog(200, 400, Language.getText("error"), Language.getText("noserverfile"), AlertType.ERROR).show();
+                }
+            });
             Notifications.push(TabManager.getTabClassByServer(this), notification);
             ServerStatusChangeEvent.change(this, StatusType.STOPPED);
         }
@@ -423,17 +535,8 @@ public class ExternalServer implements Server {
     public void stop() {
         Logger.info("Stopping server '" + serverName + "'...");
 
-        if (!connection.getSocket().isClosed()) {
-            Logger.info("Disconnecting from '" + connection.getAddress() + "'...");
-
-            connection.getTask().cancel(true);
-            sendCommand("#disconnect");
-            try {
-                connection.getSocket().close();
-            } catch (IOException e) {
-                //empty catch block
-            }
-        }
+        commandWriter.write("end\n");
+        commandWriter.flush();
     }
 
     @Override
@@ -441,7 +544,7 @@ public class ExternalServer implements Server {
         if (isRun()) {
             Logger.info("Restarting server '" + serverName + "'...");
 
-            reconnect = true;
+            restart = true;
             stop();
         }
     }
@@ -459,13 +562,14 @@ public class ExternalServer implements Server {
 
     @Override
     public ServerType getType() {
-        return ServerType.EXTERNAL;
+        return ServerType.BUNGEE;
     }
 
     @Override
     public void sendCommand(String command) {
         if (!isRun() || command.length() == 0) return;
-        connection.getClient().sendData((chatMode ? "say " + command : command));
+        commandWriter.write((chatMode ? "say " + command : command) + "\n");
+        commandWriter.flush();
     }
 
     @Override
@@ -488,25 +592,9 @@ public class ExternalServer implements Server {
         return serverStatus != StatusType.STOPPED;
     }
 
-    private String getLogLevel(String text) {
-        Matcher matcher = logPattern.matcher(text);
-        if (matcher.find()) {
-            return matcher.group("logLevel");
-        }
-        return null;
-    }
-
-    private String getMessage(String text) {
-        Matcher matcher = logPattern.matcher(text);
-        if (matcher.find()) {
-            return matcher.group("message");
-        }
-        return null;
-    }
-
-    void parseLine(String line) {
-        String logLevel = getLogLevel(line);
-        String message = getMessage(line);
+    private void parseLine(String line) {
+        String logLevel = logPattern.getLogLevel(line);
+        String message = logPattern.getMessage(line);
 
         if (logLevel == null || message == null) {
             if (line.contains("Exception")) isStackTrace = true;
@@ -515,20 +603,25 @@ public class ExternalServer implements Server {
                 errorLog.log("§c" + line, getStatus(), false);
                 return;
             }
-            console.appendLine(line);
+            if (!(line.equalsIgnoreCase("") || line.equalsIgnoreCase(">"))) console.appendLine(line);
             return;
         }
-
-        if (message.matches("Done \\(\\d+[,.]\\d+s\\)!.*")) {
+        if (message.matches("Listening on /\\d\\.\\d\\.\\d\\.\\d:\\d+")) {
             console.appendLine("§a" + line);
+            ServerStatusChangeEvent.change(this, StatusType.RUNNING);
             return;
-        } else if (message.equalsIgnoreCase("Stopping server")) {
+        } else if (message.matches("Closing listener \\[id: .+, .+]")) {
             console.appendLine("§c" + line);
+            ServerStatusChangeEvent.change(this, StatusType.STOPPING);
             return;
+        } else if (logLevel.equalsIgnoreCase("WARN") && message.contains("FAILED TO BIND TO PORT!")) {
+            Notifications.push(TabManager.getTabClassByServer(this), new Notification(serverName, Language.getText("serverstarterror.portbind"), NotificationAlertType.WARNING));
+            console.appendLine("§c[MinecraftServerLauncher] " + Language.getText("serverstarterror.portbind"));
         }
 
         isStackTrace = false;
         switch (logLevel) {
+            case "SEVERE":
             case "WARN":
                 console.appendLine("§e" + line);
                 errorLog.log("§e" + line, getStatus(), true);
@@ -547,10 +640,46 @@ public class ExternalServer implements Server {
         }
     }
 
+    private String getLogPattern() {
+        Logger.info("Getting log pattern for server '" + serverName + "'...");
+
+        return "%d{HH:mm:ss} [%level] %msg";
+    }
+
     public void updateInfos() {
         Platform.runLater(() -> {
-            ipAddress.setValue(settings.getSetting("address") + (DataTypeUtil.isInt(settings.getSetting("port")) ? Integer.parseInt(settings.getSetting("port")) == 25565 ? "" : ":" + settings.getSetting("port") : ""));
-            playerCount.setValue(pingReply == null ? "0/0" : pingReply.getPlayers().getOnline() + "/" + pingReply.getPlayers().getMax());
+            ipAddress.setValue((UPnP.getExternalIP() != null ? UPnP.getExternalIP() : "localhost") + (DataTypeUtil.isInt(settings.getSetting("server-port")) ? Integer.parseInt(settings.getSetting("server-port")) == 25565 ? "" : ":" + settings.getSetting("server-port") : ""));
+            playerCount.setValue((pingReply == null ? 0 : pingReply.getPlayers().getOnline()) + "/" + (settings.getSetting("max-players") == null ? "0" : /*settings.getSetting("max-players")*/1));
+        });
+    }
+
+    private boolean openPort() {
+        Logger.info("Opening port '" + settings.getSetting("server-port") + "' for server '" + serverName + "'...");
+
+        if (UPnP.isUPnPAvailable()) {
+            if (!UPnP.isMappedTCP(Integer.parseInt(settings.getSetting("server-port")))) {
+                UPnP.openPortTCP(Integer.parseInt(settings.getSetting("server-port")));
+                console.appendLine("§a[MinecraftServerLauncher] " + Language.getText("portopened", settings.getSetting("server-port")));
+                portOpened = true;
+            } else {
+                console.appendLine("§a[MinecraftServerLauncher] " + Language.getText("portalreadyopened", settings.getSetting("server-port")));
+            }
+        } else {
+            console.appendLine("§e[MinecraftServerLauncher] " + Language.getText("upnperrormessage"));
+            Notifications.push(TabManager.getTabClassByServer(this), new Notification(serverName, Language.getText("upnperrormessage"), NotificationAlertType.WARNING));
+        }
+        return true;
+    }
+
+    private void closePort() {
+        Logger.info("Closing port '" + settings.getSetting("server-port") + "' for server '" + serverName + "'...");
+
+        Platform.runLater(() -> {
+            if (UPnP.isMappedTCP(Integer.parseInt(settings.getSetting("server-port")))) {
+                UPnP.closePortTCP(Integer.parseInt(settings.getSetting("server-port")));
+                console.appendLine("§a[MinecraftServerLauncher] " + Language.getText("portclosed", settings.getSetting("server-port")));
+                portOpened = false;
+            }
         });
     }
 
@@ -616,15 +745,15 @@ public class ExternalServer implements Server {
     }
 
     //getters
+    public Process getProcess() {
+        return process;
+    }
+
     public ColoredTextFlow getConsole() {
         return console;
     }
 
-    public ExternalSettings getSettings() {
+    public BungeeSettings getSettings() {
         return settings;
-    }
-
-    public Connection getConnection() {
-        return connection;
     }
 }

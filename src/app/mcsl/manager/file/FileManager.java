@@ -15,6 +15,7 @@ import app.mcsl.util.DateTimeUtils;
 import app.mcsl.util.EnumUtil;
 import app.mcsl.window.content.server.Server;
 import app.mcsl.window.content.server.ServerType;
+import app.mcsl.window.content.server.type.bungee.BungeeServer;
 import app.mcsl.window.content.server.type.external.ExternalServer;
 import app.mcsl.window.content.server.type.local.LocalServer;
 import app.mcsl.window.element.dialog.customdialog.ImportServerDialog;
@@ -31,7 +32,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import sun.misc.BASE64Decoder;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -42,6 +42,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.security.CodeSource;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Locale;
 import java.util.zip.ZipEntry;
@@ -64,6 +65,7 @@ public class FileManager {
     //public static Image FILE_ICON_100 = new Image("app/mcsl/resource/file_icon.png", 100, 100, false, true);
     public static Image SERVER_ICON = new Image("app/mcsl/resource/server_icon.png");
     public static Image EXTERNAL_SERVER_ICON = new Image("app/mcsl/resource/connect_icon.png", 20, 20, false, true);
+    public static Image PROXY_ICON = new Image("app/mcsl/resource/proxy_icon.png", 20, 20, false, true);
     //public static Image HOUSE_ICON = new Image("app/mcsl/resource/house_icon.png");
     public static Image CHOOSE_ICON = new Image("app/mcsl/resource/choose_icon_mini.png");
     public static Image RENAME_ICON = new Image("app/mcsl/resource/rename_icon_mini.png");
@@ -219,6 +221,9 @@ public class FileManager {
                     case EXTERNAL:
                         server = new ExternalServer(serverFolder.getName());
                         break;
+                    case BUNGEE:
+                        server = new BungeeServer(serverFolder.getName());
+                        break;
                     default:
                         server = null;
                 }
@@ -251,6 +256,9 @@ public class FileManager {
                                 break;
                             case EXTERNAL:
                                 server = new ExternalServer(name);
+                                break;
+                            case BUNGEE:
+                                server = new BungeeServer(name);
                                 break;
                             default:
                                 server = null;
@@ -426,7 +434,7 @@ public class FileManager {
                 settingsPropsManager.setProp("type", type.name().toLowerCase());
                 settingsPropsManager.setProp("serverfile", settings[1]);
                 settingsPropsManager.setProp("ram", settings[2]);
-                settingsPropsManager.setProp("autostart", Boolean.parseBoolean(settings[2]));
+                settingsPropsManager.setProp("autostart", Boolean.parseBoolean(settings[3]));
                 return new LocalServer(name);
             case EXTERNAL:
                 settingsPropsManager.setProp("type", type.name().toLowerCase());
@@ -436,11 +444,17 @@ public class FileManager {
                 settingsPropsManager.setProp("username", settings[3]);
                 settingsPropsManager.setProp("password", settings[4]);
                 return new ExternalServer(name);
+            case BUNGEE:
+                settingsPropsManager.setProp("type", type.name().toLowerCase());
+                settingsPropsManager.setProp("serverfile", settings[1]);
+                settingsPropsManager.setProp("ram", settings[2]);
+                settingsPropsManager.setProp("autostart", Boolean.parseBoolean(settings[3]));
+                return new BungeeServer(name);
         }
         return null;
     }
 
-    public static void importServer(String name, String location) {
+    public static void importServer(String name, String location, ServerType type) {
         Logger.info("Importing server with name '" + name + "' from '" + location + "'...");
 
         JSONObject locationObject = new JSONObject();
@@ -448,7 +462,17 @@ public class FileManager {
         locationsJson.addRawData(name, locationObject);
         locationsJson.save();
 
-        ServerAction.add(new LocalServer(name));
+        switch (type) {
+            case LOCAL:
+                ServerAction.add(new LocalServer(name));
+                break;
+            case BUNGEE:
+                ServerAction.add(new BungeeServer(name));
+                break;
+            case EXTERNAL:
+                ServerAction.add(new ExternalServer(name));
+                break;
+        }
     }
 
     public static void deleteFile(File file) {
@@ -512,8 +536,7 @@ public class FileManager {
         BufferedImage image;
         byte[] imageByte;
 
-        BASE64Decoder decoder = new BASE64Decoder();
-        imageByte = decoder.decodeBuffer(imageString);
+        imageByte = Base64.getDecoder().decode(imageString);
         ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
         image = ImageIO.read(bis);
         bis.close();

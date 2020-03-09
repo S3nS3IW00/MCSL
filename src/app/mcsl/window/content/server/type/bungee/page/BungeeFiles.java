@@ -1,9 +1,9 @@
-package app.mcsl.window.content.server.type.local.page;
+package app.mcsl.window.content.server.type.bungee.page;
 
 import app.mcsl.manager.Language;
 import app.mcsl.manager.file.FileManager;
 import app.mcsl.window.Template;
-import app.mcsl.window.content.server.type.local.LocalServer;
+import app.mcsl.window.content.server.type.bungee.BungeeServer;
 import app.mcsl.window.element.IconCard;
 import app.mcsl.window.element.button.Button;
 import app.mcsl.window.element.button.ButtonType;
@@ -32,9 +32,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 
-public class LocalFiles extends HBox {
+public class BungeeFiles extends HBox {
 
-    private LocalServer server;
+    private BungeeServer server;
 
     private TreeView treeView;
     private TextArea textEditor;
@@ -43,7 +43,7 @@ public class LocalFiles extends HBox {
     private File selectedFile;
     private boolean canEditFile = false;
 
-    public LocalFiles(LocalServer server) {
+    public BungeeFiles(BungeeServer server) {
         this.server = server;
 
         treeView = new TreeView();
@@ -63,7 +63,7 @@ public class LocalFiles extends HBox {
             if (resetButton.isDisabled() && canEditFile) resetButton.setDisable(false);
         });
 
-        saveButton = new Button(Language.getText("save"), app.mcsl.window.element.button.ButtonType.APPLY_ACTION_BUTTON);
+        saveButton = new Button(Language.getText("save"), ButtonType.APPLY_ACTION_BUTTON);
         saveButton.setDisable(true);
         saveButton.setOnAction(e -> {
             PrintWriter prw;
@@ -78,7 +78,7 @@ public class LocalFiles extends HBox {
             }
         });
 
-        resetButton = new Button(Language.getText("reset"), app.mcsl.window.element.button.ButtonType.WARNING_ACTION_BUTTON);
+        resetButton = new Button(Language.getText("reset"), ButtonType.WARNING_ACTION_BUTTON);
         resetButton.setDisable(true);
         resetButton.setOnAction(e -> {
             textEditor.clear();
@@ -93,7 +93,7 @@ public class LocalFiles extends HBox {
             }
         });
 
-        deleteFileButton = new Button(Language.getText("deletefile"), app.mcsl.window.element.button.ButtonType.ERROR_ACTION_BUTTON);
+        deleteFileButton = new Button(Language.getText("deletefile"), ButtonType.ERROR_ACTION_BUTTON);
         deleteFileButton.setDisable(true);
         deleteFileButton.setOnAction(e -> new ConfirmationDialog(200, 400, Language.getText("deletefile"), Language.getText("suredeletefile", selectedFile.getName())) {
             @Override
@@ -132,11 +132,11 @@ public class LocalFiles extends HBox {
         VBox.setVgrow(editorBox, Priority.ALWAYS);
         HBox.setHgrow(editorBox, Priority.ALWAYS);
 
-        refreshButton = new Button(Language.getText("refresh"), app.mcsl.window.element.button.ButtonType.ACTION_BUTTON);
+        refreshButton = new Button(Language.getText("refresh"), ButtonType.ACTION_BUTTON);
         refreshButton.setMaxWidth(Double.MAX_VALUE);
         refreshButton.setOnAction(e -> refreshFiles());
 
-        filesButton = new Button(Language.getText("files"), app.mcsl.window.element.button.ButtonType.ACTION_BUTTON);
+        filesButton = new Button(Language.getText("files"), ButtonType.ACTION_BUTTON);
         filesButton.setMaxWidth(Double.MAX_VALUE);
         filesButton.setOnAction(e -> {
             try {

@@ -4,6 +4,7 @@ import app.mcsl.manager.Language;
 import app.mcsl.manager.file.FileManager;
 import app.mcsl.manager.file.PropertiesManager;
 import app.mcsl.util.DataTypeUtil;
+import app.mcsl.window.content.server.ServerType;
 import app.mcsl.window.element.button.Button;
 import app.mcsl.window.element.button.ButtonType;
 import app.mcsl.window.element.dialog.Dialog;
@@ -35,9 +36,10 @@ public class ImportServerDialog extends Dialog {
     private String location;
 
     //Step 1
+    private ComboBox typeComboBox;
     private TextField serverNameTextField, serverPortTextField;
 
-    private String serverName;
+    private String serverName, serverType;
     private int serverPort;
 
     //Step 2 - Local
@@ -69,6 +71,11 @@ public class ImportServerDialog extends Dialog {
         descriptionLabel.setAlignment(Pos.CENTER);
         descriptionLabel.setMaxWidth(350);
         descriptionLabel.setWrapText(true);
+
+        typeComboBox = new ComboBox(FXCollections.observableList(Arrays.asList(ServerType.displayValues())));
+        typeComboBox.getSelectionModel().clearSelection(1);
+        typeComboBox.setPrefWidth(200);
+        typeComboBox.getSelectionModel().selectFirst();
 
         serverFileComboBox = new ComboBox(FXCollections.observableList(Arrays.asList(FileManager.getServerFilesFolder().list())));
         serverFileComboBox.getSelectionModel().select(settingsProps.hasProp("serverfile") ? settingsProps.getProp("serverfile") : 0);
@@ -135,7 +142,7 @@ public class ImportServerDialog extends Dialog {
                     titleLabel.setText(Language.getText("addstep1title"));
                     descriptionLabel.setText(Language.getText("repairstep1description"));
                     inputBox.getChildren().clear();
-                    inputBox.getChildren().addAll(serverNameTextField, serverPortTextField);
+                    inputBox.getChildren().addAll(serverNameTextField, typeComboBox, serverPortTextField);
 
                     cancelButton.setText(Language.getText("cancel"));
                     nextButton.setText(Language.getText("next"));
@@ -144,6 +151,7 @@ public class ImportServerDialog extends Dialog {
                 case 1:
                     if (!serverNameTextField.getText().isEmpty() && !serverPortTextField.getText().isEmpty() && DataTypeUtil.isInt(serverPortTextField.getText())) {
                         serverName = serverNameTextField.getText();
+                        serverType = ServerType.getFromDisplayName(typeComboBox.getSelectionModel().getSelectedItem().toString()).getTypeName();
                         serverPort = Integer.parseInt(serverPortTextField.getText());
 
                         inputBox.getChildren().clear();
@@ -167,12 +175,12 @@ public class ImportServerDialog extends Dialog {
                 serverFile = serverFileComboBox.getSelectionModel().getSelectedItem().toString();
 
                 serverProps.setProp("server-port", serverPort + "");
-                settingsProps.setProp("type", "local");
+                settingsProps.setProp("type", serverType);
                 settingsProps.setProp("ram", ramInMB + "");
                 settingsProps.setProp("serverfile", serverFile);
                 settingsProps.setProp("autostart", autostartCheckBox.isSelected());
 
-                FileManager.importServer(serverName, location);
+                FileManager.importServer(serverName, location, ServerType.valueOf(serverType.toUpperCase()));
 
                 close();
             } else {

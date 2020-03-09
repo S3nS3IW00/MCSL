@@ -9,7 +9,6 @@ import app.mcsl.manager.tab.TabManager;
 import app.mcsl.manager.tab.TabType;
 import app.mcsl.window.Template;
 import app.mcsl.window.content.server.Server;
-import app.mcsl.window.content.server.ServerType;
 import app.mcsl.window.content.server.StateType;
 import app.mcsl.window.element.dialog.type.ConfirmationDialog;
 import javafx.scene.image.ImageView;
@@ -20,7 +19,7 @@ public class ServerAction {
         Logger.info("Choosing server '" + server.getName() + "'...");
 
         if (!TabManager.isTabByTypeExists(TabManager.getTabClassByServer(server), TabType.SERVER)) {
-            TabAction.add(ServersManager.getServerContent(ServersManager.getServerByName(server.getName())), new ImageView(server.getType() == ServerType.LOCAL ? FileManager.SERVER_ICON : FileManager.EXTERNAL_SERVER_ICON), true);
+            TabAction.add(ServersManager.getServerContent(ServersManager.getServerByName(server.getName())), new ImageView(server.getType().getIcon()), true);
         } else {
             if (TabManager.isDetached(TabManager.getTabByServer(server))) {
                 TabManager.getServerStageFromTab(TabManager.getTabByServer(server)).setIconified(false);

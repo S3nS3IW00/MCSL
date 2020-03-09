@@ -215,6 +215,7 @@ public class AddServerDialog extends Dialog {
                             if (ServerType.valueOf(serverType.toUpperCase()) == ServerType.EXTERNAL || FileManager.getServerFilesFolder().listFiles().length > 0) {
                                 inputBox.getChildren().clear();
                                 switch (ServerType.valueOf(serverType.toUpperCase())) {
+                                    case BUNGEE:
                                     case LOCAL:
                                         inputBox.getChildren().addAll(serverFileComboBox, ramTextField, chooseLocationBox, autoStartCheckBox, eulaCheckBox);
                                         titleLabel.setText(Language.getText("addstep2localtitle"));
@@ -285,6 +286,32 @@ public class AddServerDialog extends Dialog {
                         }
 
                         closeAndReset();
+                    } else {
+                        showError(Language.getText("mustfillallfields"));
+                        this.stepIndex--;
+                    }
+                    break;
+                case BUNGEE:
+                    if (!ramTextField.getText().isEmpty() && DataTypeUtil.isInt(ramTextField.getText())) {
+                        ramInMB = Integer.parseInt(ramTextField.getText());
+                        serverFile = serverFileComboBox.getSelectionModel().getSelectedItem().toString();
+
+                        Server server;
+                        try {
+                            server = FileManager.createServer(serverName,
+                                    ServerType.BUNGEE,
+                                    new String[]{serverPort + "", serverFile + "", ramInMB + "", autoStartCheckBox.isSelected() + ""},
+                                    customLocationTextField.getText().isEmpty() ? null : customLocationTextField.getText());
+                        } catch (IOException e) {
+                            showError(Language.getText("choosendirnotavaliable"));
+                            this.stepIndex--;
+                            return;
+                        }
+
+                        synchronized (server) {
+                            ServerAction.add(server);
+                            closeAndReset();
+                        }
                     } else {
                         showError(Language.getText("mustfillallfields"));
                         this.stepIndex--;
