@@ -290,6 +290,32 @@ public class AddServerDialog extends Dialog {
                         this.stepIndex--;
                     }
                     break;
+                case BUNGEE:
+                    if (!ramTextField.getText().isEmpty() && DataTypeUtil.isInt(ramTextField.getText())) {
+                        ramInMB = Integer.parseInt(ramTextField.getText());
+                        serverFile = serverFileComboBox.getSelectionModel().getSelectedItem().toString();
+
+                        Server server;
+                        try {
+                            server = FileManager.createServer(serverName,
+                                    ServerType.BUNGEE,
+                                    new String[]{serverPort + "", serverFile + "", ramInMB + "", autoStartCheckBox.isSelected() + ""},
+                                    customLocationTextField.getText().isEmpty() ? null : customLocationTextField.getText());
+                        } catch (IOException e) {
+                            showError(Language.getText("choosendirnotavaliable"));
+                            this.stepIndex--;
+                            return;
+                        }
+
+                        synchronized (server) {
+                            ServerAction.add(server);
+                            closeAndReset();
+                        }
+                    } else {
+                        showError(Language.getText("mustfillallfields"));
+                        this.stepIndex--;
+                    }
+                    break;
             }
         }
     }

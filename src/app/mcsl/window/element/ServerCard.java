@@ -7,7 +7,6 @@ import app.mcsl.manager.file.FileManager;
 import app.mcsl.manager.server.ServerAction;
 import app.mcsl.manager.server.ServersManager;
 import app.mcsl.window.content.server.Server;
-import app.mcsl.window.content.server.ServerType;
 import app.mcsl.window.element.button.Button;
 import app.mcsl.window.element.button.ButtonType;
 import app.mcsl.window.element.coloredtextflow.ColoredTextFlow;
@@ -59,7 +58,7 @@ public class ServerCard extends StackPane {
         setId("item-box");
 
         Label title = new Label(server.getName(), LabelType.H2);
-        graphic = new ImageView(server.getType() == ServerType.LOCAL ? FileManager.SERVER_ICON : FileManager.EXTERNAL_SERVER_ICON);
+        graphic = new ImageView(server.getType().getIcon());
         graphic.setStyle("-fx-effect: innershadow(gaussian, " + server.getStatus().getColor() + ", 7, 1, 1, 1);");
         title.setGraphic(graphic);
         title.setId("item-box-title");

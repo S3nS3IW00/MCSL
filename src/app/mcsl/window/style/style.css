@@ -118,6 +118,8 @@
     -fx-background-color: -fx-themetypecolor;
     -fx-text-fill: -fx-defcolor;
     -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-spacing: 10px;
 }
 
 .tree-cell:expanded, .tree-cell:sub-tree-item {

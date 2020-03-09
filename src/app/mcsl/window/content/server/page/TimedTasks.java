@@ -8,6 +8,7 @@ import app.mcsl.manager.mainside.timedtask.TimedTasksManager;
 import app.mcsl.util.DataTypeUtil;
 import app.mcsl.util.DateTimeUtils;
 import app.mcsl.window.Template;
+import app.mcsl.window.content.server.Server;
 import app.mcsl.window.element.GroupBox;
 import app.mcsl.window.element.IconCard;
 import app.mcsl.window.element.Table;
@@ -37,7 +38,7 @@ public class TimedTasks extends ScrollPane {
     private TextField nameField, commandField, yearField, monthField, dayField, hourField, minuteField, secondField;
     private CheckBox dailyCheckBox;
 
-    public TimedTasks(String serverName) {
+    public TimedTasks(Server server) {
         nameField = new TextField();
         nameField.setMaxWidth(100);
         nameField.setPromptText(Language.getText("id"));
@@ -100,7 +101,7 @@ public class TimedTasks extends ScrollPane {
                 if (!TimedTasksManager.isExistsInServer(nameField.getText())) {
                     String date = (!dailyCheckBox.isSelected() ? yearField.getText() + "-" + monthField.getText() + "-" + dayField.getText() + " " : "") + hourField.getText() + ":" + minuteField.getText() + ":" + secondField.getText();
                     if (dailyCheckBox.isSelected() || (!DateTimeUtils.lateDate(date) && !DateTimeUtils.lateTime(date))) {
-                        TimedTask timedTask = new TimedTask(nameField.getText(), serverName, date, commandField.getText(), dailyCheckBox.isSelected());
+                        TimedTask timedTask = new TimedTask(nameField.getText(), server.getName(), date, commandField.getText(), dailyCheckBox.isSelected());
                         addTimedTask(timedTask);
                         TimedTasksManager.createTimedTask(timedTask);
                         nameField.clear();
@@ -154,12 +155,12 @@ public class TimedTasks extends ScrollPane {
         setContent(body);
         setFitToWidth(true);
 
-        for (TimedTask timedTask : TimedTasksManager.getServersTimedTasks(serverName)) {
+        for (TimedTask timedTask : TimedTasksManager.getServersTimedTasks(server.getName())) {
             addTimedTask(timedTask);
         }
 
         TimedTaskExecuteEvent.addListener(timedTask -> {
-            if (timedTask.getServerName().equalsIgnoreCase(serverName) && !timedTask.isDaily()) {
+            if (timedTask.getServerName().equalsIgnoreCase(server.getName()) && !timedTask.isDaily()) {
                 removeTimedTask(timedTask);
             }
         });

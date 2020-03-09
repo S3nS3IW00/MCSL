@@ -146,7 +146,7 @@ public class LocalServer implements Server {
         root = FileManager.getServerFolder(this);
         settings = new LocalSettings(this);
         localFiles = new LocalFiles(this);
-        timedTasks = new TimedTasks(serverName);
+        timedTasks = new TimedTasks(this);
         queryTask = () -> {
             try {
                 pingReply = ping.getPing(new MinecraftPingOptions().setHostname("localhost").setPort(Integer.parseInt(settings.getSetting("server-port"))));
