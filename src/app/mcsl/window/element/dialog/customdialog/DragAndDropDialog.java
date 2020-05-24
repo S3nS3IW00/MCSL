@@ -23,12 +23,14 @@ import javafx.scene.layout.VBox;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DragAndDropDialog extends Dialog {
 
     private File file;
     private Label textLabel;
-    private ComboBox localServersBox;
+    private ComboBox serversBox;
     private VBox pluginSelectionBox, serverFileSelectionBox;
 
     public DragAndDropDialog() {
@@ -58,7 +60,7 @@ public class DragAndDropDialog extends Dialog {
         pluginButton.setStyle("-fx-font-size: 13px;");
         pluginButton.setOnAction(e -> {
             try {
-                FileManager.addPlugin(localServersBox.getSelectionModel().getSelectedItem().toString(), file);
+                FileManager.addPlugin(serversBox.getSelectionModel().getSelectedItem().toString(), file);
                 Template.showNotification(Language.getText("fileaddedas", "plugin"), LabelColor.ERROR);
             } catch (IOException ex) {
                 //empty catch block
@@ -66,9 +68,9 @@ public class DragAndDropDialog extends Dialog {
             close();
         });
 
-        localServersBox = new ComboBox();
+        serversBox = new ComboBox();
 
-        pluginSelectionBox = new VBox(10, new ImageView(FileManager.FILE_ICON), localServersBox, pluginButton);
+        pluginSelectionBox = new VBox(10, new ImageView(FileManager.FILE_ICON), serversBox, pluginButton);
         pluginSelectionBox.setAlignment(Pos.TOP_CENTER);
 
         HBox selectionBox = new HBox(20, serverFileSelectionBox, pluginSelectionBox);
@@ -94,8 +96,11 @@ public class DragAndDropDialog extends Dialog {
         if (ServersManager.getServersByType(ServerType.LOCAL).size() == 0) {
             pluginSelectionBox.setDisable(true);
         } else {
-            localServersBox.setItems(FXCollections.observableList(ServersManager.getServerNamesByType(ServerType.LOCAL)));
-            localServersBox.getSelectionModel().selectFirst();
+            List<String> serversNames = new ArrayList<>();
+            serversNames.addAll(ServersManager.getServerNamesByType(ServerType.BUNGEE));
+            serversNames.addAll(ServersManager.getServerNamesByType(ServerType.LOCAL));
+            serversBox.setItems(FXCollections.observableArrayList(serversNames));
+            serversBox.getSelectionModel().selectFirst();
             pluginSelectionBox.setDisable(false);
         }
 

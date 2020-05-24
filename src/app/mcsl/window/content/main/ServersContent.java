@@ -43,7 +43,7 @@ public class ServersContent implements TabClass {
 
     private AddServerDialog addServerDialog;
     private Map<Server, ServerCard> serversList = new HashMap<>();
-    private String[] cats = new String[]{"all", "local", "external"};
+    private String[] cats = new String[]{"all", "local", "external", "bungee"};
 
     public ServersContent() {
         noServersLabel = new Label(Language.getText("donthaveservers"));
@@ -111,7 +111,7 @@ public class ServersContent implements TabClass {
         searchTextField.setPromptText(Language.getText("search"));
         searchTextField.textProperty().addListener((observable, oldValue, newValue) -> displayItemsBySearch(newValue.toLowerCase()));
 
-        categoryComboBox = new ComboBox(FXCollections.observableList(Arrays.asList(new String[]{Language.getText("all"), Language.getText("local"), Language.getText("external")})));
+        categoryComboBox = new ComboBox(FXCollections.observableList(Arrays.asList(new String[]{Language.getText("all"), Language.getText("local"), Language.getText("external"), Language.getText("bungee")})));
         categoryComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> displayItemsByType(cats[categoryComboBox.getSelectionModel().getSelectedIndex()]));
 
         HBox titleBox = new HBox(5, serversTitle, titleRegion, searchTextField, categoryComboBox);
