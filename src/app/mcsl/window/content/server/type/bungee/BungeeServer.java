@@ -384,13 +384,13 @@ public class BungeeServer implements Server {
     private void initSystem() {
         switch (OSManager.getOs()) {
             case WINDOWS:
-                processBuilder = new ProcessBuilder("cmd", "/c", "cd /d \"" + root + "\" & java -Djline.terminal=jline.UnsupportedTerminal -Xms" + settings.getSetting("ram") + "M -Xmx" + settings.getSetting("ram") + "M -Dfile.encoding=UTF-8 -jar \"" + FileManager.getServerFile(settings.getSetting("serverfile")) + "\" nogui");
+                processBuilder = new ProcessBuilder("cmd", "/c", "cd /d \"" + root + "\" & java -Djline.terminal=jline.UnsupportedTerminal -Xms" + settings.getSetting("ram") + "M -Xmx" + settings.getSetting("ram") + "M -Dfile.encoding=UTF-8 " + settings.getSetting("customVmOptions") + " -jar \"" + FileManager.getServerFile(settings.getSetting("serverfile")) + "\" nogui");
                 break;
             case UNIX:
-                processBuilder = new ProcessBuilder("bash", "-c", "cd /d \"" + root + "\" & java -Djline.terminal=jline.UnsupportedTerminal -Xms" + settings.getSetting("ram") + "M -Xmx" + settings.getSetting("ram") + "M -Dfile.encoding=UTF-8 -jar \"" + FileManager.getServerFile(settings.getSetting("serverfile")) + "\" nogui");
+                processBuilder = new ProcessBuilder("bash", "-c", "cd /d \"" + root + "\" & java -Djline.terminal=jline.UnsupportedTerminal -Xms" + settings.getSetting("ram") + "M -Xmx" + settings.getSetting("ram") + "M -Dfile.encoding=UTF-8 " + settings.getSetting("customVmOptions") + " -jar \"" + FileManager.getServerFile(settings.getSetting("serverfile")) + "\" nogui");
                 break;
             case MAC:
-                processBuilder = new ProcessBuilder("#!/bin/bash", "cd /d \"" + root + "\" & exec java -Djline.terminal=jline.UnsupportedTerminal -Xms" + settings.getSetting("ram") + "M -Xmx" + settings.getSetting("ram") + "M -Dfile.encoding=UTF-8 -jar \"" + FileManager.getServerFile(settings.getSetting("serverfile")) + "\" nogui");
+                processBuilder = new ProcessBuilder("#!/bin/bash", "cd /d \"" + root + "\" & exec java -Djline.terminal=jline.UnsupportedTerminal -Xms" + settings.getSetting("ram") + "M -Xmx" + settings.getSetting("ram") + "M -Dfile.encoding=UTF-8 " + settings.getSetting("customVmOptions") + " -jar \"" + FileManager.getServerFile(settings.getSetting("serverfile")) + "\" nogui");
                 break;
         }
         serverThread = new RunnableThread("ServerThread-" + serverName) {

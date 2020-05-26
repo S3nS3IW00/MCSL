@@ -391,13 +391,13 @@ public class LocalServer implements Server {
     private void initSystem() {
         switch (OSManager.getOs()) {
             case WINDOWS:
-                processBuilder = new ProcessBuilder("cmd", "/c", "cd /d \"" + root + "\" & java -Xms" + settings.getSetting("ram") + "M -Xmx" + settings.getSetting("ram") + "M -Dfile.encoding=UTF-8 -jar \"" + FileManager.getServerFile(settings.getSetting("serverfile")) + "\" nogui");
+                processBuilder = new ProcessBuilder("cmd", "/c", "cd /d \"" + root + "\" & java -Xms" + settings.getSetting("ram") + "M -Xmx" + settings.getSetting("ram") + "M -Dfile.encoding=UTF-8 " + settings.getSetting("customVmOptions") + " -jar \"" + FileManager.getServerFile(settings.getSetting("serverfile")) + "\" nogui");
                 break;
             case UNIX:
-                processBuilder = new ProcessBuilder("bash", "-c", "cd /d \"" + root + "\" & java -Xms" + settings.getSetting("ram") + "M -Xmx" + settings.getSetting("ram") + "M -Dfile.encoding=UTF-8 -jar \"" + FileManager.getServerFile(settings.getSetting("serverfile")) + "\" nogui");
+                processBuilder = new ProcessBuilder("bash", "-c", "cd /d \"" + root + "\" & java -Xms" + settings.getSetting("ram") + "M -Xmx" + settings.getSetting("ram") + "M -Dfile.encoding=UTF-8 " + settings.getSetting("customVmOptions") + " -jar \"" + FileManager.getServerFile(settings.getSetting("serverfile")) + "\" nogui");
                 break;
             case MAC:
-                processBuilder = new ProcessBuilder("#!/bin/bash", "cd /d \"" + root + "\" & exec java -Xms" + settings.getSetting("ram") + "M -Xmx" + settings.getSetting("ram") + "M -Dfile.encoding=UTF-8 -jar \"" + FileManager.getServerFile(settings.getSetting("serverfile")) + "\" nogui");
+                processBuilder = new ProcessBuilder("#!/bin/bash", "cd /d \"" + root + "\" & exec java -Xms" + settings.getSetting("ram") + "M -Xmx" + settings.getSetting("ram") + "M -Dfile.encoding=UTF-8 " + settings.getSetting("customVmOptions") + " -jar \"" + FileManager.getServerFile(settings.getSetting("serverfile")) + "\" nogui");
                 break;
         }
         serverThread = new RunnableThread("ServerThread-" + serverName) {
@@ -418,6 +418,15 @@ public class LocalServer implements Server {
                         Platform.runLater(() -> parseLine(l));
                     }
                     reader.close();
+
+                    final BufferedReader errorReader = new BufferedReader(
+                            new InputStreamReader(getProcess().getErrorStream(), StandardCharsets.UTF_8));
+                    String errorLine;
+                    while ((errorLine = errorReader.readLine()) != null) {
+                        String l = errorLine;
+                        Platform.runLater(() -> parseLine(l));
+                    }
+                    errorReader.close();
                 } catch (final Exception e) {
                     //empty catch block
                 }

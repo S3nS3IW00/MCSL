@@ -41,7 +41,7 @@ public class LocalSettings extends ScrollPane {
             generateStructuresCheckBox, commandBlockCheckBox, onlineModeCheckBox, whitelistingCheckBox, preventProxyCheckBox, rconCheckBox, queryCheckBox, autostartCheckBox;
     private ComboBox difficultyComboBox, gamemodeComboBox, levelTypeComboBox, serverFileComboBox;
     private TextField motdTextField, respackUrlTextField, respackSha1TextField, worldNameTextField, levelSeedTextField, rconPasswordTextField, rconPortTextField,
-            playerLimitTextField, serverPortTextField, serverRamTextField, serverIpTextField;
+            playerLimitTextField, serverPortTextField, serverRamTextField, serverIpTextField, customVMOptionsTextField;
 
     public LocalSettings(LocalServer server) {
         this.server = server;
@@ -349,8 +349,18 @@ public class LocalSettings extends ScrollPane {
             }
         };
 
+        customVMOptionsTextField = new TextField();
+        customVMOptionsTextField.setMinWidth(500);
+        settingComponents.put(customVMOptionsTextField, "customVmOptions");
+        Setting customVMOptionsSetting = new Setting(Language.getText("customvmoptions"), customVMOptionsTextField, null, false) {
+            @Override
+            public void onChange(Object object) {
+
+            }
+        };
+
         SettingCategory mcsl = new SettingCategory(Language.getText("launchersettings"));
-        mcsl.addSetting(serverPortSetting, serverFileSetting, ramSetting, autostartSetting);
+        mcsl.addSetting(serverPortSetting, serverFileSetting, ramSetting, autostartSetting, customVMOptionsSetting);
 
         body = new VBox(10, gameplay, appearance, world, networking, mcsl);
 
@@ -379,7 +389,7 @@ public class LocalSettings extends ScrollPane {
     }
 
     public void setSetting(String key, String value) {
-        if (key.equalsIgnoreCase("ram") || key.equalsIgnoreCase("serverfile") || key.equalsIgnoreCase("autostart")) {
+        if (key.equalsIgnoreCase("ram") || key.equalsIgnoreCase("serverfile") || key.equalsIgnoreCase("autostart") || key.equalsIgnoreCase("customVmOptions")) {
             settingsProps.setProp(key, value);
             settings.replace(key, value);
             return;

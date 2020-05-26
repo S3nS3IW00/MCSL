@@ -291,11 +291,11 @@ public class FileManager {
         if (!settingsProps.exists()) return false;
         PropertiesManager settings = new PropertiesManager(settingsProps), serverSettings;
         if (!settings.hasProp("type")) return false;
-        if (settings.getProp("type").equalsIgnoreCase("local")) {
+        if (settings.getProp("type").equalsIgnoreCase("local") || settings.getProp("type").equalsIgnoreCase("bungee")) {
             if (!serverProps.exists()) return false;
             serverSettings = new PropertiesManager(serverProps);
             if (!settings.hasProp("ram") || !settings.hasProp("autostart") || !settings.hasProp("serverfile") ||
-                    !(serverSettings.hasProp("server-port") && DataTypeUtil.isInt(serverSettings.getProp("server-port"))))
+                    !(serverSettings.hasProp("server-port") && DataTypeUtil.isInt(serverSettings.getProp("server-port"))) || !settings.hasProp("customVmOptions"))
                 return false;
         }
         if (settings.getProp("type").equalsIgnoreCase("external") &&
@@ -435,6 +435,7 @@ public class FileManager {
                 settingsPropsManager.setProp("serverfile", settings[1]);
                 settingsPropsManager.setProp("ram", settings[2]);
                 settingsPropsManager.setProp("autostart", Boolean.parseBoolean(settings[3]));
+                settingsPropsManager.setProp("customVmOptions", "");
                 return new LocalServer(name);
             case EXTERNAL:
                 settingsPropsManager.setProp("type", type.name().toLowerCase());
@@ -449,6 +450,7 @@ public class FileManager {
                 settingsPropsManager.setProp("serverfile", settings[1]);
                 settingsPropsManager.setProp("ram", settings[2]);
                 settingsPropsManager.setProp("autostart", Boolean.parseBoolean(settings[3]));
+                settingsPropsManager.setProp("customVmOptions", "");
                 return new BungeeServer(name);
         }
         return null;

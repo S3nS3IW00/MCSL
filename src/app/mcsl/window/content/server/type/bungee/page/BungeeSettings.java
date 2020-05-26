@@ -39,7 +39,7 @@ public class BungeeSettings extends ScrollPane {
     //settings fields
     private CheckBox autostartCheckBox;
     private ComboBox serverFileComboBox;
-    private TextField serverPortTextField, serverRamTextField;
+    private TextField serverPortTextField, serverRamTextField, customVMOptionsTextField;
 
     public BungeeSettings(BungeeServer server) {
         this.server = server;
@@ -84,8 +84,18 @@ public class BungeeSettings extends ScrollPane {
             }
         };
 
+        customVMOptionsTextField = new TextField();
+        customVMOptionsTextField.setMinWidth(500);
+        settingComponents.put(customVMOptionsTextField, "customVmOptions");
+        Setting customVMOptionsSetting = new Setting(Language.getText("customvmoptions"), customVMOptionsTextField, null, false) {
+            @Override
+            public void onChange(Object object) {
+
+            }
+        };
+
         SettingCategory mcsl = new SettingCategory(Language.getText("launchersettings"));
-        mcsl.addSetting(serverPortSetting, serverFileSetting, ramSetting, autostartSetting);
+        mcsl.addSetting(serverPortSetting, serverFileSetting, ramSetting, autostartSetting, customVMOptionsSetting);
 
         body = new VBox(10, mcsl);
 
@@ -114,7 +124,7 @@ public class BungeeSettings extends ScrollPane {
     }
 
     public void setSetting(String key, String value) {
-        if (key.equalsIgnoreCase("ram") || key.equalsIgnoreCase("serverfile") || key.equalsIgnoreCase("autostart")) {
+        if (key.equalsIgnoreCase("ram") || key.equalsIgnoreCase("serverfile") || key.equalsIgnoreCase("autostart") || key.equalsIgnoreCase("customVmOptions")) {
             settingsProps.setProp(key, value);
             settings.replace(key, value);
             return;

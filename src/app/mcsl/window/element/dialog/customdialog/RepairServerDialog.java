@@ -85,7 +85,6 @@ public class RepairServerDialog extends Dialog {
         serverFileComboBox = new ComboBox(FXCollections.observableList(Arrays.asList(FileManager.getServerFilesFolder().list())));
         serverFileComboBox.getSelectionModel().select(settingsProps.hasProp("serverfile") ? settingsProps.getProp("serverfile") : 0);
         serverFileComboBox.setPrefWidth(200);
-        serverFileComboBox.getSelectionModel().selectFirst();
 
         serverNameTextField = new TextField(serverName, InputType.LETTERS_AND_NUMBERS);
         serverNameTextField.setDisable(true);
@@ -191,6 +190,7 @@ public class RepairServerDialog extends Dialog {
         } else {
             switch (ServerType.valueOf(serverType.toUpperCase())) {
                 case LOCAL:
+                case BUNGEE:
                     if (!ramTextField.getText().isEmpty() && DataTypeUtil.isInt(ramTextField.getText())) {
                         ramInMB = Integer.parseInt(ramTextField.getText());
                         serverFile = serverFileComboBox.getSelectionModel().getSelectedItem().toString();
@@ -200,6 +200,7 @@ public class RepairServerDialog extends Dialog {
                         settingsProps.setProp("ram", ramInMB + "");
                         settingsProps.setProp("serverfile", serverFile);
                         settingsProps.setProp("autostart", autostartCheckBox.isSelected());
+                        settingsProps.setProp("customVmOptions", "");
 
                         close();
                     } else {
