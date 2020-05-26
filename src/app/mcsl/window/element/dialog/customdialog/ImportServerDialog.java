@@ -80,7 +80,6 @@ public class ImportServerDialog extends Dialog {
         serverFileComboBox = new ComboBox(FXCollections.observableList(Arrays.asList(FileManager.getServerFilesFolder().list())));
         serverFileComboBox.getSelectionModel().select(settingsProps.hasProp("serverfile") ? settingsProps.getProp("serverfile") : 0);
         serverFileComboBox.setPrefWidth(200);
-        serverFileComboBox.getSelectionModel().selectFirst();
 
         serverNameTextField = new TextField(InputType.LETTERS_AND_NUMBERS);
         serverNameTextField.setMaxWidth(200);
