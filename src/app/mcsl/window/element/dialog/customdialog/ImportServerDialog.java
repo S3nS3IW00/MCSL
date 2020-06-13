@@ -4,6 +4,7 @@ import app.mcsl.manager.Language;
 import app.mcsl.manager.file.FileManager;
 import app.mcsl.manager.file.PropertiesManager;
 import app.mcsl.util.DataTypeUtil;
+import app.mcsl.util.EnumUtil;
 import app.mcsl.window.content.server.ServerType;
 import app.mcsl.window.element.button.Button;
 import app.mcsl.window.element.button.ButtonType;
@@ -74,8 +75,8 @@ public class ImportServerDialog extends Dialog {
 
         typeComboBox = new ComboBox(FXCollections.observableList(Arrays.asList(ServerType.displayValues())));
         typeComboBox.getSelectionModel().clearSelection(1);
+        typeComboBox.getSelectionModel().select(settingsProps.hasProp("type") && !settingsProps.getProp("type").equalsIgnoreCase("external") && EnumUtil.isInEnum(settingsProps.getProp("type").toUpperCase(), ServerType.class) ? Language.getText(ServerType.valueOf(settingsProps.getProp("type").toUpperCase()).getTypeName()) : 0);
         typeComboBox.setPrefWidth(200);
-        typeComboBox.getSelectionModel().selectFirst();
 
         serverFileComboBox = new ComboBox(FXCollections.observableList(Arrays.asList(FileManager.getServerFilesFolder().list())));
         serverFileComboBox.getSelectionModel().select(settingsProps.hasProp("serverfile") ? settingsProps.getProp("serverfile") : 0);
@@ -150,7 +151,7 @@ public class ImportServerDialog extends Dialog {
                 case 1:
                     if (!serverNameTextField.getText().isEmpty() && !serverPortTextField.getText().isEmpty() && DataTypeUtil.isInt(serverPortTextField.getText())) {
                         serverName = serverNameTextField.getText();
-                        serverType = ServerType.getFromDisplayName(typeComboBox.getSelectionModel().getSelectedItem().toString()).getTypeName();
+                        serverType = ServerType.getByDisplayName(typeComboBox.getSelectionModel().getSelectedItem().toString()).getTypeName();
                         serverPort = Integer.parseInt(serverPortTextField.getText());
 
                         inputBox.getChildren().clear();

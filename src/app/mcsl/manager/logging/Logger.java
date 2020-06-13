@@ -1,6 +1,7 @@
 package app.mcsl.manager.logging;
 
 import app.mcsl.event.LogEvent;
+import app.mcsl.manager.file.FileManager;
 import app.mcsl.manager.mainside.OSManager;
 import app.mcsl.window.element.dialog.customdialog.ExceptionDialog;
 import javafx.application.Platform;
@@ -79,7 +80,8 @@ public class Logger {
         }
 
         LogEvent.log(logLevel, line, text);
-        if (logLevel == LogLevel.EXCEPTION) Platform.runLater(() -> new ExceptionDialog(line).show());
+        if (logLevel == LogLevel.EXCEPTION && FileManager.getConfigProps().getBoolProp("errordialog"))
+            Platform.runLater(() -> new ExceptionDialog(line).show());
     }
 
     public static void debug(String text) {

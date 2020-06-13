@@ -195,6 +195,9 @@ public class FileManager {
         if (!configProps.hasProp("fancyfont")) {
             configProps.setProp("fancyfont", false);
         }
+        if (!configProps.hasProp("errordialog")) {
+            configProps.setProp("errordialog", true);
+        }
 
         Logger.info("Loading timed tasks...");
         timedTasksJson = new JsonManager(timedtasksFile);
@@ -538,7 +541,11 @@ public class FileManager {
         BufferedImage image;
         byte[] imageByte;
 
-        imageByte = Base64.getDecoder().decode(imageString);
+        try {
+            imageByte = Base64.getDecoder().decode(imageString);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
         ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
         image = ImageIO.read(bis);
         bis.close();

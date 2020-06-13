@@ -1,1 +1,4 @@
-- Minden megváltozott :)
+- Szerver javításhoz BungeeCord hozzáadva
+- Szerver javításban port alapértelmezett érték adva
+- Ikon a szerverlistán javítva
+- Lehetőség a hiba dialógus kikapcsolására

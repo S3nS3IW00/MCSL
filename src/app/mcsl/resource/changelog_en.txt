@@ -1,1 +1,4 @@
-- Everything has changed :)
+- BungeeCord was added to the server repair
+- The default port value was set in server repair
+- Icon in server list fixed
+- Ability to turn off error dialogs

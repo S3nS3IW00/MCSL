@@ -396,9 +396,9 @@ public class Template {
             stage.setMaximized(true);
         Scene scene = new Scene(new StackPane(dialogStack, dropPane),
                 FileManager.getConfigProps().hasProp("lastWidth") && (!FileManager.getConfigProps().hasProp("isMaximized") || !FileManager.getConfigProps().getBoolProp("isMaximized")) ?
-                        FileManager.getConfigProps().getDoubleProp("lastWidth") : screenSize.getWidth() / 2,
+                        FileManager.getConfigProps().getDoubleProp("lastWidth") : screenSize.getWidth() / 1.5,
                 FileManager.getConfigProps().hasProp("lastHeight") && (!FileManager.getConfigProps().hasProp("isMaximized") || !FileManager.getConfigProps().getBoolProp("isMaximized")) ?
-                        FileManager.getConfigProps().getDoubleProp("lastHeight") : screenSize.getHeight() / 2);
+                        FileManager.getConfigProps().getDoubleProp("lastHeight") : screenSize.getHeight() / 1.5);
         scene.getStylesheets().add(Template.class.getResource("/app/mcsl/window/style/style.css").toExternalForm());
 
         stage.setScene(scene);

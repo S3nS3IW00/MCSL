@@ -19,6 +19,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.GaussianBlur;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
@@ -255,7 +256,8 @@ public class ServerCard extends StackPane {
         Platform.runLater(() -> {
             try {
                 if (faviconBase64 != null) {
-                    favicon.setImage(FileManager.decodeBase64ToImage(faviconBase64));
+                    Image favImg = FileManager.decodeBase64ToImage(faviconBase64);
+                    if (favImg != null) favicon.setImage(favImg);
                 }
             } catch (IOException e) {
                 //empty catch block

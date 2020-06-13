@@ -31,7 +31,7 @@ public enum ServerType {
         return displayNames;
     }
 
-    public static ServerType getFromDisplayName(String s) {
+    public static ServerType getByDisplayName(String s) {
         for (ServerType type : ServerType.values()) {
             if (Language.getText(type.typeName).equalsIgnoreCase(s)) return type;
         }

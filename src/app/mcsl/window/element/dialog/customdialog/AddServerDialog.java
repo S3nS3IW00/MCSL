@@ -209,7 +209,7 @@ public class AddServerDialog extends Dialog {
                                 serverName = serverName.replaceAll("[^\\s\\p{L}0-9]", "");
                             }
 
-                            serverType = ServerType.getFromDisplayName(typeComboBox.getSelectionModel().getSelectedItem().toString()).getTypeName();
+                            serverType = ServerType.getByDisplayName(typeComboBox.getSelectionModel().getSelectedItem().toString()).getTypeName();
                             serverPort = Integer.parseInt(serverPortTextField.getText());
 
                             if (ServerType.valueOf(serverType.toUpperCase()) == ServerType.EXTERNAL || FileManager.getServerFilesFolder().listFiles().length > 0) {

@@ -96,6 +96,15 @@ public class SettingsContent extends StackPane {
             }
         };
 
+        CheckBox errorDialogCheckBox = new CheckBox();
+        errorDialogCheckBox.setSelected(FileManager.getConfigProps().getBoolProp("errordialog"));
+        Setting errorDialogSetting = new Setting(Language.getText("showerrordialog"), errorDialogCheckBox, null, false) {
+            @Override
+            public void onChange(Object object) {
+                FileManager.getConfigProps().setProp("errordialog", (boolean) object);
+            }
+        };
+
         ComboBox themeColorsComboBox = new ComboBox(FXCollections.observableList(Arrays.asList(ThemeManager.displayColorValues())));
         themeColorsComboBox.getSelectionModel().select(Language.getText(ThemeColor.valueOf(FileManager.getConfigProps().getProp("themecolor").toUpperCase()).getDisplayName()));
         Setting themecolorSetting = new Setting(Language.getText("themecolor"), themeColorsComboBox, null, false) {
@@ -135,7 +144,7 @@ public class SettingsContent extends StackPane {
             }
         };
 
-        standardSettings.addSetting(pushNotificationsSetting, hideWhenExitSetting);
+        standardSettings.addSetting(pushNotificationsSetting, hideWhenExitSetting, errorDialogSetting);
 
         designSettings.addSetting(languageSetting, themecolorSetting, themetypeSetting, fancyFontSetting);
 
