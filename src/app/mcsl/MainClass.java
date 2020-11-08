@@ -44,7 +44,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class MainClass extends Application {
 
-    public static final String VERSION = "0.1.1-beta";
+    public static final String VERSION = "0.1.2-beta";
 
     private File sessionFile;
     private FileChannel sessionChannel;
@@ -101,7 +101,7 @@ public class MainClass extends Application {
             sessionChannel = new RandomAccessFile(sessionFile, "rw").getChannel();
             sessionLock = sessionChannel.tryLock();
             if (sessionLock == null) {
-                Logger.error("Session is already in use! Check for the running application!");
+                Logger.error("Session is already in use! Look for the running application!");
                 sessionChannel.close();
                 System.exit(0);
                 return;
@@ -138,11 +138,11 @@ public class MainClass extends Application {
 
                 Logger.info("Verifying updates...");
                 if (UpdateManager.needUpdate()) {
-                    AlertDialog updateAlert = new AlertDialog(150, 400, Language.getText("update"), Language.getText("updateavailable"), AlertType.SUCCESS);
+                    AlertDialog updateAlert = new AlertDialog(250, 400, Language.getText("update"), Language.getText("updateavailable", VERSION, UpdateManager.getLatestVersion()), AlertType.SUCCESS);
                     Button downloadButton = new Button(Language.getText("download"), ButtonType.APPLY);
                     downloadButton.setOnAction(e -> {
                         try {
-                            Desktop.getDesktop().browse(new URI("https://mcsl.app/download"));
+                            Desktop.getDesktop().browse(new URI(UpdateManager.getHtmlUrl()));
                         } catch (IOException | URISyntaxException ex) {
                             Logger.exception(ex);
                         }

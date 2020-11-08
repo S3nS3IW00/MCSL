@@ -10,8 +10,6 @@ import app.mcsl.window.element.dialog.DialogType;
 import app.mcsl.window.element.label.Label;
 import app.mcsl.window.element.label.LabelType;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
@@ -47,13 +45,11 @@ public class ExceptionDialog extends Dialog {
         Button reportButton = new Button(Language.getText("reporterror"), ButtonType.APPLY);
         reportButton.setOnAction(e -> {
             try {
+                Desktop.getDesktop().open(Logger.LOGS_FOLDER);
                 Desktop.getDesktop().browse(new URI("https://github.com/S3nS3IW00/mcserverlauncher/issues/new"));
             } catch (IOException | URISyntaxException ex) {
                 Logger.exception(ex);
             }
-            ClipboardContent clipboardContent = new ClipboardContent();
-            clipboardContent.putString(exception);
-            Clipboard.getSystemClipboard().setContent(clipboardContent);
             close();
         });
 

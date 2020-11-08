@@ -12,18 +12,18 @@ import java.util.concurrent.TimeUnit;
 public class DateTimeUtils {
 
     public static String calculateTime(long seconds) {
-        String time = null;
+        String time;
         int day = (int) TimeUnit.SECONDS.toDays(seconds);
         long hours = TimeUnit.SECONDS.toHours(seconds) - (day * 24);
         long minute = TimeUnit.SECONDS.toMinutes(seconds) - (TimeUnit.SECONDS.toHours(seconds) * 60);
         long second = TimeUnit.SECONDS.toSeconds(seconds) - (TimeUnit.SECONDS.toMinutes(seconds) * 60);
         if (seconds < 60) {
             time = second + " second";
-        } else if (seconds >= 60 && seconds < 3600) {
+        } else if (seconds < 3600) {
             time = minute + " minute " + second + " second";
-        } else if (seconds >= 3600 && seconds < 86400) {
+        } else if (seconds < 86400) {
             time = hours + " hour " + minute + " minute " + second + " second";
-        } else if (seconds >= 86400) {
+        } else {
             time = day + " day " + hours + " hour " + minute + " minute " + second + " second";
         }
         return time;

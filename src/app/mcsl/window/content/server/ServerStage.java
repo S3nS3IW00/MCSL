@@ -58,7 +58,11 @@ public class ServerStage extends Stage {
         header.setAlignment(Pos.CENTER);
         header.setId("header-box");
 
-        body = new VBox(header, serverContent.getContent());
+        StackPane contentStack = new StackPane(serverContent.getContent());
+        contentStack.setStyle("-fx-background-image: url(\"/app/mcsl/resource/bg_blur.jpg\");\n" +
+                "-fx-background-size: cover;");
+
+        body = new VBox(header, contentStack);
 
         Scene scene = new Scene(body, screenSize.getWidth() / 2, screenSize.getHeight() / 2);
         scene.getStylesheets().add(getClass().getResource("/app/mcsl/window/style/style.css").toExternalForm());

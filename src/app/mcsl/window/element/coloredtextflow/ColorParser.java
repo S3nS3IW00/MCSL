@@ -9,12 +9,14 @@ public class ColorParser {
 
     private String text;
     private int fontSize;
-    private ChatColor color = ChatColor.WHITE;
+    private ChatColor defaultColor, color;
     private boolean underlined = false, bold = false, italic = false, striketrough = false;
 
-    public ColorParser(String text, int fontSize) {
+    public ColorParser(String text, int fontSize, ChatColor defaultColor) {
         this.text = text.replace("§", "&").replace("\u00A7", "&");
         this.fontSize = fontSize;
+        this.defaultColor = defaultColor;
+        this.color = defaultColor;
     }
 
     public Text[] parse() {
@@ -40,6 +42,9 @@ public class ColorParser {
                         texts[index] = getStyledText(sText);
                         index++;
                     }
+                } else {
+                    texts[index] = getStyledText("&" + styleCode + sText);
+                    index++;
                 }
             }
         }
@@ -60,7 +65,7 @@ public class ColorParser {
         for (ChatColor type : ChatColor.values()) {
             if (type.getStyleCode().equalsIgnoreCase(styleCode)) return type;
         }
-        return ChatColor.WHITE;
+        return defaultColor;
     }
 
     private Text getStyledText(String s) {

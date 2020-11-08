@@ -1,4 +1,7 @@
-- Szerver javításhoz BungeeCord hozzáadva
-- Szerver javításban port alapértelmezett érték adva
-- Ikon a szerverlistán javítva
-- Lehetőség a hiba dialógus kikapcsolására
+- Letöltés rész javítva
+- Frissítés ellenőrzés és figyelmeztetés javítva
+- Log fájl formátum megváltoztatva
+- Kilépésnél a szerverek leállításának töltése javítva
+- UPnP figyelmeztető felugró értesítés kikapcsolva
+- Néhány dizájn változtatás és javítás
+- BungeeCord szerver készítés javítva

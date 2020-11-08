@@ -1,0 +1,52 @@
+[
+  {
+    "name": "craftbukkit-1.12.2",
+    "downloadUrl": "https://cdn.getbukkit.org/craftbukkit/craftbukkit-1.12.2.jar",
+    "type": "serverfile"
+  },
+  {
+    "name": "craftbukkit-1.13.2",
+    "downloadUrl": "https://cdn.getbukkit.org/craftbukkit/craftbukkit-1.13.2.jar",
+    "type": "serverfile"
+  },
+  {
+    "name": "craftbukkit-1.16.4",
+    "downloadUrl": "https://cdn.getbukkit.org/craftbukkit/craftbukkit-1.16.4.jar",
+    "type": "serverfile"
+  },
+  {
+    "name": "spigot-1.12.2",
+    "downloadUrl": "https://cdn.getbukkit.org/spigot/spigot-1.12.2.jar",
+    "type": "serverfile"
+  },
+  {
+    "name": "spigot-1.13.2",
+    "downloadUrl": "https://cdn.getbukkit.org/spigot/spigot-1.13.2.jar",
+    "type": "serverfile"
+  },
+  {
+    "name": "spigot-1.16.4",
+    "downloadUrl": "https://cdn.getbukkit.org/spigot/spigot-1.16.4.jar",
+    "type": "serverfile"
+  },
+  {
+    "name": "vanilla-1.12.2",
+    "downloadUrl": "https://launcher.mojang.com/mc/game/1.12.2/server/886945bfb2b978778c3a0288fd7fab09d315b25f/server.jar",
+    "type": "serverfile"
+  },
+  {
+    "name": "vanilla-1.13.2",
+    "downloadUrl": "https://launcher.mojang.com/v1/objects/3737db93722a9e39eeada7c27e7aca28b144ffa7/server.jar",
+    "type": "serverfile"
+  },
+  {
+    "name": "BungeeCord",
+    "downloadUrl": "https://ci.md-5.net/job/BungeeCord/lastSuccessfulBuild/artifact/bootstrap/target/BungeeCord.jar",
+    "type": "serverfile"
+  },
+  {
+    "name": "MCSL plugin",
+    "downloadUrl": "https://github.com/S3nS3IW00/mcserverlauncher/releases/download/0.1.1-beta/MCSL_plugin.jar",
+    "type": "plugin"
+  }
+]

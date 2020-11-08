@@ -123,6 +123,7 @@ public class ServersContent implements TabClass {
         VBox.setVgrow(serversStack, Priority.ALWAYS);
 
         body = new VBox(5, titleBox, serversStack, bottomRegion, buttonBox);
+
         body.setPadding(new Insets(10));
         body.setMinHeight(0);
 

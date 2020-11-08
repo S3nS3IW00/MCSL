@@ -314,25 +314,25 @@ public class LocalServer implements Server {
         VBox.setVgrow(consoleBox, Priority.ALWAYS);
         HBox.setHgrow(consoleBox, Priority.ALWAYS);
 
-        ipAddress = new KeyValueLabel(Language.getText("ipaddress"), "localhost", LabelColor.THIRDCOLOR);
+        ipAddress = new KeyValueLabel(Language.getText("ipaddress"), "localhost", LabelColor.DEFAULT);
         ipAddress.setOnValueClick(e -> {
             ClipboardContent clipboardContent = new ClipboardContent();
             clipboardContent.putString((UPnP.getExternalIP() != null ? UPnP.getExternalIP() : "localhost") + (DataTypeUtil.isInt(settings.getSetting("server-port")) ? Integer.parseInt(settings.getSetting("server-port")) == 25565 ? "" : ":" + settings.getSetting("server-port") : ""));
             Clipboard.getSystemClipboard().setContent(clipboardContent);
 
-            Template.showNotification(Language.getText("ipcopied"), LabelColor.ERROR);
+            Template.showNotification(Language.getText("ipcopied"), LabelColor.DEFAULT);
         });
 
-        playerCount = new KeyValueLabel(Language.getText("playercount"), "0/0", LabelColor.THIRDCOLOR);
+        playerCount = new KeyValueLabel(Language.getText("playercount"), "0/0", LabelColor.DEFAULT);
 
         playersCard = new ListBox(200, 100);
         playersCard.getBody().setSpacing(5);
         VBox.setVgrow(playersCard, Priority.ALWAYS);
 
-        controlInfoBox = new VBox(10, ipAddress, playerCount, new Label(Language.getText("onlineplayers"), LabelType.H2, LabelColor.THIRDCOLOR), playersCard);
+        controlInfoBox = new VBox(10, ipAddress, playerCount, new Label(Language.getText("onlineplayers"), LabelType.H2, LabelColor.DEFAULT), playersCard);
         controlInfoBox.setMinWidth(200);
         VBox.setVgrow(controlInfoBox, Priority.ALWAYS);
-        controlInfoBox.setStyle("-fx-border-color: -fx-defcolor;-fx-border-width: 4px 0px 4px 0px;");
+        controlInfoBox.setStyle("-fx-border-color: -fx-defcolor;-fx-border-width: 4px 0px 4px 0px;-fx-background-color: -fx-themetypecolor;-fx-padding: 0px 0px 0px 5px");
 
         startButton = new Button(Language.getText("start"), ButtonType.APPLY_ACTION_BUTTON);
 
@@ -411,22 +411,13 @@ public class LocalServer implements Server {
                 }
                 try {
                     final BufferedReader reader = new BufferedReader(
-                            new InputStreamReader(getProcess().getInputStream(), StandardCharsets.UTF_8));
+                            new InputStreamReader(new SequenceInputStream(getProcess().getInputStream(), getProcess().getErrorStream()), StandardCharsets.UTF_8));
                     String line;
                     while ((line = reader.readLine()) != null) {
                         String l = line;
                         Platform.runLater(() -> parseLine(l));
                     }
                     reader.close();
-
-                    final BufferedReader errorReader = new BufferedReader(
-                            new InputStreamReader(getProcess().getErrorStream(), StandardCharsets.UTF_8));
-                    String errorLine;
-                    while ((errorLine = errorReader.readLine()) != null) {
-                        String l = errorLine;
-                        Platform.runLater(() -> parseLine(l));
-                    }
-                    errorReader.close();
                 } catch (final Exception e) {
                     //empty catch block
                 }
@@ -504,7 +495,7 @@ public class LocalServer implements Server {
                     for (String cmd : processBuilder.command()) {
                         command.append(cmd).append(" ");
                     }
-                    Logger.info("Executing command: '" + command + "'...");
+                    Logger.info("Executing command: '" + command.toString() + "'...");
                     ServerStatusChangeEvent.change(this, StatusType.STARTING);
                     try {
                         process = processBuilder.start();
@@ -697,7 +688,6 @@ public class LocalServer implements Server {
             }
         } else {
             console.appendLine("§e[MinecraftServerLauncher] " + Language.getText("upnperrormessage"));
-            Notifications.push(TabManager.getTabClassByServer(this), new Notification(serverName, Language.getText("upnperrormessage"), NotificationAlertType.WARNING));
         }
         return true;
     }

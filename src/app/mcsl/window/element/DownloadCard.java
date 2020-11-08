@@ -87,30 +87,30 @@ public class DownloadCard extends StackPane {
         overlayBox.setMaxSize(200, 0);
         overlayBox.setOnMouseClicked(e -> {
             overlayOutTimeline.play();
-            String targetDir = null;
-            if (item.getType() == DownloadType.SERVERFILE) {
-                if (FileManager.getServerFile(item.getFileName()).exists()) {
-                    new AlertDialog(200, 400, Language.getText("error"), Language.getText("filealreadydownloaded"), AlertType.ERROR).show();
-                    return;
-                } else {
-                    targetDir = FileManager.getServerFilesFolder().getAbsolutePath();
-                }
-            } else if (item.getType() == DownloadType.PLUGIN) {
-                DirectoryChooser directoryChooser = new DirectoryChooser();
-                directoryChooser.setTitle(Language.getText("choose"));
-                File directory = directoryChooser.showDialog(Template.getStage());
-                if (directory != null) {
-                    targetDir = directory.getAbsolutePath();
-                }
-            }
-
-            if (targetDir == null) {
-                new AlertDialog(200, 400, Language.getText("error"), Language.getText("targetdirnull"), AlertType.ERROR).show();
-                return;
-            }
-
             Downloader downloader = item.getDownloader();
             if (downloader == null || downloader.getStatus() != DownloadStatus.IN_PROGRESS) {
+                String targetDir = null;
+                if (item.getType() == DownloadType.SERVERFILE) {
+                    if (FileManager.getServerFile(item.getFileName()).exists()) {
+                        new AlertDialog(200, 400, Language.getText("error"), Language.getText("filealreadydownloaded"), AlertType.ERROR).show();
+                        return;
+                    } else {
+                        targetDir = FileManager.getServerFilesFolder().getAbsolutePath();
+                    }
+                } else if (item.getType() == DownloadType.PLUGIN) {
+                    DirectoryChooser directoryChooser = new DirectoryChooser();
+                    directoryChooser.setTitle(Language.getText("choose"));
+                    File directory = directoryChooser.showDialog(Template.getStage());
+                    if (directory != null) {
+                        targetDir = directory.getAbsolutePath();
+                    }
+                }
+
+                if (targetDir == null) {
+                    new AlertDialog(200, 400, Language.getText("error"), Language.getText("targetdirnull"), AlertType.ERROR).show();
+                    return;
+                }
+
                 downloader = new Downloader(item.getDownloadUrl(), targetDir, 20);
                 downloader.setOnFinished(status -> {
                     downloadProgressBar.progressProperty().unbind();

@@ -17,9 +17,9 @@ import java.util.regex.Pattern;
 public class Logger {
 
     public static final Pattern LOG_PATTERN = Pattern.compile("\\[(?<date>\\d\\d:\\d\\d:\\d\\d) (?<level>[A-Z]+)]:( \\[?<prefix>[A-Za-z0-9]+])*( ?<msg>.+)*");
-    private static final File LOGS_FOLDER = new File(OSManager.getRoot() + File.separator + "logs");
+    public static final File LOGS_FOLDER = new File(OSManager.getRoot() + File.separator + "logs");
 
-    private static final Pattern LOG_FILE_PATTERN = Pattern.compile("mcsl.log.(?<index>\\d+)");
+    private static final Pattern LOG_FILE_PATTERN = Pattern.compile("mcsl\\.log(?<index>\\d+)\\.txt");
     public static File LOG_FILE;
     private static BufferedWriter OUT_PRINT;
 
@@ -46,9 +46,9 @@ public class Logger {
                     }
                 }
             }
-            LOG_FILE = new File(LOGS_FOLDER + File.separator + "mcsl.log." + (logFileIndex + 1));
+            LOG_FILE = new File(LOGS_FOLDER + File.separator + "mcsl.log" + (logFileIndex + 1) + ".txt");
         } else {
-            LOG_FILE = new File(LOGS_FOLDER + File.separator + "mcsl.log.0");
+            LOG_FILE = new File(LOGS_FOLDER + File.separator + "mcsl.log0.txt");
         }
         LOG_FILE.createNewFile();
         OUT_PRINT = new BufferedWriter(new FileWriter(LOG_FILE));

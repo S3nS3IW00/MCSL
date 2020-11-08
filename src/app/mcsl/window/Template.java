@@ -192,7 +192,7 @@ public class Template {
             @Override
             public void onClick() {
                 try {
-                    Desktop.getDesktop().browse(new URI("https://mcsl.app"));
+                    Desktop.getDesktop().browse(new URI("https://github.com/S3nS3IW00/mcserverlauncher"));
                 } catch (IOException | URISyntaxException e) {
                     Logger.exception(e);
                 }
@@ -203,7 +203,7 @@ public class Template {
             @Override
             public void onClick() {
                 try {
-                    Desktop.getDesktop().browse(new URI("https://mcsl.app/wiki"));
+                    Desktop.getDesktop().browse(new URI("https://github.com/S3nS3IW00/mcserverlauncher/wiki/F%C5%91oldal"));
                 } catch (IOException | URISyntaxException e) {
                     Logger.exception(e);
                 }

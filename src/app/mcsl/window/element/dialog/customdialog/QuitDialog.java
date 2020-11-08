@@ -119,14 +119,12 @@ public class QuitDialog extends Dialog {
                 content.getChildren().add(serversStopProgressBar);
 
                 onlineServers.addListener((ListChangeListener<Server>) c -> {
-                    if (c.next()) {
-                        serversStopProgressBar.setProgress((onlineServerCount - c.getList().size()) / onlineServerCount);
-                        if (c.getList().size() == 0) {
-                            if (restart) {
-                                restartApplication();
-                            } else {
-                                System.exit(0);
-                            }
+                    serversStopProgressBar.setProgress((double) (onlineServerCount - onlineServers.size()) / onlineServerCount);
+                    if (onlineServers.size() == 0) {
+                        if (restart) {
+                            restartApplication();
+                        } else {
+                            System.exit(0);
                         }
                     }
                 });

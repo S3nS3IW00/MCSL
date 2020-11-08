@@ -316,8 +316,9 @@
     -fx-font-size: 15px;
     -fx-border-insets: 10px;
     -fx-alignment: center-left;
-    -fx-border-color: -fx-defcolor;
-    -fx-border-width: 0px 0px 2px 0px;
+    -fx-padding: 10px;
+    /*-fx-border-color: -fx-defcolor;
+    -fx-border-width: 0px 0px 2px 0px;*/
 }
 
 #item-box-text-area {
@@ -608,7 +609,7 @@
 }
 
 #rounded-warning-button {
-    -fx-max-width: 50px;
+    -fx-text-fill: -fx-warning;
     -fx-border-radius: 500px;
     -fx-background-radius: 500px;
     -fx-background-color: transparent;
@@ -627,11 +628,11 @@
 #rounded-warning-button:hover {
     -fx-background-color: -fx-darkwarning;
     -fx-border-color: -fx-darkwarning;
-    -fx-text-fill: -fx-bgcolor;
+    -fx-text-fill: -fx-themetypecolor;
 }
 
 #rounded-error-button {
-    -fx-max-width: 50px;
+    -fx-text-fill: -fx-error;
     -fx-border-radius: 500px;
     -fx-background-radius: 500px;
     -fx-background-color: transparent;
@@ -650,11 +651,11 @@
 #rounded-error-button:hover {
     -fx-background-color: -fx-darkerror;
     -fx-border-color: -fx-darkerror;
-     -fx-text-fill: -fx-bgcolor;
+    -fx-text-fill: -fx-themetypecolor;
 }
 
 #rounded-apply-button {
-    -fx-max-width: 50px;
+    -fx-text-fill: -fx-apply;
     -fx-border-radius: 500px;
     -fx-background-radius: 500px;
     -fx-background-color: transparent;
@@ -673,7 +674,7 @@
 #rounded-apply-button:hover {
     -fx-background-color: -fx-darkapply;
     -fx-border-color: -fx-darkapply;
-     -fx-text-fill: -fx-bgcolor;
+    -fx-text-fill: -fx-themetypecolor;
 }
 
 #action-button {
@@ -1061,7 +1062,9 @@
 }
 
 .tab-content-area {
-    -fx-background-color: -fx-bgcolor;
+    -fx-background-image: url("../../resource/bg_blur.jpg");
+    -fx-background-size: cover;
+    /*-fx-background-color: -fx-bgcolor;*/
 }
 
 .tab {

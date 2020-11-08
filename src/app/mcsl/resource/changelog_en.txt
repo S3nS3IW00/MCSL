@@ -1,4 +1,7 @@
-- BungeeCord was added to the server repair
-- The default port value was set in server repair
-- Icon in server list fixed
-- Ability to turn off error dialogs
+- Download section fix
+- Update check and alert fix
+- Log file format changed
+- On quit the server stopping progressbar fixed
+- UPnP warning push notification turned off
+- Some design change and fix
+- BungeeCord server creation fix

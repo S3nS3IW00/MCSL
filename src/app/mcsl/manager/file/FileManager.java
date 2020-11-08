@@ -449,6 +449,10 @@ public class FileManager {
                 settingsPropsManager.setProp("password", settings[4]);
                 return new ExternalServer(name);
             case BUNGEE:
+                serverProps.createNewFile();
+                PropertiesManager bungeeServerProps = new PropertiesManager(serverProps);
+                bungeeServerProps.setProp("server-port", settings[0]);
+
                 settingsPropsManager.setProp("type", type.name().toLowerCase());
                 settingsPropsManager.setProp("serverfile", settings[1]);
                 settingsPropsManager.setProp("ram", settings[2]);

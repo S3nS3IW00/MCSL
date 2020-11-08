@@ -58,7 +58,7 @@ public class ServerCard extends StackPane {
         setPrefHeight(height);
         setId("item-box");
 
-        Label title = new Label(server.getName(), LabelType.H2);
+        Label title = new Label(server.getName(), LabelType.H2, LabelColor.THIRDCOLOR);
         graphic = new ImageView(server.getType().getIcon());
         graphic.setStyle("-fx-effect: innershadow(gaussian, " + server.getStatus().getColor() + ", 7, 1, 1, 1);");
         title.setGraphic(graphic);
@@ -127,11 +127,11 @@ public class ServerCard extends StackPane {
             }
         });
 
-        chooseButton = new Button("", ButtonType.ROUNDED);
+        chooseButton = new Button(Language.getText("choose"), ButtonType.ROUNDED);
         chooseButton.setOnAction(e -> ServerAction.choose(server));
         chooseButton.setGraphic(chooseIconView);
 
-        renameButton = new Button("", ButtonType.ROUNDED);
+        renameButton = new Button(Language.getText("rename"), ButtonType.ROUNDED);
         renameButton.setOnAction(e -> {
             showLayer = false;
             out.play();
@@ -144,11 +144,11 @@ public class ServerCard extends StackPane {
         });
         renameButton.setGraphic(renameIconView);
 
-        deleteButton = new Button("", ButtonType.ROUNDED_ERROR);
+        deleteButton = new Button(Language.getText("delete"), ButtonType.ROUNDED_ERROR);
         deleteButton.setOnAction(e -> ServerAction.delete(server));
         deleteButton.setGraphic(deleteIconView);
 
-        startButton = new Button("", ButtonType.ROUNDED_APPLY);
+        startButton = new Button(Language.getText("start"), ButtonType.ROUNDED_APPLY);
         startButton.setOnAction(e -> {
             if (server.isRun()) {
                 server.stop();
@@ -159,10 +159,10 @@ public class ServerCard extends StackPane {
         startButton.setGraphic(startIconView);
 
         HBox buttonBox = new HBox(5, chooseButton, renameButton, deleteButton, startButton);
+        HBox.setHgrow(buttonBox, Priority.ALWAYS);
         buttonBox.setAlignment(Pos.CENTER);
 
         layer = new HBox(buttonBox);
-        HBox.setHgrow(layer, Priority.ALWAYS);
         layer.setPrefHeight(height);
         layer.setAlignment(Pos.CENTER);
         layer.setOpacity(0);
@@ -215,6 +215,7 @@ public class ServerCard extends StackPane {
                         startButton.setDisable(false);
                         startButton.setGraphic(stopIconView);
                         startButton.setType(ButtonType.ROUNDED_ERROR);
+                        startButton.setText(Language.getText("stop"));
                         renameButton.setDisable(true);
                         deleteButton.setDisable(true);
                         break;
@@ -234,6 +235,7 @@ public class ServerCard extends StackPane {
                         startButton.setDisable(false);
                         startButton.setGraphic(startIconView);
                         startButton.setType(ButtonType.ROUNDED_APPLY);
+                        startButton.setText(Language.getText("start"));
                         renameButton.setDisable(false);
                         deleteButton.setDisable(false);
                         playerCount.setText("");
