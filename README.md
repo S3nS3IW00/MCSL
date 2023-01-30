@@ -18,7 +18,7 @@ It supports adding server files and plugins with dragging and dropping files to 
 
 # Screenshots
 It has a nicely designed user-friendly UI with light and dark mode, two supported languages (hungarian, english) and few color themes.
-
+<div>
 <img width="300" src="https://user-images.githubusercontent.com/22691959/215487992-89973d8e-8854-4813-870b-f76f6553b4fb.png">
 <img width="300" src="https://user-images.githubusercontent.com/22691959/215488056-35ac7256-6e67-42f4-a43c-ddc0c76709a1.png">
 <img width="300" src="https://user-images.githubusercontent.com/22691959/215488070-449e1d75-4385-49b7-9799-5792721214ff.png">
@@ -35,3 +35,4 @@ It has a nicely designed user-friendly UI with light and dark mode, two supporte
 <img width="300" src="https://user-images.githubusercontent.com/22691959/215488134-a2d239cc-e340-4aa0-a718-c765c97745e3.png">
 <img width="300" src="https://user-images.githubusercontent.com/22691959/215488137-ebb84c26-b5c4-4d65-861e-32126f133190.png">
 <img width="300" src="https://user-images.githubusercontent.com/22691959/215488470-ead348bf-a42a-4814-a5ed-ff4ee12f92ac.png">
+</div>
