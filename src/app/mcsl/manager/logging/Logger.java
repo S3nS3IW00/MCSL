@@ -97,13 +97,13 @@ public class Logger {
     public static void warn(String text) {
         String className = new Exception().getStackTrace()[1].getClassName();
         append(className.substring(className.lastIndexOf(".") + 1), text, LogLevel.WARN);
-        WARN_COUNT_PROP.setValue(ERROR_COUNT_PROP.getValue() + 1);
+        WARN_COUNT_PROP.setValue(WARN_COUNT_PROP.getValue() + 1);
     }
 
     public static void error(String text) {
         String className = new Exception().getStackTrace()[1].getClassName();
         append(className.substring(className.lastIndexOf(".") + 1), text, LogLevel.ERROR);
-        ERROR_COUNT_PROP.setValue(WARN_COUNT_PROP.getValue() + 1);
+        ERROR_COUNT_PROP.setValue(ERROR_COUNT_PROP.getValue() + 1);
     }
 
     public static void exception(Throwable t) {

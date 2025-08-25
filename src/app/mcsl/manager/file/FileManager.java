@@ -304,7 +304,7 @@ public class FileManager {
         if (settings.getProp("type").equalsIgnoreCase("external") &&
                 (!settings.hasProp("username") || !settings.hasProp("password") ||
                         !(settings.hasProp("port") && DataTypeUtil.isInt(settings.getProp("port"))) || !settings.hasProp("address") ||
-                        (!settings.hasProp("pluginport") && DataTypeUtil.isInt(settings.getProp("pluginport")))))
+                        !(settings.hasProp("pluginport") && DataTypeUtil.isInt(settings.getProp("pluginport")))))
             return false;
         return true;
     }
